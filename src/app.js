@@ -11,12 +11,22 @@ const path = require("path");
 const cors = require("cors");
 const SpotifyWebApi = require("spotify-web-api-node");
 
-const { auth, initializeAuthRoute } = require("./auth");
-
 const PORT = process.env.PORT || 8888;
 const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const SECRET_KEY = process.env.SECRET_KEY;
 const RED_URI = process.env.RED_URL || `http://localhost:${PORT}/search`; // Your redirect uri
+
+const spotify_api = new SpotifyWebApi({
+	clientId: CLIENT_ID,
+	clientSecret: SECRET_KEY,
+	redirectUri: RED_URI,
+});
+
+const { auth, initializeAuthRoute } = require("./auth");
+const { search, initializeSearchRoute } = require("./search");
+
+initializeAuthRoute(spotify_api);
+initializeSearchRoute(spotify_api);
 
 // initializing app using
 /*
@@ -24,13 +34,6 @@ public directory for statics
 json and urlencoded for server -> client and client <- server comm
 cors so we can talk nice with spotify's server
 */
-const spotify_api = new SpotifyWebApi({
-	clientId: CLIENT_ID,
-	clientSecret: CLIENT_SECRET,
-	redirectUri: RED_URI,
-});
-initializeAuthRoute(spotify_api);
-
 let app = express();
 app
 	.use(express.static(path.join(__dirname, "public")))
@@ -40,7 +43,8 @@ app
 			extended: true,
 		})
 	)
-	.use(cookieParser());
+	.use(cookieParser())
+	.use(search);
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -57,7 +61,7 @@ const execute_with_access_token = async (cookie, callback) => {
 	spotify_api.resetAccessToken();
 };
 
-app.get("/authorize", (req, res) => {
+app.get("/asdawd", (req, res) => {
 	// check if there's an access token in cookies
 	// if not, check if there's a refresh token in cookies, then refresh access token
 	// if neither, or refreshing token results in error, authenticate using Spotify's Code Grant Path

@@ -1,16 +1,35 @@
-const express = require("express");
-const router = express.Router();
+// api object init
+let spotify_api = null;
+const initializeSearchRoute = (spotify_api_obj) => {
+	spotify_api = spotify_api_obj;
+	initializeAuthRoute(spotify_api);
+};
 
-router.get("/search", (req, res) => {
+const path = require("path");
+
+const {
+	state_key,
+	access_tok_key,
+	refresh_tok_key,
+} = require("./cookieMapping").cookieMap;
+
+const { auth, authFunc, initializeAuthRoute } = require("./auth");
+
+const express = require("express");
+const search = express.Router();
+
+search.use(auth);
+
+search.get("/search", (req, res) => {
+    // operatig under the assumption that access token exists, thanks to middleware
+    return res.sendFile(path.join(__dirname, "search.html"));
+
 	// these are for checking if the user is already authenticated
 	let cookies = req.cookies ? req.cookies : null;
 	let access_token = cookies ? cookies[access_tok_key] : null;
 	let refresh_token = cookies ? cookies[refresh_tok_key] : null;
-
-	// this is for obtaining a new auth key if the prior is untrue.
-	let authentication_code = req.query.code ? req.query.code : null;
-
 	console.log("search: checking for authorization");
+
 	if (access_token) {
 		// user is already authorized and token hasn't expired
 		console.log("search: access token found, serving search page");
@@ -40,7 +59,6 @@ router.get("/search", (req, res) => {
 					});
 					res.cookie(refresh_tok_key, data.body["refresh_token"]);
 
-					return res.sendFile(path.join(__dirname, "search.html"));
 				},
 				(err) => {
 					console.log(
@@ -58,3 +76,5 @@ router.get("/search", (req, res) => {
 		res.redirect("/");
 	}
 });
+
+module.exports = { search, initializeSearchRoute };
