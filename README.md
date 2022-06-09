@@ -16,8 +16,8 @@ This application's always been closed source, but since I'll be sunsetting it so
 
 I was planning to make it open after I had an MVP working, but goofed and committed the secret and client id codes Spotify gave me in a place gitignore wasn't keeping out. My bad. Won't happen again (I wasn't entirely knowledgable on how secret keys worked before.)
 
-Since I feel the live deployment's had a good run (and I don't feel like paying server+domain fees,) I'll be removing it from the interweb, and leaving you lot to self-host (or do whatever with it.)
+Since I feel the live deployment's had a good run (and I don't feel like paying server+domain fees,) I'll be removing it from the interweb, and leaving you lot to self-host (or do whatever with it.) So, I've made a new repo to prevent any secret key fiascos and placed the code here.
 
 ## Code Cleanup
 
-I built this in a bit less than a month, while learning lots of new things about interacting with and making APIs, so it's not the code I'm proudest of. This is my opportunity to fix that.
+I built this in a bit less than a month, while learning lots of new things about express and interacting with and making APIs, so it's not the code I'm proudest of. This is my opportunity to fix that.
