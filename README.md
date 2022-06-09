@@ -2,8 +2,6 @@
 
 Compares tracks on Spotify using their Audio Analysis data.
 
-![Moledar](https://user-images.githubusercontent.com/39662993/134794308-5cdf2679-eddd-4b5a-8b61-ce7ccf48fe95.jpeg)
-
 Started 8/15/2021
 Completed 9/25/2021
 Updated 6/8/2022
