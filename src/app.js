@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { body, query, validationResult } = require("express-validator");
 
 const cookieParser = require("cookie-parser");
@@ -9,7 +11,7 @@ const path = require("path");
 const cors = require("cors");
 const SpotifyWebApi = require("spotify-web-api-node");
 
-require("dotenv").config();
+const { auth, initializeAuthRoute } = require("./auth");
 
 const PORT = process.env.PORT || 8888;
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -22,8 +24,14 @@ public directory for statics
 json and urlencoded for server -> client and client <- server comm
 cors so we can talk nice with spotify's server
 */
-let app = express();
+const spotify_api = new SpotifyWebApi({
+	clientId: CLIENT_ID,
+	clientSecret: CLIENT_SECRET,
+	redirectUri: RED_URI,
+});
+initializeAuthRoute(spotify_api);
 
+let app = express();
 app
 	.use(express.static(path.join(__dirname, "public")))
 	.use(express.json())
@@ -37,25 +45,11 @@ app
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-let spotify_api = new SpotifyWebApi({
-	clientId: CLIENT_ID,
-	clientSecret: CLIENT_SECRET,
-	redirectUri: RED_URI,
-});
-
-let state_key = "spotify_auth_state";
-let access_tok_key = "spotify_auth_acc_tok";
-let refresh_tok_key = "spotify_auth_refresh_token";
-
-let scopes = ["user-top-read"];
-
-const { generateRandomString } = require("./authFuncs");
-
-const gen_auth_link = () => {
-	let state = generateRandomString(16);
-
-	return [spotify_api.createAuthorizeURL(scopes, state), state];
-};
+const {
+	state_key,
+	access_tok_key,
+	refresh_tok_key,
+} = require("./cookieMapping");
 
 const execute_with_access_token = async (cookie, callback) => {
 	spotify_api.setAccessToken(cookie);
@@ -109,74 +103,6 @@ app.get("/authorize", (req, res) => {
 
 app.get("/privacy", (req, res) => {
 	return res.sendFile(path.join(__dirname, "/public/privacy.html"));
-});
-
-const check_authorization_state = (state, stored_state) => {
-	if (state === null || state !== stored_state || state === undefined) {
-		return false;
-	} else {
-		return true;
-	}
-};
-
-app.get("/search", (req, res) => {
-	// check if already authenticated
-	let cookies = req.cookies ? req.cookies : null;
-	let access_token = cookies ? cookies[access_tok_key] : null;
-	let refresh_token = cookies ? cookies[refresh_tok_key] : null;
-
-	// obtain new authentication
-	let authentication_code = req.query.code ? req.query.code : null;
-
-	console.log("search page requested, checking for authorization");
-
-	if (access_token) {
-		// arrival from anywhere, recently authenticated
-		console.log("access token found, serving search page");
-		return res.sendFile(path.join(__dirname, "search.html"));
-	} else if (refresh_token) {
-		// arrival from anywhere, previously authenticated but access token expired
-		console.log(
-			"refresh token found, redirecting to authorization to refresh access token"
-		);
-		return res.redirect("/authorize");
-	} else if (authentication_code) {
-		// arrival from spotify auth page
-		let state = req.query.state;
-		let stored_state = cookies ? cookies[state_key] : null;
-		let proper_state = check_authorization_state(state, stored_state);
-
-		if (proper_state) {
-			res.clearCookie(state_key);
-
-			spotify_api.authorizationCodeGrant(authentication_code).then(
-				(data) => {
-					console.log("set refresh and access tokens, serving search page");
-					// console.log("The token expires in " + data.body["expires_in"]);
-					// console.log("The access token is " + data.body["access_token"]);
-					// console.log("The refresh token is " + data.body["refresh_token"]);
-					res.cookie(access_tok_key, data.body["access_token"], {
-						maxAge: data.body["expires_in"] * 1000,
-					});
-					res.cookie(refresh_tok_key, data.body["refresh_token"]);
-
-					return res.sendFile(path.join(__dirname, "search.html"));
-				},
-				(err) => {
-					console.log(
-						"error on initial access and refresh tokens setting",
-						err.message
-					);
-					return res.redirect("/");
-				}
-			);
-		} else {
-			console.log("state mismatch, redirecting to authorization");
-			return res.redirect("/authorize");
-		}
-	} else {
-		res.redirect("/");
-	}
 });
 
 const create_track_obj = (track) => {
