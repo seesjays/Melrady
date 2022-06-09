@@ -22,18 +22,14 @@ const spotify_api = new SpotifyWebApi({
 	redirectUri: RED_URI,
 });
 
-const { auth, initializeAuthRoute } = require("./auth");
-const { search, initializeSearchRoute } = require("./search");
+const { auth } = require("./auth");
+const sharedObjects = {
+	spotify_api: spotify_api,
+	authentication: auth(spotify_api)
+}
 
-initializeAuthRoute(spotify_api);
-initializeSearchRoute(spotify_api);
+const search = require("./search");
 
-// initializing app using
-/*
-public directory for statics
-json and urlencoded for server -> client and client <- server comm
-cors so we can talk nice with spotify's server
-*/
 let app = express();
 app
 	.use(express.static(path.join(__dirname, "public")))
@@ -44,7 +40,7 @@ app
 		})
 	)
 	.use(cookieParser())
-	.use(search);
+	.use(search(sharedObjects));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
