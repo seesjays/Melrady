@@ -1,0 +1,24 @@
+.sso-button {
+    display:flex;
+    align-items: center;
+}
+
+a, p, h1, h5, span {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+h1 {
+    font-weight: 600;
+}
+
+.moledar-title {
+    color: #49B955;
+}
+
+.album-chart {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10%;
+}

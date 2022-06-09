@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Moledar makes charts that display the intricate differences between songs.">
+    <link rel="canonical" href="https://moledar.net/">
+
+    <meta property="og:site_name" content="Moledar">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://moledar.net/">
+    <meta property="og:title" content="Moledar - Analyze Your Audio">
+    <meta property="og:description" content="Moledar makes charts that display the intricate differences between songs.">
+    <meta property="og:image" content="/images/dnda.png">
+
+    <meta property="twitter:domain" content="moledar.com">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://moledar.net/">
+    <meta property="twitter:title" content="Moledar - Analyze Your Audio">
+    <meta property="twitter:description"
+        content="Moledar displays and compares the intricate details of multiple songs.">
+    <meta property="twitter:image" content="/images/dnda.png">
+
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link href="/styles/landing.css" rel="stylesheet">
+    <link href="/styles/styles.css" rel="stylesheet">
+
+    <title>Moledar | Analyze Your Audio</title>
+</head>
+
+<body>
+    <div style="width: 100%; height: 100%;">
+        <div class="container-fluid d-flex flex-column justify-content-center align-items-center"
+            style="height: 100vh;">
+            <div class="card" style="margin: 0 auto;">
+                <div id="canvas-container-landing" class="card-img-top">
+                    <canvas id="track_chart" width="10" height="10">
+                    </canvas>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title moledar-title">Moledar</h1>
+                    <h2 class="h4 card-subtitle mb-2 text-muted">creates charts comparing traits of songs</h2>
+                    <p class="card-text">
+                        and displays other useful bits of data.
+                    </p>
+                    <a href="/authorize" class="btn btn-dark btn-lg">
+                        <span class="sso-button"><svg xmlns="http://www.w3.org/2000/svg"
+                                style="width:26px;height:26px;margin-right:10px;vertical-align:-6px">
+                                <g transform="scale(0.15)">
+                                    <path style="fill:currentcolor"
+                                        d="M83.996.277C37.747.277.253 37.77.253 84.019c0 46.251 37.494 83.741 83.743 83.741 46.254 0 83.744-37.49 83.744-83.741 0-46.246-37.49-83.738-83.745-83.738l.001-.004zm38.404 120.78a5.217 5.217 0 0 1-7.18 1.73c-19.662-12.01-44.414-14.73-73.564-8.07a5.222 5.222 0 0 1-6.249-3.93 5.213 5.213 0 0 1 3.926-6.25c31.9-7.291 59.263-4.15 81.337 9.34 2.46 1.51 3.24 4.72 1.73 7.18zm10.25-22.805c-1.89 3.075-5.91 4.045-8.98 2.155-22.51-13.839-56.823-17.846-83.448-9.764-3.453 1.043-7.1-.903-8.148-4.35a6.538 6.538 0 0 1 4.354-8.143c30.413-9.228 68.222-4.758 94.072 11.127 3.07 1.89 4.04 5.91 2.15 8.976v-.001zm.88-23.744c-26.99-16.031-71.52-17.505-97.289-9.684-4.138 1.255-8.514-1.081-9.768-5.219a7.835 7.835 0 0 1 5.221-9.771c29.581-8.98 78.756-7.245 109.83 11.202a7.823 7.823 0 0 1 2.74 10.733c-2.2 3.722-7.02 4.949-10.73 2.739z">
+                                    </path>
+                                </g>
+                            </svg> <span style="padding-left: 5px;">Sign in with Spotify</span></span></a>
+                </div>
+            </div>
+            <a href="/privacy" type="button" class="link-secondary" style="margin: 10px;">
+                Privacy
+            </a>
+
+        </div>
+    </div>
+
+    <script>
+        const datasetlist = [
+            {
+                "label": "Praise God",
+                "data": [
+                    1,
+                    0.6681002210759027,
+                    0.7898550724637682,
+                    0.4540540540540541,
+                    0.7971162288106977,
+                    0.3365079365079365
+                ],
+                "borderColor": "rgba(120, 198, 121, 0.9)",
+                "backgroundColor": "rgba(120, 198, 121, 0.1)",
+                "pointBackgroundColor": "rgba(120, 198, 121, 0.9)",
+                "pointBorderColor": "rgba(120, 198, 121, 0.9)",
+                "pointHoverBackgroundColor": "rgba(120, 198, 121, 0.1)",
+                "pointHoverBorderColor": "rgba(120, 198, 121, 0.1)"
+            },
+            {
+                "label": "Heaven and Hell",
+                "data": [
+                    0.9573934837092731,
+                    0.42830066322770816,
+                    0.6115942028985507,
+                    0.3216216216216216,
+                    0.560451137975282,
+                    0.42539682539682544
+                ],
+                "borderColor": "rgba(65, 171, 93, 0.9)",
+                "backgroundColor": "rgba(65, 171, 93, 0.1)",
+                "pointBackgroundColor": "rgba(65, 171, 93, 0.9)",
+                "pointBorderColor": "rgba(65, 171, 93, 0.9)",
+                "pointHoverBackgroundColor": "rgba(65, 171, 93, 0.1)",
+                "pointHoverBorderColor": "rgba(65, 171, 93, 0.1)"
+            },
+            {
+                "label": "Off The Grid",
+                "data": [
+                    0.6842105263157895,
+                    1,
+                    0.9275362318840581,
+                    1,
+                    0.9301546565813468,
+                    1
+                ],
+                "borderColor": "rgba(35, 132, 67, 0.9)",
+                "backgroundColor": "rgba(35, 132, 67, 0.1)",
+                "pointBackgroundColor": "rgba(35, 132, 67, 0.9)",
+                "pointBorderColor": "rgba(35, 132, 67, 0.9)",
+                "pointHoverBackgroundColor": "rgba(35, 132, 67, 0.1)",
+                "pointHoverBorderColor": "rgba(35, 132, 67, 0.1)"
+            },
+            {
+                "label": "Junya",
+                "data": [
+                    0.9423558897243107,
+                    0.4352807663964628,
+                    1,
+                    0.1735135135135135,
+                    1,
+                    0.6285714285714286
+                ],
+                "borderColor": "rgba(0, 90, 50, 0.9)",
+                "backgroundColor": "rgba(0, 90, 50, 0.1)",
+                "pointBackgroundColor": "rgba(0, 90, 50, 0.9)",
+                "pointBorderColor": "rgba(0, 90, 50, 0.9)",
+                "pointHoverBackgroundColor": "rgba(0, 90, 50, 0.1)",
+                "pointHoverBorderColor": "rgba(0, 90, 50, 0.1)"
+            }
+        ];
+
+        const datasetlist1 = [
+            {
+                "label": "Praise God",
+                "data": [
+                    1,
+                    0.6681002210759027,
+                    0.7898550724637682,
+                    0.4540540540540541,
+                    0.7971162288106977,
+                    0.3365079365079365
+                ],
+                "borderColor": "rgba(120, 198, 121, 0.9)",
+                "backgroundColor": "rgba(120, 198, 121, 0.1)",
+                "pointBackgroundColor": "rgba(120, 198, 121, 0.9)",
+                "pointBorderColor": "rgba(120, 198, 121, 0.9)",
+                "pointHoverBackgroundColor": "rgba(120, 198, 121, 0.1)",
+                "pointHoverBorderColor": "rgba(120, 198, 121, 0.1)"
+            },
+            {
+                "label": "Heaven and Hell",
+                "data": [
+                    0.9573934837092731,
+                    0.42830066322770816,
+                    0.6115942028985507,
+                    0.3216216216216216,
+                    0.560451137975282,
+                    0.42539682539682544
+                ],
+                "borderColor": "rgba(65, 171, 93, 0.9)",
+                "backgroundColor": "rgba(65, 171, 93, 0.1)",
+                "pointBackgroundColor": "rgba(65, 171, 93, 0.9)",
+                "pointBorderColor": "rgba(65, 171, 93, 0.9)",
+                "pointHoverBackgroundColor": "rgba(65, 171, 93, 0.1)",
+                "pointHoverBorderColor": "rgba(65, 171, 93, 0.1)"
+            },
+            {
+                "label": "Off The Grid",
+                "data": [
+                    0.6842105263157895,
+                    1,
+                    0.9275362318840581,
+                    1,
+                    0.9301546565813468,
+                    1
+                ],
+                "borderColor": "rgba(35, 132, 67, 0.9)",
+                "backgroundColor": "rgba(35, 132, 67, 0.1)",
+                "pointBackgroundColor": "rgba(35, 132, 67, 0.9)",
+                "pointBorderColor": "rgba(35, 132, 67, 0.9)",
+                "pointHoverBackgroundColor": "rgba(35, 132, 67, 0.1)",
+                "pointHoverBorderColor": "rgba(35, 132, 67, 0.1)"
+            },
+            {
+                "label": "Junya",
+                "data": [
+                    0.9423558897243107,
+                    0.4352807663964628,
+                    1,
+                    0.1735135135135135,
+                    1,
+                    0.6285714285714286
+                ],
+                "borderColor": "rgba(0, 90, 50, 0.9)",
+                "backgroundColor": "rgba(0, 90, 50, 0.1)",
+                "pointBackgroundColor": "rgba(0, 90, 50, 0.9)",
+                "pointBorderColor": "rgba(0, 90, 50, 0.9)",
+                "pointHoverBackgroundColor": "rgba(0, 90, 50, 0.1)",
+                "pointHoverBorderColor": "rgba(0, 90, 50, 0.1)"
+            }
+        ];
+
+        const datasetlist2 = [
+            {
+                "label": "Daughter of Hallownest",
+                "data": [
+                    0.37702265372168287,
+                    0.3478825407537646,
+                    0.5623268698060943,
+                    0.5849731663685153,
+                    0.9998758081097304,
+                    0.5258215962441315
+                ],
+                "borderColor": "rgba(226, 52, 52, 0.9)",
+                "backgroundColor": "rgba(226, 52, 52, 0.1)",
+                "pointBackgroundColor": "rgba(226, 52, 52, 0.9)",
+                "pointBorderColor": "rgba(226, 52, 52, 0.9)",
+                "pointHoverBackgroundColor": "rgba(226, 52, 52, 0.1)",
+                "pointHoverBorderColor": "rgba(226, 52, 52, 0.1)"
+            },
+            {
+                "label": "Hornet",
+                "data": [
+                    1,
+                    0.3290571726822992,
+                    0.5055401662049862,
+                    0.5974955277280859,
+                    1,
+                    1
+                ],
+                "borderColor": "rgba(82.49999999999999, 116.25, 172.5, 0.9)",
+                "backgroundColor": "rgba(82.49999999999999, 116.25, 172.5, 0.1)",
+                "pointBackgroundColor": "rgba(82.49999999999999, 116.25, 172.5, 0.9)",
+                "pointBorderColor": "rgba(82.49999999999999, 116.25, 172.5, 0.9)",
+                "pointHoverBackgroundColor": "rgba(82.49999999999999, 116.25, 172.5, 0.1)",
+                "pointHoverBorderColor": "rgba(82.49999999999999, 116.25, 172.5, 0.1)"
+            },
+            {
+                "label": "Light of Nibel (feat. Aeralie Brighton)",
+                "data": [
+                    0.40129449838187703,
+                    0.5112488480808584,
+                    0.7022160664819945,
+                    0.667262969588551,
+                    0.5487901640022906,
+                    0.08450704225352113
+                ],
+                "borderColor": "rgba(44, 188, 240, 0.9)",
+                "backgroundColor": "rgba(44, 188, 240, 0.1)",
+                "pointBackgroundColor": "rgba(44, 188, 240, 0.9)",
+                "pointBorderColor": "rgba(44, 188, 240, 0.9)",
+                "pointHoverBackgroundColor": "rgba(44, 188, 240, 0.1)",
+                "pointHoverBorderColor": "rgba(44, 188, 240, 0.1)"
+            },
+            {
+                "label": "Bfg Division",
+                "data": [
+                    0.459546925566343,
+                    1,
+                    1,
+                    1,
+                    0.8023624057349055,
+                    0.05993740219092332
+                ],
+                "borderColor": "rgba(218, 90, 20, 0.9)",
+                "backgroundColor": "rgba(218, 90, 20, 0.1)",
+                "pointBackgroundColor": "rgba(218, 90, 20, 0.9)",
+                "pointBorderColor": "rgba(218, 90, 20, 0.9)",
+                "pointHoverBackgroundColor": "rgba(218, 90, 20, 0.1)",
+                "pointHoverBorderColor": "rgba(218, 90, 20, 0.1)"
+            }
+        ];
+
+        const datasetlist3 = [
+            {
+                "label": "Praise God",
+                "data": [
+                    1,
+                    0.588040099834474,
+                    0.7305630026809652,
+                    0.4786324786324787,
+                    0.7370225361083531,
+                    0.3706293706293706
+                ],
+                "borderColor": "rgba(127.5, 127.5, 127.5, 0.9)",
+                "backgroundColor": "rgba(127.5, 127.5, 127.5, 0.1)",
+                "pointBackgroundColor": "rgba(127.5, 127.5, 127.5, 0.9)",
+                "pointBorderColor": "rgba(127.5, 127.5, 127.5, 0.9)",
+                "pointHoverBackgroundColor": "rgba(127.5, 127.5, 127.5, 0.1)",
+                "pointHoverBorderColor": "rgba(127.5, 127.5, 127.5, 0.1)"
+            },
+            {
+                "label": "Non-Stop",
+                "data": [
+                    0.9649122807017544,
+                    1,
+                    0.646112600536193,
+                    1,
+                    0.5744490861292719,
+                    0.770979020979021
+                ],
+                "borderColor": "rgba(204, 140, 46, 0.9)",
+                "backgroundColor": "rgba(204, 140, 46, 0.1)",
+                "pointBackgroundColor": "rgba(204, 140, 46, 0.9)",
+                "pointBorderColor": "rgba(204, 140, 46, 0.9)",
+                "pointHoverBackgroundColor": "rgba(204, 140, 46, 0.1)",
+                "pointHoverBorderColor": "rgba(204, 140, 46, 0.1)"
+            },
+            {
+                "label": "Lost In The World",
+                "data": [
+                    0.7619047619047619,
+                    0.6657023957160425,
+                    1,
+                    0.5242165242165242,
+                    0.7310466270770499,
+                    0.4842657342657343
+                ],
+                "borderColor": "rgba(236, 35, 60, 0.9)",
+                "backgroundColor": "rgba(236, 35, 60, 0.1)",
+                "pointBackgroundColor": "rgba(236, 35, 60, 0.9)",
+                "pointBorderColor": "rgba(236, 35, 60, 0.9)",
+                "pointHoverBackgroundColor": "rgba(236, 35, 60, 0.1)",
+                "pointHoverBorderColor": "rgba(236, 35, 60, 0.1)"
+            },
+            {
+                "label": "Redbone",
+                "data": [
+                    0.931077694235589,
+                    0.8482116449338155,
+                    0.4651474530831099,
+                    0.34472934472934474,
+                    1,
+                    1
+                ],
+                "borderColor": "rgba(50, 148, 206, 0.9)",
+                "backgroundColor": "rgba(50, 148, 206, 0.1)",
+                "pointBackgroundColor": "rgba(50, 148, 206, 0.9)",
+                "pointBorderColor": "rgba(50, 148, 206, 0.9)",
+                "pointHoverBackgroundColor": "rgba(50, 148, 206, 0.1)",
+                "pointHoverBorderColor": "rgba(50, 148, 206, 0.1)"
+            }
+        ];
+
+        const datasetlist4 = [
+            {
+                "label": "Iris",
+                "data": [
+                    0.3804347826086957,
+                    0.9351841085271317,
+                    1,
+                    0.6666666666666667,
+                    1,
+                    0.569954128440367
+                ],
+                "borderColor": "rgba(199, 59, 131, 0.9)",
+                "backgroundColor": "rgba(199, 59, 131, 0.1)",
+                "pointBackgroundColor": "rgba(199, 59, 131, 0.9)",
+                "pointBorderColor": "rgba(199, 59, 131, 0.9)",
+                "pointHoverBackgroundColor": "rgba(199, 59, 131, 0.1)",
+                "pointHoverBorderColor": "rgba(199, 59, 131, 0.1)"
+            },
+            {
+                "label": "Sunkissed",
+                "data": [
+                    0.92512077294686,
+                    0.40847545219638237,
+                    0.4951048951048951,
+                    1,
+                    0.9870258136924802,
+                    0.908256880733945
+                ],
+                "borderColor": "rgba(244, 41, 116, 0.9)",
+                "backgroundColor": "rgba(244, 41, 116, 0.1)",
+                "pointBackgroundColor": "rgba(244, 41, 116, 0.9)",
+                "pointBorderColor": "rgba(244, 41, 116, 0.9)",
+                "pointHoverBackgroundColor": "rgba(244, 41, 116, 0.1)",
+                "pointHoverBorderColor": "rgba(244, 41, 116, 0.1)"
+            },
+            {
+                "label": "The Scientist",
+                "data": [
+                    0.6727053140096619,
+                    1,
+                    0.6181818181818182,
+                    0.4475138121546961,
+                    0.9381240981240979,
+                    0.24426605504587157
+                ],
+                "borderColor": "rgba(135.59523809523813, 123.45238095238092, 119.40476190476188, 0.9)",
+                "backgroundColor": "rgba(135.59523809523813, 123.45238095238092, 119.40476190476188, 0.1)",
+                "pointBackgroundColor": "rgba(135.59523809523813, 123.45238095238092, 119.40476190476188, 0.9)",
+                "pointBorderColor": "rgba(135.59523809523813, 123.45238095238092, 119.40476190476188, 0.9)",
+                "pointHoverBackgroundColor": "rgba(135.59523809523813, 123.45238095238092, 119.40476190476188, 0.1)",
+                "pointHoverBorderColor": "rgba(135.59523809523813, 123.45238095238092, 119.40476190476188, 0.1)"
+            },
+            {
+                "label": "Fresh Eyes",
+                "data": [
+                    1,
+                    0.6395381136950904,
+                    0.7832167832167833,
+                    0.6022099447513812,
+                    0.7827737694404361,
+                    1
+                ],
+                "borderColor": "rgba(169.54054054054052, 140.59459459459458, 85.4594594594595, 0.9)",
+                "backgroundColor": "rgba(169.54054054054052, 140.59459459459458, 85.4594594594595, 0.1)",
+                "pointBackgroundColor": "rgba(169.54054054054052, 140.59459459459458, 85.4594594594595, 0.9)",
+                "pointBorderColor": "rgba(169.54054054054052, 140.59459459459458, 85.4594594594595, 0.9)",
+                "pointHoverBackgroundColor": "rgba(169.54054054054052, 140.59459459459458, 85.4594594594595, 0.1)",
+                "pointHoverBorderColor": "rgba(169.54054054054052, 140.59459459459458, 85.4594594594595, 0.1)"
+            }
+        ];
+
+        const sets = [datasetlist1, datasetlist2, datasetlist3, datasetlist4];
+
+        for (let set of sets)
+        {
+            for (let data of set)
+            {
+                Object.freeze(data);
+            }
+        }
+
+        for (let data of datasetlist)
+        {
+            data.pointBackgroundColor = data.borderColor;
+            data.pointBorderColor = data.borderColor;
+            data.pointHoverBackgroundColor = data.borderColor;
+            data.pointHoverBorderColor = data.borderColor;
+        }
+
+        const mapping_mode = {
+            "danceability": "danceability",
+            "duration": "duration",
+            "energy": "energy",
+            "speechiness": "speechiness",
+            "tempo": "tempo",
+            "valence": "valence",
+        };
+
+        let track_chart = null;
+        let get_chart = null;
+
+        let current_set = 0;
+
+        function create_chart()
+        {
+            let canvcontainer = document.getElementById('canvas-container-landing');
+            let cnvs = document.getElementById('track_chart');
+            let ctx = document.getElementById('track_chart').getContext('2d');
+
+            // get color list
+            canvcontainer.width = canvcontainer.clientWidth;
+            canvcontainer.height = canvcontainer.clientHeight;
+
+
+            track_chart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(mapping_mode),
+                    datasets: datasetlist,
+                },
+                options: {
+                    tooltips: {
+                        enabled: false
+                    },
+                    layout: {
+                        padding: {
+                            top: 5,
+                            bottom: 5,
+                        },
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false,
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                            },
+                            min: 0,
+                            max: 1.0,
+                            ticks: {
+                                display: false
+                            },
+                            display: false
+                        }
+                    }
+                },
+            });
+            get_chart = () => { return track_chart; }
+        }
+
+        function change_set(i)
+        {
+            let chart = get_chart();
+            let set = sets[i];
+            let setnum = 0;
+            chart.data.datasets.forEach(dataset =>
+            {
+                Object.keys(set[setnum]).forEach(key =>
+                {
+                    dataset[key] = set[setnum][key];
+                });
+                setnum++;
+            })
+            chart.update();
+        }
+
+        create_chart();
+        let i = 1;
+        setInterval(() => { change_set(i); i++; if (i > 3) { i = 0 }; }, 1000);
+    </script>
+</body>
+
+</html>
