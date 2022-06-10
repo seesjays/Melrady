@@ -12,7 +12,8 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://moledar.net/">
     <meta property="og:title" content="Moledar - Analyze Your Audio">
-    <meta property="og:description" content="Moledar makes charts that display the intricate differences between songs.">
+    <meta property="og:description"
+        content="Moledar makes charts that display the intricate differences between songs.">
     <meta property="og:image" content="/images/dnda.png">
 
     <meta property="twitter:domain" content="moledar.com">
@@ -94,10 +95,11 @@
 
                                 <div class="col-sm-3 justify-content-center mt-2 mt-sm-0">
                                     <div class="d-grid gap-2">
-                                        <button id="search-button" class="btn btn-primary btn-lg">Search
+                                        <button type="button" id="search-button" class="btn btn-primary btn-lg">Search
                                             Tracks</button>
 
-                                        <button id="reset-button" class="btn btn-danger">Reset</button>
+                                        <button type="reset" form="track-search-form" id="reset-button"
+                                            class="btn btn-danger">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -184,223 +186,9 @@
         </div>
         <div style="width: 100%; margin-bottom: 1em;"></div>
     </div>
+
+    <script src="/scripts/formSubmit.js"></script>
 </body>
-
-<script>
-    let testTrack = {
-        search_box_num: 4,
-        album: "Yeezus",
-        title: "Guilt Trip"
-    }
-
-    let testTracks = {
-        track_one: testTrack,
-        track_two: testTrack,
-        track_three: testTrack,
-    }
-
-    const track_ids = {};
-    let track_objs = {};
-
-    function gen_url_ids_query()
-    {
-        // check if track ids is empty
-        let track_cnt = 1;
-        let fullquery = "";
-
-        Object.keys(track_ids).map((boxnum) =>
-        {
-            fullquery += `track${boxnum[5]}=${track_ids[boxnum]}&`;
-            track_cnt++;
-        });
-
-        fullquery = fullquery.substring(0, fullquery.length - 1);
-
-        return fullquery;
-    }
-
-    function update_selections_list()
-    {
-        $("#album-cover-row").empty();
-        Object.values(track_ids).map((track_id) =>
-        {
-            const corresponding = track_objs[track_id];
-
-            let track_cover_container = $('<a></a>').attr('href', corresponding.track_url);
-            track_cover_container.addClass(`col-6 col-sm-3 link-dark`);
-
-            let track_image = $('<img>');
-            track_image.attr('src', `${corresponding.track_image}`);
-            track_image.attr('alt', `album cover for ${corresponding.track_name}`);
-            track_image.addClass("album-cover img-fluid");
-
-            let track_text = $(`<p></p>`).text(`${corresponding.track_name}`).css({ "text-align": "center" }).addClass("link-dark");
-
-            track_cover_container.append(track_image);
-            track_cover_container.append(track_text);
-            $("#album-cover-row").append(track_cover_container);
-        });
-    }
-
-    function update_selections_and_link()
-    {
-        let new_query = gen_url_ids_query();
-
-        $('#selections-label').text('');
-        update_selections_list();
-
-        if (new_query.length === 0)
-        {
-            $('#selections-label').text('No tracks selected. ');
-            $('#stats-button').addClass('disabled');
-            $('#stats-button').attr('href', `/stats/`);
-            return;
-        }
-        else
-        {
-            $('#selections-label').text('Selections: ');
-            $('#stats-button').removeClass('disabled');
-            $('#stats-button').attr('href', `/stats/?${new_query}`);
-        }
-    }
-
-    function hide_track_lists()
-    {
-        $(".accordion-collapse").collapse("hide");
-        for (let i = 1; i < 5; i++)
-        {
-            $(`#card-${i}-list`).empty();
-        }
-    }
-
-    function show_track_lists()
-    {
-        for (let i = 1; i < 5; i++)
-        {
-            $(`#card-${i}-list`).children().length > 0 && $(`#card-${i}-list`).slideDown(250);
-            $(`#card-${i}-list`).children().length > 0 && $(`#track-${i}-accordion`).collapse("show");
-        }
-    }
-
-    // also adds to track_obj list
-    function add_tracks_to_card(tracks_obj)
-    {
-        for (result of tracks_obj)
-        {
-            let { track_name, track_artists, track_album, track_id, search_box_num } = result;
-
-            track_objs[track_id] = result;
-
-            let cardlist = `card-${search_box_num}-list`;
-
-            let names = [];
-            for (let artist of track_artists)
-            {
-                names.push(artist.name);
-            }
-
-            let album_artists = names.join(", ");
-            $(`#${cardlist}`).append(`<div class="track-option" data-song-id=${track_id}><h5 class="card-title">${track_name}</h5><h6 class="card-subtitle mb-2 text-muted">${track_name}</h6><h6 class="card-subtitle mb-2 text-muted">${album_artists}</h6></div>`);
-        }
-    }
-
-    $('#search-button').click(() =>
-    {
-        $('#search-button').prop('disabled', true);
-        // empty field checking
-        let allempty = true;
-
-        for (let i = 1; i < 5; i++)
-        {
-            allempty = false;
-            if ($(`#track_${i}_name`).val() != '')
-            {
-                break;
-            }
-
-            // checks all four inputs, and if it finds one
-            // that isn't empty, it'll continue to the form sending portion
-            allempty = true;
-        }
-
-        if (allempty)
-        {
-            // wait for collapse anim
-            setTimeout(() =>
-            {
-                show_track_lists();
-                $('#search-button').prop('disabled', false);
-            }, 500);
-            return;
-        }
-
-        hide_track_lists();
-
-        $.post("/tracksearch", $('#track-search-form').serialize(), (searchlist) =>
-        {
-            Object.keys(track_ids).forEach(track => delete track_ids[track]);
-            track_objs = {};
-
-            for (let searchresultlist of searchlist)
-            {
-                add_tracks_to_card(searchresultlist);
-            }
-
-            update_selections_and_link();
-
-            $(".track-option").click(function ()
-            {
-                let list_parent_id = $(this).parent().attr('id');
-                let track_option_track_id = $(this).attr("data-song-id");
-
-                if (Object.values(track_ids).includes(track_option_track_id))
-                {
-                    delete track_ids[list_parent_id];
-                    update_selections_and_link();
-
-                    // remove highlight
-                    $(this).siblings().removeClass("selected-track");
-                    $(this).removeClass("selected-track");
-
-                    return;
-                }
-
-                track_ids[list_parent_id] = track_option_track_id;
-
-                update_selections_and_link();
-
-                // set highlight
-                $(this).siblings().removeClass("selected-track");
-                $(this).removeClass("selected-track");
-                $(this).addClass("selected-track");
-            });
-
-            // wait for collapse anim
-            setTimeout(() =>
-            {
-                show_track_lists();
-                $('#search-button').prop('disabled', false);
-            }, 500);
-        },
-            'json');
-    });
-
-    $('#reset-button').click(() =>
-    {
-        hide_track_lists();
-        Object.keys(track_ids).forEach(track => delete track_ids[track]);
-        track_objs = {};
-        $("#track-search-form").find("input[type=text], textarea").val("");
-        update_selections_and_link();
-    });
-
-    $(document).ready(function ()
-    {
-        update_selections_and_link();
-        hide_track_lists();
-    });
-
-</script>
 
 <script>
     const get_tops = async () =>
@@ -427,7 +215,7 @@
         for (let i = 1; i < 5; i++)
         {
             let random_track = fvs[Math.floor(Math.random() * fvs.length)];
-            let {track_name, track_album} = random_track;
+            let { track_name, track_album } = random_track;
 
             let track_option = `${track_name} (${track_album})`;
             if (pickeds.indexOf(track_option) > -1)
@@ -436,7 +224,7 @@
                     if it's still the same then either there's < 4 top tracks on the account or bad luck
                 */
                 random_track = fvs[Math.floor(Math.random() * fvs.length)];
-                ({track_name, track_album} = random_track);
+                ({ track_name, track_album } = random_track);
                 track_option = `${track_name} (${track_album})`;
             }
 

@@ -4,18 +4,13 @@ const testTrack = {
 	title: "Guilt Trip",
 };
 
-const testTracks = {
-	track_one: testTrack,
-	track_two: testTrack,
-	track_three: testTrack,
-};
+const testTracks = [testTrack, testTrack, testTrack];
 
-const track_ids = {};
-let track_objs = {};
+let trackObjects = {};
 
 $("#search-button").click(() => {
 	// mitigate submit spam
-	$("#search-button").prop("disabled", true);
+	//$("#search-button").prop("disabled", true);
 	hide_track_lists();
 
 	if (searchQueryExists) {
@@ -23,7 +18,16 @@ $("#search-button").click(() => {
 		$.post(
 			"/search",
 			$("#track-search-form").serialize(),
+
 			(response) => {
+				// should be an array of arrays of 3 track objects
+				console.dir(response);
+
+				// clear out the previous track object store
+				trackObjects = {};
+
+				response.forEach((resultGroup, index) => {});
+
 				Object.keys(track_ids).forEach((track) => delete track_ids[track]);
 				track_objs = {};
 
