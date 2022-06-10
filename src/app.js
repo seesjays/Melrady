@@ -33,6 +33,7 @@ const search = require("./search");
 let app = express();
 app
 	.use(express.static(path.join(__dirname, "public")))
+	.use(express.static(path.join(__dirname, "publicMeta"))) // didn't want to use a subdir in public for <meta> stuff
 	.use(express.json())
 	.use(
 		express.urlencoded({
