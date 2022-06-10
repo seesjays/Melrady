@@ -1,11 +1,12 @@
 const path = require("path");
 
 const express = require("express");
-const { body, validationResult } = require("express-validator");
 const searchRouter = express.Router();
 
 function search(sharedObjects) {
 	const auth = sharedObjects.authentication;
+	const spotify_api = sharedObjects.spotify_api;
+	const { body, validationResult } = require("express-validator");
 
 	// operating under the assumption that access token exists in cookies already thanks to middleware
 	searchRouter.get("/search", auth, (req, res) => {
@@ -32,34 +33,31 @@ function search(sharedObjects) {
 			console.log(
 				`tracksearch: searching ${Object.keys(req.body).length} tracks:`
 			);
+
 			console.dir(req.body);
 
 			const { access_tok_key } = require("./cookieMapping").cookieMap;
 			const cookies = req.cookies ? req.cookies : null;
 			const access_token = cookies ? cookies[access_tok_key] : null;
 
+			const { createTrackObject } = require("./trackObject");
 			let trackouts = [];
+
 			const output = await Promise.all(
 				Object.values(req.body)
-					.filter((query) => query.legnth > 0)
+					.filter((query) => query.length > 0)
 					.map(async (query, index) => {
-						console.log(query);
 						spotify_api.setAccessToken(access_token);
 
 						const searchResults = await spotify_api.searchTracks(query, {
 							limit: 3,
 						});
 
-						console.log(searchResults);
-
 						if (searchResults) {
-							for (const result of searchResults.body.tr acks.items) {
-								console.log(result);
+							for (const searchresult of searchResults.body.tracks.items) {
+								const trackobj = createTrackObject(searchresult);
 
-								//let trackobj = create_track_obj(searchresult);
-
-								//trackobj.search_box_num = trackin[0][6];
-								//search_results.push(trackobj);
+								console.log(trackobj);
 							}
 							return searchResults;
 						} else {
@@ -73,12 +71,8 @@ function search(sharedObjects) {
 					})
 			);
 
-			console.log(output);
-
+			console.log(`search: Successfully searched ${output.length} songs.`);
 			return res.json(output);
-
-			console.log(`Successfully searched ${trackouts.length} songs.`);
-			console.log();
 		}
 	);
 

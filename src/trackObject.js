@@ -18,10 +18,11 @@ exports.createTrackObject = (fullTrackData) => {
 		features: null,
 		color: null,
 	};
-    
+
     return track;
 };
 
+/*
 const create_track_obj = (track) => {
 	let track_object = {
 		track_id: track.id,
@@ -40,6 +41,7 @@ const create_track_obj = (track) => {
 
 	return track_object;
 };
+*/
 
 exports.dummy_obj = {
 	track_id: "1UKk6maDt5HXQCriDiZWP5",
