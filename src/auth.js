@@ -200,7 +200,15 @@ const auth = (spotify_api) => {
 		}
 	};
 };
-module.exports = { auth, authRouter };
+
+const executeWithAccessToken = async (accessToken, callback) => {
+	if (callback instanceof Function) {
+		spotify_api.setAccessToken(accessToken);
+		await callback();
+		spotify_api.resetAccessToken();
+	}
+};
+module.exports = { auth, authRouter, executeWithAccessToken };
 
 const scopes = ["user-top-read"];
 const gen_auth_link = () => {
