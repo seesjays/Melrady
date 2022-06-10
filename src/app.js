@@ -22,11 +22,11 @@ const spotify_api = new SpotifyWebApi({
 	redirectUri: RED_URI,
 });
 
-const { auth } = require("./auth");
+const { auth, executeWithAccessToken } = require("./auth");
 const sharedObjects = {
 	spotify_api: spotify_api,
-	authentication: auth(spotify_api)
-}
+	authentication: auth(spotify_api),
+};
 
 const search = require("./search");
 
@@ -51,11 +51,7 @@ const {
 	refresh_tok_key,
 } = require("./cookieMapping");
 
-const execute_with_access_token = async (cookie, callback) => {
-	spotify_api.setAccessToken(cookie);
-	callback instanceof Function && (await callback());
-	spotify_api.resetAccessToken();
-};
+
 
 app.get("/asdawd", (req, res) => {
 	// check if there's an access token in cookies
@@ -279,8 +275,6 @@ const search_track = async (trackin) => {
 
 	return search_results;
 };
-
-
 
 app.get(
 	"/stats",
