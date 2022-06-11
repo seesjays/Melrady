@@ -107,19 +107,19 @@ const auth = (spotify_api) => {
 		let text = "";
 		let possible =
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	
+
 		for (let i = 0; i < length; i++) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));
 		}
 		return text;
 	};
-	
+
 	const gen_auth_link = () => {
 		let state = generateRandomString(16);
 
 		return [spotify_api.createAuthorizeURL(scopes, state), state];
 	};
-	
+
 	return function (req, res, next) {
 		// check if there's an access token in cookies
 		// if not, check if there's a refresh token in cookies, then refresh access token

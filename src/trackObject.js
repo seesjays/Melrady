@@ -20,5 +20,5 @@ exports.createTrackObject = (fullTrackData) => {
 		color: null,
 	};
 
-    return track;
+	return track;
 };

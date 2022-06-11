@@ -68,7 +68,7 @@ function search(sharedObjects) {
 					}
 				})
 			);
-			
+
 			// Promise.all returns everything in the same order it was fed, which is nice.
 			console.log(`tracksearch: returning ${output.length} track objects:`);
 			console.dir(output);
