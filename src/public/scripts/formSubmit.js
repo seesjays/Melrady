@@ -6,7 +6,8 @@ const testTrack = {
 
 const testTracks = [testTrack, testTrack, testTrack];
 
-let trackObjects = {};
+let resultGroups = [];
+let selectedTracks = [];
 
 $("#search-button").click(() => {
 	// mitigate submit spam
@@ -20,20 +21,36 @@ $("#search-button").click(() => {
 			$("#track-search-form").serialize(),
 
 			(response) => {
-				// should be an array of arrays of 3 track objects
+				// should be an array consisting of arrays of 3 track objects
 				console.dir(response);
 
-				// clear out the previous track object store
-				trackObjects = {};
+				// clear out the previous result group and selected track stores
+				resultGroups = response;
+				selectedTracks = [];
+				
+				// resultDisplay.js
+				displayResults(resultGroups);
+				
+				return;
 
-				response.forEach((resultGroup, index) => {});
+				response.forEach((resultGroup, index) => {
+					const cardGroup = `#card-${index + 1}-list`;
 
-				Object.keys(track_ids).forEach((track) => delete track_ids[track]);
-				track_objs = {};
+					for (result of resultGroup) {
+						const artistNames = result.trackArtists.map(artist => artist.name).join(", ");
 
-				for (let searchresultlist of searchlist) {
-					add_tracks_to_card(searchresultlist);
-				}
+						$(cardGroup).append(
+							`
+							<div class="track-option" data-song-id=${result.trackId}>
+								<h5 class="card-title">${result.trackName}</h5>
+								<h6 class="card-subtitle mb-2 text-muted">${result.albumName}</h6>
+								<h6 class="card-subtitle mb-2 text-muted">${artistNames}</h6>
+							</div>
+							`
+						);
+					}
+				});
+
 
 				update_selections_and_link();
 
@@ -71,50 +88,25 @@ $("#search-button").click(() => {
 			"json"
 		);
 	}
+
+	// returns true if any inputs have values
+	function searchQueryExists() {
+		for (let i = 1; i < 5; i++) {
+			if ($(`#track_${i}_name`).val() != "") {
+				return true;
+			}
+		}
+
+		return false;
+	}
 });
 
-// returns true if any inputs have values
-function searchQueryExists() {
-	let notempty = false;
 
-	for (let i = 1; i < 5; i++) {
-		if ($(`#track_${i}_name`).val() != "") {
-			return true;
-		}
-	}
 
-	return false;
 
-	/*
-    
-	if (allempty) {
-		// wait for collapse anim
-		setTimeout(() => {
-			show_track_lists();
-			$("#search-button").prop("disabled", false);
-		}, 500);
-		return;
-	}
-    */
-}
 
-function gen_url_ids_query() {
-	// check if track ids is empty
-	let track_cnt = 1;
-	let fullquery = "";
-
-	Object.keys(track_ids).map((boxnum) => {
-		fullquery += `track${boxnum[5]}=${track_ids[boxnum]}&`;
-		track_cnt++;
-	});
-
-	fullquery = fullquery.substring(0, fullquery.length - 1);
-
-	return fullquery;
-}
 
 function update_selections_list() {
-	$("#album-cover-row").empty();
 	Object.values(track_ids).map((track_id) => {
 		const corresponding = track_objs[track_id];
 
@@ -141,7 +133,7 @@ function update_selections_list() {
 }
 
 function update_selections_and_link() {
-	let new_query = gen_url_ids_query();
+	let new_query = generateStatsLink(selectedTracks);
 
 	$("#selections-label").text("");
 	update_selections_list();
@@ -150,11 +142,20 @@ function update_selections_and_link() {
 		$("#selections-label").text("No tracks selected. ");
 		$("#stats-button").addClass("disabled");
 		$("#stats-button").attr("href", `/stats/`);
-		return;
 	} else {
 		$("#selections-label").text("Selections: ");
 		$("#stats-button").removeClass("disabled");
 		$("#stats-button").attr("href", `/stats/?${new_query}`);
+	}
+
+	function generateStatsLink(tracks) {
+		const statsQuery = tracks.reduce(
+			(partialQuery, trackObject, index) => partialQuery + `track${index + 1}=${trackObject.trackId}&`,
+			"/stats?"
+		);
+
+		// remove trailing &
+		return statsQuery.substring(0, statsQuery.length - 1);
 	}
 }
 
@@ -171,28 +172,6 @@ function show_track_lists() {
 			$(`#card-${i}-list`).slideDown(250);
 		$(`#card-${i}-list`).children().length > 0 &&
 			$(`#track-${i}-accordion`).collapse("show");
-	}
-}
-
-// also adds to track_obj list
-function add_tracks_to_card(tracks_obj) {
-	for (result of tracks_obj) {
-		let { track_name, track_artists, track_album, track_id, search_box_num } =
-			result;
-
-		track_objs[track_id] = result;
-
-		let cardlist = `card-${search_box_num}-list`;
-
-		let names = [];
-		for (let artist of track_artists) {
-			names.push(artist.name);
-		}
-
-		let album_artists = names.join(", ");
-		$(`#${cardlist}`).append(
-			`<div class="track-option" data-song-id=${track_id}><h5 class="card-title">${track_name}</h5><h6 class="card-subtitle mb-2 text-muted">${track_name}</h6><h6 class="card-subtitle mb-2 text-muted">${album_artists}</h6></div>`
-		);
 	}
 }
 
