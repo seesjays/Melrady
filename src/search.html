@@ -66,7 +66,7 @@
   </head>
 
   <body>
-    <header>
+    <header style="width: 100%">
       <nav class="topbar">
         <span class="moledar">
           <strong> Moledar </strong>
@@ -79,93 +79,87 @@
         </span>
       </nav>
     </header>
-    <div style="width: 100%; margin-bottom: 2em"></div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">Track Search</div>
 
-            <div class="card-body">
-              <div class="container">
-                <div class="row" style="align-items: center">
-                  <div class="col-sm-9">
-                    <form id="track-search-form">
-                      <div class="d-grid gap-3">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="track_1_name"
-                          aria-describedby="Multi-Track Title Input"
-                          name="track_1_name"
-                        />
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="track_2_name"
-                          aria-describedby="Track 2 Album Title Input"
-                          name="track_2_name"
-                        />
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="track_3_name"
-                          aria-describedby="Track 3 Title Input"
-                          name="track_3_name"
-                        />
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="track_4_name"
-                          aria-describedby="Track 4 Title Input"
-                          name="track_4_name"
-                        />
-                      </div>
-                    </form>
-                  </div>
-
-                  <div class="col-sm-3 justify-content-center mt-2 mt-sm-0">
-                    <div class="d-grid gap-2">
-                      <button
-                        type="button"
-                        id="search-button"
-                        class="btn btn-primary btn-lg"
-                      >
-                        Search Tracks
-                      </button>
-
-                      <button
-                        type="reset"
-                        form="track-search-form"
-                        id="reset-button"
-                        class="btn btn-danger"
-                      >
-                        Reset
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div class="container" style="margin-top: 2em">
+      <div class="row">
+        <h2 style="font-size: calc(1.275rem + 0.3vw)">Enter 1-4 tracks:</h2>
+      </div>
+      <div class="row" style="align-items: center">
+        <div class="col-sm-9">
+          <form id="track-search-form">
+            <div class="d-grid gap-3">
+              <input
+                type="text"
+                class="form-control"
+                id="track_1_name"
+                aria-describedby="Multi-Track Title Input"
+                name="track_1_name"
+              />
+              <input
+                type="text"
+                class="form-control"
+                id="track_2_name"
+                aria-describedby="Track 2 Album Title Input"
+                name="track_2_name"
+              />
+              <input
+                type="text"
+                class="form-control"
+                id="track_3_name"
+                aria-describedby="Track 3 Title Input"
+                name="track_3_name"
+              />
+              <input
+                type="text"
+                class="form-control"
+                id="track_4_name"
+                aria-describedby="Track 4 Title Input"
+                name="track_4_name"
+              />
             </div>
+          </form>
+        </div>
+
+        <div class="col-sm-3 justify-content-center mt-2 mt-sm-0">
+          <div class="d-grid gap-2">
+            <button
+              type="button"
+              id="search-button"
+              class="btn btn-primary btn-lg"
+            >
+              Search Spotify
+            </button>
+
+            <button
+              type="reset"
+              form="track-search-form"
+              id="reset-button"
+              class="btn btn-danger"
+            >
+              Reset
+            </button>
           </div>
         </div>
       </div>
 
-      <div style="width: 100%; margin-bottom: 2em"></div>
+      <h2 style="font-size: calc(1.275rem + 0.3vw); margin-top: 2em">
+        Select the right tracks:
+      </h2>
+      <form id="track-selection-form" style="width: 100%"></form>
 
-      <form id="track-selection-form" class="">
-      </form>
-
-      <div style="width: 100%; margin-bottom: 1em"></div>
-      <div id="selections-container" class="container">
-        <h3 id="selections-label"></h3>
+      <div
+        id="selections-container"
+        class="container"
+        style="width: 100%; margin-top: 1em"
+      >
         <div class="row">
+          <h3 id="selections-label"></h3>
+
           <div class="album-row">
             <div id="album-cover-row" class="row justify-content-center"></div>
           </div>
         </div>
-        <div style="width: 100%; margin-bottom: 1em"></div>
-        <div class="row">
+        <div class="row" style="width: 100%;">
           <a
             id="stats-button"
             href="/stats"
@@ -175,8 +169,8 @@
           >
         </div>
       </div>
-      <div style="width: 100%; margin-bottom: 1em"></div>
     </div>
+
     <script src="/scripts/formSubmit.js"></script>
     <script src="/scripts/resultDisplay.js"></script>
   </body>
