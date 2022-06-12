@@ -8,9 +8,19 @@ const displayResults = (results) => {
 		const radios = trackObjArray.map((track, index) => radioElement(track, groupInd + 1, index));
 		const cards = trackSelectionCard(radios, groupInd + 1);
 		return cards;
-	});
+	}).join('\n');
 
-	$("#track-selection-form").append(resultCards);
+	// used to be cards being placed in a form, now I realize that an empty form might be inaccessible.
+	const resultForm = `
+	<h2 id="results-label" style="font-size: calc(1.275rem + 0.3vw); margin-top: 1em">
+        Select the correct tracks:
+    </h2>
+	<form id="track-selection-form" class="col-sm-8">
+		${resultCards}
+	</form>
+	`;
+
+	$("#results").prepend(resultForm);
 
 
 	/*
@@ -23,7 +33,7 @@ const displayResults = (results) => {
 	// This takes an array of singular radio elements (see below) and groups them into a card.
 	function trackSelectionCard(radioElements, groupNum) {
 		return `
-			<div class="card" style="width: 100%; margin-top: 0.5em;" >
+			<div class="card" style="width: 100%; margin-top: 0.5em;">
 				<div class="card-header">
 					Track ${groupNum}
 				</div>
@@ -42,7 +52,6 @@ const displayResults = (results) => {
 			.map(artist => artist.name)
 			.join(", ");
 
-
 		return `
 			<div class="form-check">
 				<input
@@ -50,6 +59,7 @@ const displayResults = (results) => {
 					type="radio"
 					name="track-selection-${groupNum}"
 					id="track-group-${groupNum}-radio-${trackNum}"
+					data-song-id=${trackObject.trackData.trackId}
 				/>
 				<label class="form-check-label" for="track-group-${groupNum}-radio-${trackNum}">
 					<div class="track-option" data-song-id="${trackObject.trackData.trackId}">
@@ -67,7 +77,14 @@ const displayResults = (results) => {
 			</div>
 	`;
 	}
+
+	const explainer = `
+		<h2 style="font-size: calc(1.275rem + 0.3vw); margin-top: 1em;">
+			Select the right tracks:
+		</h2>
+	`;
 }
+
 
 
 

@@ -24,12 +24,18 @@ $("#search-button").click(() => {
 				// should be an array consisting of arrays of 3 track objects
 				console.dir(response);
 
+				// no results. do nothing
+				if (response.every(array => array.length == 0)) return;
+
 				// clear out the previous result group and selected track stores
 				resultGroups = response;
 				selectedTracks = [];
 				
 				// resultDisplay.js
 				displayResults(resultGroups);
+
+				// albumDisplay.js
+				initializeAlbumDisplay(resultGroups);
 				
 				return;
 
