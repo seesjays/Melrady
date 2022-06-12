@@ -34,17 +34,35 @@
 	font-family: 'Montserrat', sans-serif;
 }
 
-div.selected-track {
-	color: #1db954 !important;
-    font-weight: bold;
+
+/* track selection form styling, to make selected tracks green and look good */
+.form-check {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-top: 0.2rem;
+	
 }
-div.selected-track h5 {
-	color: #1db954 !important;
-    font-weight: bold;
+input[type="radio"] + label
+{
+	display: block;
+	width: 100%;
 }
-div.selected-track h6 {
-	color: #1db954 !important;
+input[type="radio"]:checked
+{
+	background-color: #1db954;
+	border-color: #1db954;
+}
+input[type="radio"]:checked + label,
+input[type="radio"]:checked + label h5,
+input[type="radio"]:checked + label h6
+{
+	width: 100%;
+	flex-grow: 1;
     font-weight: bold;
+	color: #1db954 !important;
+	/* I don't like using !important but Bootstrap uses it for muted
+	test, so oh well... */
 }
 
 .album-row {

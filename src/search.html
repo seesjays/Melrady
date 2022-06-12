@@ -153,103 +153,58 @@
 
       <div style="width: 100%; margin-bottom: 2em"></div>
 
-      <div class="accordion" id="tracks-accordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="track-1-heading">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#track-1-accordion"
-              aria-expanded="false"
-              aria-controls="track-1-accordion"
-            >
-              Track 1
-            </button>
-          </h2>
-          <div
-            id="track-1-accordion"
-            class="accordion-collapse collapse"
-            aria-labelledby="track-1-heading"
-          >
-            <div class="accordion-body">
-              <div id="card-1-list"></div>
+      <form id="track-selection-form" class="">
+        <div class="card" style="width: 100%">
+          <div class="card-header">Track 1</div>
+          <div class="card-body">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="track1Selection"
+                id="track1Radio"
+              />
+              <label class="form-check-label" for="track1Radio">
+                <div class="track-option" data-song-id="${result.trackId}">
+                  <h5 class="card-title">Yo Yo y Yo</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Nena Trampa</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">Cazzu</h6>
+                </div>
+              </label>
+            </div>
+            <div class="form-check" class="list-group list-group-flush">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="track1Selection"
+                id="track2Radio"
+              />
+              <label class="form-check-label" for="track2Radio">
+                <div class="track-option" data-song-id="${result.trackId}">
+                  <h5 class="card-title">Yo Yo y Yo</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Nena Trampa</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">Cazzu</h6>
+                </div>
+              </label>
+            </div>
+            <div class="form-check" class="list-group list-group-flush">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="track1Selection"
+                id="track3Radio"
+              />
+              <label class="form-check-label" for="track3Radio">
+                <div class="track-option" data-song-id="${result.trackId}">
+                  <h5 class="card-title">Yo Yo y Yo</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Nena Trampa</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">Cazzu</h6>
+                </div>
+              </label>
             </div>
           </div>
         </div>
-
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="track-2-heading">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#track-2-accordion"
-              aria-expanded="false"
-              aria-controls="track-2-accordion"
-            >
-              Track 2
-            </button>
-          </h2>
-          <div
-            id="track-2-accordion"
-            class="accordion-collapse collapse"
-            aria-labelledby="track-2-heading"
-          >
-            <div class="accordion-body">
-              <div id="card-2-list"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="track-3-heading">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#track-3-accordion"
-              aria-expanded="false"
-              aria-controls="track-3-accordion"
-            >
-              Track 3
-            </button>
-          </h2>
-          <div
-            id="track-3-accordion"
-            class="accordion-collapse collapse"
-            aria-labelledby="track-3-heading"
-          >
-            <div class="accordion-body">
-              <div id="card-3-list"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="track-4-heading">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#track-4-accordion"
-              aria-expanded="false"
-              aria-controls="track-4-accordion"
-            >
-              Track 4
-            </button>
-          </h2>
-          <div
-            id="track-4-accordion"
-            class="accordion-collapse collapse"
-            aria-labelledby="track-4-heading"
-          >
-            <div class="accordion-body">
-              <div id="card-4-list"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </form>
 
       <div style="width: 100%; margin-bottom: 1em"></div>
       <div id="selections-container" class="container">
