@@ -4,6 +4,7 @@
 	and adding them to the DOM
 */
 const displayResults = (results) => {
+
 	const resultCards = results.map((trackObjArray, groupInd) => {
 		const radios = trackObjArray.map((track, index) => radioElement(track, groupInd + 1, index));
 		const cards = trackSelectionCard(radios, groupInd + 1);
@@ -12,12 +13,12 @@ const displayResults = (results) => {
 
 	// used to be cards being placed in a form, now I realize that an empty form might be inaccessible.
 	const resultForm = `
-	<h2 id="results-label" style="font-size: calc(1.275rem + 0.3vw); margin-top: 1em">
-        Select the correct tracks:
-    </h2>
-	<form id="track-selection-form" class="col-sm-8">
-		${resultCards}
-	</form>
+		<h2 id="results-label" style="font-size: calc(1.275rem + 0.3vw); margin-top: 1em">
+    	    Select the correct tracks:
+    	</h2>
+		<form id="track-selection-form" class="col-sm-8">
+			${resultCards}
+		</form>
 	`;
 
 	$("#results").prepend(resultForm);
@@ -75,14 +76,8 @@ const displayResults = (results) => {
 					</div>
 				</label>
 			</div>
-	`;
+		`;
 	}
-
-	const explainer = `
-		<h2 style="font-size: calc(1.275rem + 0.3vw); margin-top: 1em;">
-			Select the right tracks:
-		</h2>
-	`;
 }
 
 

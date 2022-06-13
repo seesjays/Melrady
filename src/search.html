@@ -84,7 +84,7 @@
       <div class="row">
         <h2 style="font-size: calc(1.275rem + 0.3vw)">Enter 1-4 tracks:</h2>
       </div>
-      <div class="row" style="align-items: center; margin-top: 0.5em;">
+      <div class="row" style="align-items: center; margin-top: 0.5em">
         <div class="col-sm-9">
           <form id="track-search-form">
             <div class="d-grid gap-3">
@@ -143,25 +143,17 @@
       </div>
 
       <div id="results" class="row">
-
         <div class="col-sm-4 text-center container" style="margin-top: 0.5em">
-          <div id="cover-art-container" class="row" />
+          <div id="cover-art-container" class="row p-sm-5" />
         </div>
-        <div class="col-12 text-center">
-          <a
-            id="stats-button"
-            href="/stats"
-            class="btn btn-success"
-            role="button"
-            >Visualize</a
-          >
-        </div>
+        <div id="stats-button-container" class="col-12 text-center" />
       </div>
     </div>
 
     <script src="/scripts/formSubmit.js"></script>
     <script src="/scripts/resultDisplay.js"></script>
     <script src="/scripts/albumDisplay.js"></script>
+    <script src="/scripts/statsButtonDisplay.js"></script>
   </body>
 
   <script>

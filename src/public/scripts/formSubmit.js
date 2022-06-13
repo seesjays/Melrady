@@ -1,11 +1,9 @@
-const testTrack = {
-	search_box_num: 4,
-	album: "Yeezus",
-	title: "Guilt Trip",
-};
 
-const testTracks = [testTrack, testTrack, testTrack];
-
+/*
+	Responsible for making the request to /search for the track
+	objects, saving them, then executing the functions necessary
+	for forming the stats link (and providing a good UX :>)
+*/
 let resultGroups = [];
 let selectedTracks = [];
 
@@ -36,6 +34,9 @@ $("#search-button").click(() => {
 
 				// albumDisplay.js
 				initializeAlbumDisplay(resultGroups);
+
+				// statsButtonDisplay.js
+				displayStatsButton();
 				
 				return;
 
