@@ -34,7 +34,7 @@ const displayResults = (results) => {
 	// This takes an array of singular radio elements (see below) and groups them into a card.
 	function trackSelectionCard(radioElements, groupNum) {
 		return `
-			<div class="card" style="width: 100%; margin-top: 0.5em;">
+			<div class="card" style="width: 100%; margin-bottom: 1em;">
 				<div class="card-header">
 					Track ${groupNum}
 				</div>
