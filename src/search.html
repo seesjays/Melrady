@@ -82,7 +82,11 @@
 
     <div class="container-lg" style="margin-top: 2em">
       <div class="row">
-        <h2 style="font-size: calc(1.275rem + 0.3vw)">Enter 1-4 tracks:</h2>
+        <h2 class="h3">Enter 1-4 tracks:</h2>
+        <small id="input-explainer" class="text-muted mb-2">
+          Track names are required, album/artist names are optional but help us
+          find tracks with common names.
+        </small>
       </div>
       <div class="row" style="align-items: center">
         <div class="col-sm-9">
@@ -91,30 +95,30 @@
               <input
                 type="text"
                 class="form-control track-input"
-                id="track_1_name"
-                aria-describedby="Multi-Track Title Input"
+                id="track-1-name"
                 name="track_1_name"
+                aria-describedby="input-explainer"
               />
               <input
                 type="text"
                 class="form-control track-input"
-                id="track_2_name"
-                aria-describedby="Track 2 Album Title Input"
+                id="track-2-name"
                 name="track_2_name"
+                aria-describedby="input-explainer"
               />
               <input
                 type="text"
                 class="form-control track-input"
-                id="track_3_name"
-                aria-describedby="Track 3 Title Input"
+                id="track-3-name"
                 name="track_3_name"
+                aria-describedby="input-explainer"
               />
               <input
                 type="text"
                 class="form-control track-input"
-                id="track_4_name"
-                aria-describedby="Track 4 Title Input"
+                id="track-4-name"
                 name="track_4_name"
+                aria-describedby="input-explainer"
               />
             </div>
           </form>
@@ -142,7 +146,7 @@
         </div>
       </div>
 
-      <div id="results" class="row" style="margin-bottom: 1rem;">
+      <div id="results" class="row" style="margin-bottom: 1rem">
         <div class="col-sm-4 text-center container p-3 p-sm-0">
           <div id="cover-art-container" class="row" />
         </div>
