@@ -1,13 +1,13 @@
 /*
     Gives all the track input elements some
     nice placeholders that match what the user
-    would probably search for (their favorite tracks
-        over the past 3 months)
+    would probably search for
+    (their all time favorite tracks)
     Runs once on page load.
 */
 const loadFavorites = () => {
-    // should be an array of 10 track objects
-    fetch("/favies").then((response) => response.json).then(
+    // should be an array of up to 16 track objects
+    fetch("/favies").then((response) => response.json()).then(
         (favoriteTracks) => {
             if (favoriteTracks.length > 4) {
                 shuffleTrackObjects(favoriteTracks);
@@ -19,38 +19,37 @@ const loadFavorites = () => {
                     song name, artist name
                     song name, album name, artist name
                 */
-                const selecteds = favoritesArray.slice(0, 3);
+                const selecteds = favoriteTracks.slice(0, 4);
+
                 const descA = selecteds[0].trackData.trackName;
                 const descB = `${selecteds[1].trackData.trackName}, ${selecteds[1].trackData.albumName}`;
                 const descC = `${selecteds[2].trackData.trackName}, ${selecteds[2].trackData.primaryArtists[0].name}`;
                 const descD = `${selecteds[3].trackData.trackName}, ${selecteds[3].trackData.albumName}, ${selecteds[3].trackData.primaryArtists[0].name}`;
-
                 const descArray = [descA, descB, descC, descD];
-                descArray.forEach((description, index) => {
-                    $(`track-${index}-name`).prop("placeholder", description);
-                });
+
+                return descArray;
             }
             else {
                 // The user hasn't listened to 4 songs over the past year, just using a placeholder
                 // from one of my favorites for them.
-
-                dummyPlaceholders.forEach((description, index) => {
-                    $(`track-${index}-name`).prop("placeholder", description);
-                });
+                return dummyPlaceholders;
             }
         },
         (err) => {
             console.err("searchPage: error fetching favies", err);
-
-            dummyPlaceholders.forEach((description, index) => {
-                $(`track-${index}-name`).prop("placeholder", description);
-            });
+            return dummyPlaceholders;
         }
-    );
+    ).then((placeholders) => {
+        // The prior function either gives us real placeholders or the dummy values
+        // We assign the placeholders to the inputs here
+        placeholders.forEach((description, index) => {
+            $(`#track-${index + 1}-name`).attr("placeholder", description);
+        });
+    });
 
     // modern Fisher-Yates
     function shuffleTrackObjects(trackObjects) {
-        for (const indexA = trackObjects.length; indexA > 0; indexA--) {
+        for (let indexA = trackObjects.length - 1; indexA > 0; indexA--) {
             const indexB = Math.floor(Math.random() * indexA + 1);
             temp = trackObjects[indexA];
             trackObjects[indexA] = trackObjects[indexB];

@@ -2,20 +2,17 @@ require("dotenv").config();
 
 const { body, query, validationResult } = require("express-validator");
 
-const cookieParser = require("cookie-parser");
-
-const Vibrant = require("node-vibrant");
-
 const express = require("express"); // Express web server framework
-const path = require("path");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const SpotifyWebApi = require("spotify-web-api-node");
+const path = require("path");
 
 const PORT = process.env.PORT || 8888;
 const CLIENT_ID = process.env.CLIENT_ID;
 const SECRET_KEY = process.env.SECRET_KEY;
 const RED_URI = process.env.RED_URL || `http://localhost:${PORT}/search`; // Your redirect uri
 
+const SpotifyWebApi = require("spotify-web-api-node");
 const spotify_api = new SpotifyWebApi({
 	clientId: CLIENT_ID,
 	clientSecret: SECRET_KEY,
@@ -29,6 +26,7 @@ const sharedObjects = {
 };
 
 const search = require("./search");
+const favies = require("./favies");
 
 let app = express();
 app
@@ -41,7 +39,8 @@ app
 		})
 	)
 	.use(cookieParser())
-	.use(search(sharedObjects));
+	.use(search(sharedObjects))
+	.use(favies(sharedObjects));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -52,13 +51,11 @@ const {
 	refresh_tok_key,
 } = require("./cookieMapping");
 
-app.get("/privacy", (req, res) =>
-{
+app.get("/privacy", (req, res) => {
 	return res.sendFile(path.join(__dirname, "/public/privacy.html"));
 });
 
-const create_track_obj = (track) =>
-{
+const create_track_obj = (track) => {
 	let track_object = {
 		track_id: track.id,
 		track_name: track.name,
@@ -77,8 +74,7 @@ const create_track_obj = (track) =>
 	return track_object;
 };
 
-const create_dummy_track_obj = () =>
-{
+const create_dummy_track_obj = () => {
 	let dummy_obj = {
 		track_id: "1UKk6maDt5HXQCriDiZWP5",
 		track_name: "Technical Difficulties",
@@ -116,8 +112,7 @@ const create_dummy_track_obj = () =>
 	return dummy_obj;
 };
 
-const add_feature_set = (track, feature_set) =>
-{
+const add_feature_set = (track, feature_set) => {
 	const feature_set_object = {
 		acousticness: feature_set.acousticness,
 		danceability: feature_set.danceability,
@@ -146,8 +141,7 @@ const add_feature_set = (track, feature_set) =>
 	track.normalized_features = normalized_features_object;
 };
 
-const normalize_tracklist = (tracks_with_feature_sets) =>
-{
+const normalize_tracklist = (tracks_with_feature_sets) => {
 	const det_stats = {
 		totals: {
 			acousticness: 0,
@@ -211,8 +205,7 @@ const normalize_tracklist = (tracks_with_feature_sets) =>
 	return det_stats;
 };
 
-const search_track = async (trackin) =>
-{
+const search_track = async (trackin) => {
 	let track_name_search_results = await spotify_api.searchTracks(trackin[1], {
 		limit: 3,
 	});
@@ -243,8 +236,9 @@ app.get(
 	query("track2").trim().escape(),
 	query("track3").trim().escape(),
 	query("track4").trim().escape(),
-	async (req, res) =>
-	{
+	async (req, res) => {
+		const Vibrant = require("node-vibrant");
+
 		const authcookie = req.cookies[access_tok_key];
 
 		const outtracks = [];
@@ -312,18 +306,15 @@ app.get(
 				}
 			}
 
-			await execute_with_access_token(authcookie, async () =>
-			{
+			await execute_with_access_token(authcookie, async () => {
 				await spotify_api.getTracks(trackids).then(
-					(data) =>
-					{
+					(data) => {
 						for (let track of data.body.tracks) {
 							let track_obj = create_track_obj(track);
 							outtracks.push(track_obj);
 						}
 					},
-					(err) =>
-					{
+					(err) => {
 						console.log("whoopsies on getting tracks for stats", err.message);
 						return res.redirect("/");
 					}
@@ -333,13 +324,11 @@ app.get(
 					await Vibrant.from(track.track_image)
 						.getPalette()
 						.then(
-							(color) =>
-							{
+							(color) => {
 								let vib = color.Vibrant;
 								track.track_color = vib._rgb;
 							},
-							(err) =>
-							{
+							(err) => {
 								console.log("no color");
 								track.track_color = null;
 							}
@@ -347,17 +336,14 @@ app.get(
 				}
 			});
 
-			await execute_with_access_token(authcookie, async () =>
-			{
+			await execute_with_access_token(authcookie, async () => {
 				await spotify_api
 					.getAudioFeaturesForTracks(outtracks.map((track) => track.track_id))
 					.then(
-						(data) =>
-						{
+						(data) => {
 							let features = data.body.audio_features;
 
-							features.forEach((feature_set) =>
-							{
+							features.forEach((feature_set) => {
 								let track_features_id = feature_set.id;
 								let matched_track = outtracks.find(
 									(track) => track.track_id === track_features_id
@@ -379,8 +365,7 @@ app.get(
 								tracks_data: tracks_and_data,
 							});
 						},
-						(err) =>
-						{
+						(err) => {
 							console.log(
 								"whoopsies on getting audio features from tracks",
 								err.message
@@ -395,70 +380,17 @@ app.get(
 	}
 );
 
-const get_faves = (count) =>
-{
-	return new Promise((resolve, reject) =>
-	{
-		spotify_api.getMyTopTracks({ limit: count }).then(
-			(data) =>
-			{
-				const tops = [];
-				for (let track of data.body.items) {
-					let trackobj = create_track_obj(track);
-					tops.push(trackobj);
-				}
-				resolve(tops);
-			},
-			(err) =>
-			{
-				reject(new Error("Couldn't get top tracks."));
-			}
-		);
-	});
-};
-
-app.get("/favies", (req, res) =>
-{
-	console.log("Fave tracks hit");
-
-	let cookies = req.cookies ? req.cookies : null;
-	let access_token = cookies ? cookies[access_tok_key] : null;
-	const count = 16;
-	if (access_token) {
-		spotify_api.setAccessToken(access_token);
-		get_faves(count).then(
-			(data) =>
-			{
-				return res.status(200).json({ faves: data });
-			},
-			(err) =>
-			{
-				return res
-					.status(400)
-					.json({ faves: Array(count).fill("Enter 1-4 tracks.") });
-			}
-		);
-		spotify_api.resetAccessToken();
-	} else {
-		return res
-			.status(400)
-			.json({ faves: Array(count).fill("Enter 1-4 tracks.") });
-	}
-});
-
 app.get("/logout", (req, res) =>
 {
 	console.log("logging user out");
 	let cookies = [state_key, access_tok_key, refresh_tok_key];
-	cookies.forEach((cookie) =>
-	{
+	cookies.forEach((cookie) => {
 		res.clearCookie(cookie);
 	});
 	res.redirect("/");
 });
 
-app.get("/robots.txt", function (req, res)
-{
+app.get("/robots.txt", function (req, res) {
 	res.type("text/plain");
 	return res.send(
 		"User-agent: *\nDisallow: /stats\nDisallow: /search\nDisallow: /tracksearch"
