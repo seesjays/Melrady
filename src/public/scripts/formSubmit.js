@@ -14,8 +14,7 @@ $("#search-button").click(() => {
 		$.post(
 			"/search",
 			$("#track-search-form").serialize(),
-
-			(response) => {				
+			(response) => {
 				// response should be an array 
 				// made up of arrays of 3 track objects
 

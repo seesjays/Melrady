@@ -158,47 +158,10 @@
       </div>
     </div>
 
+    <script src="/scripts/loadFavorites.js"></script>
     <script src="/scripts/formSubmit.js"></script>
     <script src="/scripts/resultDisplay.js"></script>
     <script src="/scripts/albumDisplay.js"></script>
     <script src="/scripts/statsButtonDisplay.js"></script>
   </body>
-
-  <script>
-    const get_tops = async () => {
-      let response = await fetch("/favies");
-      let favetracks = await response.json();
-      return favetracks["faves"];
-    };
-
-    $(document).ready(async function () {
-      let fvs = await get_tops();
-      let pickeds = [];
-
-      if (fvs[0] === "Enter 1-4 tracks.") {
-        for (let i = 1; i < 5; i++) {
-          $(`#track_${i}_name`).attr("placeholder", fvs[0]);
-        }
-        return;
-      }
-
-      for (let i = 1; i < 5; i++) {
-        let random_track = fvs[Math.floor(Math.random() * fvs.length)];
-        let { track_name, track_album } = random_track;
-
-        let track_option = `${track_name} (${track_album})`;
-        if (pickeds.indexOf(track_option) > -1) {
-          /* just try it twice, 
-                    if it's still the same then either there's < 4 top tracks on the account or bad luck
-                */
-          random_track = fvs[Math.floor(Math.random() * fvs.length)];
-          ({ track_name, track_album } = random_track);
-          track_option = `${track_name} (${track_album})`;
-        }
-
-        pickeds.push(track_option);
-        $(`#track_${i}_name`).attr("placeholder", track_option);
-      }
-    });
-  </script>
 </html>
