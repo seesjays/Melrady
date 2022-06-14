@@ -12,7 +12,7 @@ $("#search-button").click(() => {
 	//$("#search-button").prop("disabled", true);
 	hide_track_lists();
 
-	if (searchQueryExists) {
+	if (searchQueryExists()) {
 		// submitting form for track object response
 		$.post(
 			"/search",
@@ -25,8 +25,9 @@ $("#search-button").click(() => {
 				// no results. do nothing
 				if (response.every(array => array.length == 0)) return;
 
-				// clear out the previous result group and selected track stores
-				resultGroups = response;
+				// replace stored result group with the results that 
+				// have tracks in them
+				resultGroups = response.filter(array => array.length > 0);
 				selectedTracks = [];
 				
 				// resultDisplay.js
@@ -181,13 +182,6 @@ function show_track_lists() {
 			$(`#track-${i}-accordion`).collapse("show");
 	}
 }
-
-$("#reset-button").click(() => {
-	hide_track_lists();
-	Object.keys(track_ids).forEach((track) => delete track_ids[track]);
-	track_objs = {};
-	update_selections_and_link();
-});
 
 $(document).ready(function () {
 	update_selections_and_link();

@@ -49,3 +49,11 @@ const initializeAlbumDisplay = (results) => {
         `;
     }
 }
+
+/*
+	add individual logic for each thing to remove
+	to reset button
+*/
+$("#reset-button").click(() => {
+	$("#cover-art-container").empty();
+});

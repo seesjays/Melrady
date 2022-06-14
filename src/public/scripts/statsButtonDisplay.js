@@ -43,3 +43,11 @@ const baseButton = `
       No Tracks Selected
     </a>
 `;
+
+/*
+    add individual logic for each thing to remove
+    to reset button
+*/
+$("#reset-button").click(() => {
+    $("#stats-button").remove();
+});
