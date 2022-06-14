@@ -120,7 +120,7 @@ const auth = (spotify_api) => {
 		return [spotify_api.createAuthorizeURL(scopes, state), state];
 	};
 
-	return function (req, res, next) {
+	return async function (req, res, next) {
 		// check if there's an access token in cookies
 		// if not, check if there's a refresh token in cookies, then refresh access token
 		// if neither, or refreshing token results in error, authenticate using Spotify's Code Grant Path
@@ -143,14 +143,16 @@ const auth = (spotify_api) => {
 
 			spotify_api.setRefreshToken(refresh_token);
 
-			spotify_api.refreshAccessToken().then(
+			await spotify_api.refreshAccessToken().then(
 				(data) => {
+					req.cookies[access_tok_key] = data.body["access_token"];
+					req.cookies[access_tok_key].maxAge = data.body["expires_in"] * 1000;
 					res.cookie(access_tok_key, data.body["access_token"], {
 						// spotify puts their time in seconds instead of ms
 						maxAge: data.body["expires_in"] * 1000,
 					});
+					
 					spotify_api.resetRefreshToken();
-
 					return next();
 				},
 				(err) => {
