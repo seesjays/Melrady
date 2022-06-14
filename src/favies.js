@@ -5,17 +5,18 @@ function favies(sharedObjects) {
     const auth = sharedObjects.authentication;
     const spotify_api = sharedObjects.spotify_api;
 
-    // operating under the assumption that access token exists in cookies already thanks to middleware
     faviesRouter.get("/favies", auth, async (req, res) => {
-        const { access_tok_key } = require("./cookieMapping").cookieMap;
-        const cookies = req.cookies ? req.cookies : null;
-        const access_token = cookies ? cookies[access_tok_key] : null;
-
         const count = 16;
-        if (access_token) {
-            spotify_api.setAccessToken(access_token);
 
+        // operating under the assumption that access token exists in req body already thanks to middleware
+        // but still double checking anyway
+        const accessToken = req.headers.authorization;
+        if (accessToken) {
+            spotify_api.setAccessToken(accessToken);
             const { createTrackObject } = require("./trackObject");
+
+            // query the top tracks for a user API, with a max item count of count and time range
+            // extended over the user's entire account
             const favoriteTracks = await spotify_api.getMyTopTracks({ limit: count, time_range: "long_term" })
                 .then(
                     (data) => {

@@ -8,7 +8,6 @@ function search(sharedObjects) {
 	const spotify_api = sharedObjects.spotify_api;
 	const { body, validationResult } = require("express-validator");
 
-	// operating under the assumption that access token exists in cookies already thanks to middleware
 	searchRouter.get("/search", auth, (req, res) => {
 		console.log("search: search hit, serving search page");
 		return res.sendFile(path.join(__dirname, "search.html"));
@@ -43,36 +42,37 @@ function search(sharedObjects) {
 			console.log(`tracksearch: searching ${queries.length} tracks:`);
 			console.dir(queries);
 
-			const { access_tok_key } = require("./cookieMapping").cookieMap;
-			const cookies = req.cookies ? req.cookies : null;
-			const access_token = cookies ? cookies[access_tok_key] : null;
+			// operating under the assumption that access token exists in req body already thanks to middleware
+			// but still double checking anyway
+			const accessToken = req.headers.authorization;
+			if (accessToken) {
+				const { createTrackObject } = require("./trackObject");
+				const output = await Promise.all(
+					queries.map(async (query) => {
+						spotify_api.setAccessToken(accessToken);
+						const searchResults = await spotify_api.searchTracks(query, {
+							limit: 3,
+						});
 
-			const { createTrackObject } = require("./trackObject");
-			const output = await Promise.all(
-				queries.map(async (query) => {
-					spotify_api.setAccessToken(access_token);
-					const searchResults = await spotify_api.searchTracks(query, {
-						limit: 3,
-					});
+						// search results are massive, so we filter down the values
+						// into nice packaged objects using createTrackObject
 
-					// search results are massive, so we filter down the values
-					// into nice packaged objects using createTrackObject
+						if (searchResults) {
+							const trackObjects = Object.values(
+								searchResults.body.tracks.items
+							).map((fullData) => createTrackObject(fullData));
+							return trackObjects;
+						} else {
+							return null;
+						}
+					})
+				);
 
-					if (searchResults) {
-						const trackObjects = Object.values(
-							searchResults.body.tracks.items
-						).map((fullData) => createTrackObject(fullData));
-						return trackObjects;
-					} else {
-						return null;
-					}
-				})
-			);
-
-			// Promise.all returns everything in the same order it was fed, which is nice.
-			console.log(`tracksearch: returning ${output.length} track objects:`);
-			console.dir(output);
-			return res.json(output);
+				// Promise.all returns everything in the same order it was fed, which is nice.
+				console.log(`tracksearch: returning ${output.length} track objects:`);
+				console.dir(output);
+				return res.json(output);
+			}
 		}
 	);
 

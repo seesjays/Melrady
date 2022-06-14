@@ -137,21 +137,18 @@ const auth = (spotify_api) => {
 		if (access_token) {
 			// user is already authorized and token hasn't expired
 			console.log("auth: access token found, continuing");
+			req.headers.authorization = access_token;
 			return next();
 		} else if (refresh_token) {
 			console.log("auth: refreshing access token");
 
 			spotify_api.setRefreshToken(refresh_token);
-
 			await spotify_api.refreshAccessToken().then(
 				(data) => {
-					req.cookies[access_tok_key] = data.body["access_token"];
-					req.cookies[access_tok_key].maxAge = data.body["expires_in"] * 1000;
-					res.cookie(access_tok_key, data.body["access_token"], {
-						// spotify puts their time in seconds instead of ms
-						maxAge: data.body["expires_in"] * 1000,
-					});
-					
+					const accessTokenCookie = data.body["access_token"];
+					req.headers.authorization = accessTokenCookie;
+					res.cookie(access_tok_key, accessTokenCookie, { maxAge: data.body["expires_in"] * 1000 });
+
 					spotify_api.resetRefreshToken();
 					return next();
 				},
@@ -167,8 +164,7 @@ const auth = (spotify_api) => {
 				}
 			);
 		} else if (authentication_code) {
-			// arrival from spotify auth page
-
+			// arrival of new user from spotify auth page
 			// helps prevent xss
 			const check_auth_state = (state, storedState) => state === storedState;
 
@@ -188,9 +184,9 @@ const auth = (spotify_api) => {
 						// console.log("auth: access token is " + data.body["access_token"]);
 						// console.log("auth: refresh token is " + data.body["refresh_token"]);
 
-						res.cookie(access_tok_key, data.body["access_token"], {
-							maxAge: data.body["expires_in"] * 1000,
-						});
+						const accessTokenCookie = data.body["access_token"];
+						req.headers.authorization = accessTokenCookie;
+						res.cookie(access_tok_key, accessTokenCookie, { maxAge: data.body["expires_in"] * 1000 });
 						res.cookie(refresh_tok_key, data.body["refresh_token"]);
 
 						return res.redirect("/search");
@@ -208,8 +204,10 @@ const auth = (spotify_api) => {
 				);
 			} else {
 				console.log("auth: state mismatch, dropping!", state, stored_state);
+				return res.redirect("/");
 			}
 		} else {
+			// entirely new user
 			console.log(
 				"auth: no access/refresh token, requesting auth from Spotify\n"
 			);
