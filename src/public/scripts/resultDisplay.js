@@ -4,6 +4,7 @@
 	and adding them to the DOM
 */
 const displayResults = (results) => {
+
 	const resultCards = results.map((trackObjArray, groupInd) => {
 		const radios = trackObjArray.map((track, index) => radioElement(track, groupInd + 1, index));
 		const cards = trackSelectionCard(radios, groupInd + 1);
@@ -20,6 +21,7 @@ const displayResults = (results) => {
 		</form>
 	`;
 
+	$(".result-form-element").remove();
 	$("#results").prepend(resultForm);
 
 

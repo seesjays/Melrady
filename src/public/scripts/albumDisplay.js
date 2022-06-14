@@ -8,6 +8,7 @@
     display section with the art for the selected tracks.
 */
 const initializeAlbumDisplay = (results) => {
+    $("#cover-art-container").empty();
     $(".form-check-input").change(updateAlbumGrid);
 
     // also serves as the onclick func

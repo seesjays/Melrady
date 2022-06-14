@@ -6,6 +6,7 @@
     page with our track IDs as the query
 */
 const displayStatsButton = () => {
+    $("#stats-button").remove();
     $(".form-check-input").change(updateStatsLink);
     $("#stats-button-container").append(baseButton);
 
