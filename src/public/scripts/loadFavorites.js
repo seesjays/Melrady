@@ -12,14 +12,15 @@ const loadFavorites = () => {
             if (favoriteTracks.length > 4) {
                 shuffleTrackObjects(favoriteTracks);
 
-                // pick three out of the shuffled array, make some basic placeholder queries:
+                // pick four from the end
+                // of the shuffled array, make some basic placeholder queries:
                 /*
                     song name
                     song name, album name
                     song name, artist name
                     song name, album name, artist name
                 */
-                const selecteds = favoriteTracks.slice(0, 4);
+                const selecteds = favoriteTracks.slice(-4);
 
                 const descA = selecteds[0].trackData.trackName;
                 const descB = `${selecteds[1].trackData.trackName}, ${selecteds[1].trackData.albumName}`;
