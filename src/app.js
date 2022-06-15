@@ -26,7 +26,9 @@ const sharedObjects = {
 };
 
 const search = require("./search");
+const stats = require("./stats");
 const favies = require("./favies");
+
 
 let app = express();
 app
@@ -40,6 +42,7 @@ app
 	)
 	.use(cookieParser())
 	.use(search(sharedObjects))
+	.use(stats(sharedObjects))
 	.use(favies(sharedObjects));
 
 app.set("views", path.join(__dirname, "views"));
@@ -229,156 +232,6 @@ const search_track = async (trackin) => {
 
 	return search_results;
 };
-
-app.get(
-	"/stats",
-	query("track1").trim().escape(),
-	query("track2").trim().escape(),
-	query("track3").trim().escape(),
-	query("track4").trim().escape(),
-	async (req, res) => {
-		const Vibrant = require("node-vibrant");
-
-		const authcookie = req.cookies[access_tok_key];
-
-		const outtracks = [];
-
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
-
-		if (authcookie) {
-			const trackids = [];
-
-			// console.log(req.query);
-
-			if (req.query["test"]) {
-				// testing
-				let testset = req.query["test"];
-
-				console.log("TEST SET: ");
-
-				if (testset === "faves") {
-					console.log("FAVES");
-
-					trackids.push(
-						"0Zm7NKJgoKY6ZWwtoEUILK",
-						"7qfoq1JFKBUEIvhqOHzuqX",
-						"2Im64pIz6m0EJKdUe6eZ8r",
-						"0wXuerDYiBnERgIpbb3JBR"
-					);
-				} else if (testset === "donda") {
-					console.log("DONDA");
-
-					trackids.push(
-						"0Zm7NKJgoKY6ZWwtoEUILK",
-						"2ZUJsR8HEktit58X6FuPQM",
-						"2gbMPBrBVj3CuNTLp2dHYs",
-						"1aF9TeHZbe6OVo9dtjPuzK"
-					);
-				} else if (testset === "instru") {
-					console.log("INSTRUMENTALS");
-
-					trackids.push(
-						"3Pwmf3xVA8MV6h2isY6whx",
-						"4p6GbcE3GjJs7JzhVBv2uT",
-						"79aotvPXTlHbZ8MvoxhqAE",
-						"4COR2ZPEyUn0lsbAouRWxA"
-					);
-				} else if (testset === "ethan") {
-					console.log("ETHAN");
-
-					trackids.push(
-						"6Qyc6fS4DsZjB2mRW9DsQs",
-						"1tD8J13a74q8fBqXwAP50j",
-						"75JFxkI2RXiU7L9VXzMkle",
-						"5NDUXbMwcnTQp66tI2zcdR"
-					);
-				}
-			} else {
-				for (track in req.query) {
-					let trck = req.query[track];
-
-					if (trck.length > 0) {
-						trackids.push(req.query[track]);
-					}
-				}
-			}
-
-			await execute_with_access_token(authcookie, async () => {
-				await spotify_api.getTracks(trackids).then(
-					(data) => {
-						for (let track of data.body.tracks) {
-							let track_obj = create_track_obj(track);
-							outtracks.push(track_obj);
-						}
-					},
-					(err) => {
-						console.log("whoopsies on getting tracks for stats", err.message);
-						return res.redirect("/");
-					}
-				);
-
-				for (let track of outtracks) {
-					await Vibrant.from(track.track_image)
-						.getPalette()
-						.then(
-							(color) => {
-								let vib = color.Vibrant;
-								track.track_color = vib._rgb;
-							},
-							(err) => {
-								console.log("no color");
-								track.track_color = null;
-							}
-						);
-				}
-			});
-
-			await execute_with_access_token(authcookie, async () => {
-				await spotify_api
-					.getAudioFeaturesForTracks(outtracks.map((track) => track.track_id))
-					.then(
-						(data) => {
-							let features = data.body.audio_features;
-
-							features.forEach((feature_set) => {
-								let track_features_id = feature_set.id;
-								let matched_track = outtracks.find(
-									(track) => track.track_id === track_features_id
-								);
-
-								add_feature_set(matched_track, feature_set);
-							});
-
-							const det_stats = normalize_tracklist(outtracks);
-
-							// console.dir(det_stats);
-
-							let tracks_and_data = {
-								tracks: outtracks,
-								full_data: det_stats,
-							};
-
-							return res.render("pages/stats", {
-								tracks_data: tracks_and_data,
-							});
-						},
-						(err) => {
-							console.log(
-								"whoopsies on getting audio features from tracks",
-								err.message
-							);
-							return res.redirect("/");
-						}
-					);
-			});
-		} else {
-			res.redirect("/authorize");
-		}
-	}
-);
 
 app.get("/logout", (req, res) =>
 {

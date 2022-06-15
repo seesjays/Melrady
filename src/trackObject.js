@@ -22,3 +22,24 @@ exports.createTrackObject = (fullTrackData) => {
 
 	return track;
 };
+
+exports.createTrackFeaturesObject = (fullTrackFeatureData) => {
+	// Absolute features are attached in the backend,
+	// while relative ones are calculated in the frontend
+	const features = {
+		absolute: {
+			acousticness: fullTrackFeatureData.acousticness,
+			danceability: fullTrackFeatureData.danceability,
+			duration: fullTrackFeatureData.duration_ms / 1000,
+			energy: fullTrackFeatureData.energy,
+			instrumentalness: fullTrackFeatureData.instrumentalness,
+			loudness: fullTrackFeatureData.loudness + 60,
+			speechiness: fullTrackFeatureData.speechiness,
+			tempo: fullTrackFeatureData.tempo,
+			valence: fullTrackFeatureData.valence,
+		},
+		relative: null,
+	};
+
+	return features;
+}
