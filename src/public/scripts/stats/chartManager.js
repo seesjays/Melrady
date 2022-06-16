@@ -1,3 +1,24 @@
+// this is a mess.
+/*
+The objective of the chartManager is to:
+A. Form and attach the chart.js instance to an element on the stats page
+- If trackObjects is undefined, chartManager does nothing
+B. Provide controls for the user to modify how the data is displayed
+- Bar vs Radar
+    Bars are better at displaying the data sometimes, particularly when the data points are close together.
+    Radars are the signature display form, and provide an easier way to gain understanding frmo
+        multiple data points. The datapoints aren't split up into their individual groups,
+        which makes for an easier time comparing each song, as radar areas are overlaid atop
+        one another.
+- Colors
+    Colors that match the album art (sourced from backend)
+    Shades of green
+    Static unique colors that are far apart
+- Showing/Hiding different charts on the album
+*/
+
+
+
 /*
 <script>
 const tracks_data_obj = <%-JSON.stringify(trackObjects)%>;
