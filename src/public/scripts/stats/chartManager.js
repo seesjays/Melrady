@@ -17,89 +17,221 @@ B. Provide controls for the user to modify how the data is displayed
 - Showing/Hiding different charts on the album
 */
 
+// Track Object Array should already exist as trackObjects, this script's the last on the page.
+// But we want a local reference, so:
+const trackObjectArray = trackObjects;
 
+class ChartManager {
+	colorOptions = {
+		green: ["29,185,84", "25,126,56", "16,72,30", "0,25,0"],
+		unique: ["114, 224, 106", "126, 132, 250", "222, 61, 130", "246, 133, 17"],
+		art: null,
+	};
+	mode = "radar";
+	trackObjects = null;
+	/**
+	 * @param {Object[]} trackObjects - An array of fully formed track objects.
+	 * @param {Object} chartManagerOptions - Overrides for the ChartManager's defaults
+	 * @param {"radar"|"bar"} chartManagerOptions.mode - The type of chart to use initially
+	 * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the HTMLElement legends for the chart
+	 *
+	 */
+	constructor(trackObjects, chartManagerOptions) {
+		if (trackObjects) {
+			this.colorOptions.art = trackObjects.map((trackObject) =>
+				trackObject.color.join(", ")
+			);
+		}
+	}
+
+	initializeChart() {
+		const canvasContainer = document.getElementById("canvas-container");
+		const canvas = document.getElementById("track-chart");
+		const ctx = document.getElementById("track-chart").getContext("2d");
+
+		canvcontainer.width = canvcontainer.clientWidth;
+		canvcontainer.height = canvcontainer.clientHeight;
+
+		const options = optionsForMode(this.mode);
+		trackChart = new Chart(ctx, {
+			type: this.mode,
+			data: {
+				labels: Object.keys(categoryLabels),
+				datasets: datasetlist,
+			},
+			...options,
+		});
+
+		this.chart = trackChart;
+
+		function optionsForMode(mode) {
+			if (mode === "radar") {
+				const radarOptions = {
+					options: {
+						layout: {
+							padding: {
+								top: 5,
+								bottom: 5,
+							},
+						},
+						responsive: true,
+						plugins: {
+							htmlLegend: {
+								containerID: "album-cover-row",
+							},
+							legend: {
+								display: false,
+							},
+						},
+						scales: {
+							r: {
+								angleLines: {},
+								min: 0,
+								max: 1.0,
+								ticks: {
+									display: false,
+								},
+							},
+						},
+					},
+				};
+
+				return radarOptions;
+			} else {
+				const barOptions = {
+					options: {
+						layout: {
+							padding: {
+								top: 5,
+								bottom: 5,
+							},
+						},
+						elements: {
+							bar: { borderWidth: 2 },
+						},
+						plugins: {
+							htmlLegend: {
+								containerID: "album-cover-row",
+							},
+							legend: {
+								display: false,
+							},
+						},
+						responsive: true,
+						scales: {
+							xAxes: {
+								display: true,
+								ticks: {
+									maxRotation: 90,
+									minRotation: 45,
+								},
+							},
+							yAxes: {
+								ticks: {
+									display: false,
+								},
+							},
+						},
+					},
+				};
+
+				return barOptions;
+			}
+		}
+	}
+
+    
+}
+
+const categoryLabels = [
+	"danceability",
+	"duration",
+	"energy",
+	"speechiness",
+	"tempo",
+	"valence",
+];
+
+let chartMode = "radar";
+let trackChart = null;
+let features_obj = "normalized_features";
+
+
+const calculateRelative = () => {
+    
+}
+/*
+const html_legend_plugin = {
+	id: "htmlLegend",
+	afterUpdate(chart, args, options) {
+		const legend_list = $("#album-cover-row");
+		legend_list.empty();
+
+		const items = chart.options.plugins.legend.labels.generateLabels(chart);
+
+		let tracknum = 0;
+
+		items.forEach((item) => {
+			let curr_item = tracks_data_obj.tracks[tracknum];
+			let track_cover_container = $("<div></div>");
+			track_cover_container.addClass(`col-3`);
+
+			let track_image = $("<img>");
+			track_image.attr("src", `${curr_item.track_image}`);
+			track_image.attr("alt", `album cover for ${curr_item.track_name}`);
+			track_image.addClass("album-cover img-fluid");
+
+			let track_text = $(`<a></a>`)
+				.text(`${item.text}`)
+				.css({ "text-align": "center" })
+				.addClass("link-dark")
+				.attr("href", curr_item.track_url);
+			track_image.css({
+				background: item.fillStyle,
+				"border-color": item.strokeStyle,
+				"border-width": "3px",
+				opacity: item.hidden ? 0.2 : 1.0,
+			});
+
+			track_cover_container.append(track_image);
+			track_cover_container.append(track_text);
+
+			track_cover_container.click(function clicked() {
+				const { type } = chart.config;
+				if (type === "pie" || type === "doughnut") {
+					chart.toggleDataVisibility(item.index);
+				} else {
+					chart.setDatasetVisibility(
+						item.datasetIndex,
+						!chart.isDatasetVisible(item.datasetIndex)
+					);
+				}
+				chart.update();
+			});
+
+			legend_list.append(track_cover_container);
+
+			tracknum++;
+		});
+
+		// average
+	},
+};
+*/
 
 /*
 <script>
 const tracks_data_obj = <%-JSON.stringify(trackObjects)%>;
 
-const html_legend_plugin = {
-    id: 'htmlLegend',
-    afterUpdate(chart, args, options)
-    {
-        const legend_list = $('#album-cover-row');
-        legend_list.empty();
 
-        const items = chart.options.plugins.legend.labels.generateLabels(chart);
-
-        let tracknum = 0;
-
-        items.forEach(item =>
-        {
-            let curr_item = tracks_data_obj.tracks[tracknum];
-            let track_cover_container = $('<div></div>');
-            track_cover_container.addClass(`col-3`);
-
-            let track_image = $('<img>');
-            track_image.attr('src', `${curr_item.track_image}`);
-            track_image.attr('alt', `album cover for ${curr_item.track_name}`);
-            track_image.addClass("album-cover img-fluid");
-
-            let track_text = $(`<a></a>`).text(`${item.text}`).css({ "text-align": "center" }).addClass("link-dark").attr('href', curr_item.track_url);
-            track_image.css({
-                "background": item.fillStyle,
-                "border-color": item.strokeStyle,
-                "border-width": '3px',
-                "opacity": item.hidden ? 0.2 : 1.0
-            });
-
-            track_cover_container.append(track_image);
-            track_cover_container.append(track_text);
-
-            track_cover_container.click(function clicked()
-            {
-                const { type } = chart.config;
-                if (type === 'pie' || type === 'doughnut')
-                {
-                    chart.toggleDataVisibility(item.index);
-                }
-                else
-                {
-                    chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
-                }
-                chart.update();
-            }
-            )
-
-            legend_list.append(track_cover_container);
-
-            tracknum++;
-        })
-
-        // average
-    }
-}
 
 function get_chart()
 {
 
 }
 
-const default_colors = [];
-const different_colors = [];
-default_colors.push("120, 198, 121,", "65, 171, 93,", "35, 132, 67,", "0, 90, 50,", "39, 255, 115,");
-different_colors.push("127, 201, 127,", "190, 174, 212,", "253, 192, 134,", "255, 255, 153,", "76, 174, 255,");
-const dominant_colors = [];
-let datasetlist = [];
 
-const relative_mappings = {
-    "danceability": "danceability",
-    "duration": "duration",
-    "energy": "energy",
-    "speechiness": "speechiness",
-    "tempo": "tempo",
-    "valence": "valence",
-};
+
 
 const absolute_mappings = {
     "danceability": "danceability",
@@ -108,114 +240,13 @@ const absolute_mappings = {
     "valence": "valence",
 };
 
-let chart_mode = "radar";
-let mapping_mode = relative_mappings;
-let scaling_mode = "relative";
-let track_chart = null;
-let features_obj = "normalized_features";
 
 function destroy_chart()
 {
     track_chart.destroy();
 }
 
-function create_chart()
-{
-    let canvcontainer = document.getElementById('canvas-container');
-    let cnvs = document.getElementById('track_chart');
-    let ctx = document.getElementById('track_chart').getContext('2d');
 
-    // get color list
-    canvcontainer.width = canvcontainer.clientWidth;
-    canvcontainer.height = canvcontainer.clientHeight;
-
-    if (chart_mode === "radar")
-    {
-        track_chart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: Object.keys(mapping_mode),
-                datasets: datasetlist,
-            },
-            options: {
-                layout: {
-                    padding: {
-                        top: 5,
-                        bottom: 5,
-                    },
-                },
-                responsive: true,
-                plugins: {
-                    htmlLegend: {
-                        containerID: 'album-cover-row'
-                    },
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    r: {
-                        angleLines: {
-                        },
-                        min: 0,
-                        max: 1.0,
-                        ticks: {
-                            display: false
-                        },
-                    },
-                }
-            },
-            plugins: [html_legend_plugin]
-        });
-    }
-    else
-    {
-        track_chart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(mapping_mode),
-                datasets: datasetlist,
-            },
-            options: {
-                layout: {
-                    padding: {
-                        top: 5,
-                        bottom: 5,
-                    },
-                },
-                elements: {
-                    bar: { borderWidth: 2 }
-                },
-                plugins: {
-                    htmlLegend: {
-                        containerID: 'album-cover-row'
-                    },
-                    legend: {
-                        display: false
-                    }
-                },
-                responsive: true,
-                scales: {
-                    xAxes: {
-                        display: true,
-                        ticks: {
-                            maxRotation: 90,
-                            minRotation: 45
-                        }
-                    },
-                    yAxes: {
-                        ticks: {
-                            display: false
-                        }
-                    },
-                },
-            },
-            plugins: [html_legend_plugin]
-        });
-    }
-
-    get_chart = () => { return track_chart; }
-}
 
 function update_colors()
 {
