@@ -19,203 +19,232 @@ B. Provide controls for the user to modify how the data is displayed
 
 // Track Object Array should already exist as trackObjects, this script's the last on the page.
 // But we want a local reference, so:
-const trackObjectArray = trackObjects;
-
-class ChartManager {
-	colorOptions = {
-		green: ["29,185,84", "25,126,56", "16,72,30", "0,25,0"],
-		unique: ["114, 224, 106", "126, 132, 250", "222, 61, 130", "246, 133, 17"],
-		art: null,
-	};
-	mode = "radar";
-	trackObjects = null;
-	/**
-	 * @param {Object[]} trackObjects - An array of fully formed track objects.
-	 * @param {Object} chartManagerOptions - Overrides for the ChartManager's defaults
-	 * @param {"radar"|"bar"} chartManagerOptions.mode - The type of chart to use initially
-	 * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the HTMLElement legends for the chart
-	 *
-	 */
-	constructor(trackObjects, chartManagerOptions) {
-		if (trackObjects) {
-			this.colorOptions.art = trackObjects.map((trackObject) =>
-				trackObject.color.join(", ")
-			);
-		}
-	}
-
-	initializeChart() {
-		const canvasContainer = document.getElementById("canvas-container");
-		const canvas = document.getElementById("track-chart");
-		const ctx = document.getElementById("track-chart").getContext("2d");
-
-		canvcontainer.width = canvcontainer.clientWidth;
-		canvcontainer.height = canvcontainer.clientHeight;
-
-		const options = optionsForMode(this.mode);
-		trackChart = new Chart(ctx, {
-			type: this.mode,
-			data: {
-				labels: Object.keys(categoryLabels),
-				datasets: datasetlist,
-			},
-			...options,
-		});
-
-		this.chart = trackChart;
-
-		function optionsForMode(mode) {
-			if (mode === "radar") {
-				const radarOptions = {
-					options: {
-						layout: {
-							padding: {
-								top: 5,
-								bottom: 5,
-							},
-						},
-						responsive: true,
-						plugins: {
-							htmlLegend: {
-								containerID: "album-cover-row",
-							},
-							legend: {
-								display: false,
-							},
-						},
-						scales: {
-							r: {
-								angleLines: {},
-								min: 0,
-								max: 1.0,
-								ticks: {
-									display: false,
-								},
-							},
-						},
-					},
-				};
-
-				return radarOptions;
-			} else {
-				const barOptions = {
-					options: {
-						layout: {
-							padding: {
-								top: 5,
-								bottom: 5,
-							},
-						},
-						elements: {
-							bar: { borderWidth: 2 },
-						},
-						plugins: {
-							htmlLegend: {
-								containerID: "album-cover-row",
-							},
-							legend: {
-								display: false,
-							},
-						},
-						responsive: true,
-						scales: {
-							xAxes: {
-								display: true,
-								ticks: {
-									maxRotation: 90,
-									minRotation: 45,
-								},
-							},
-							yAxes: {
-								ticks: {
-									display: false,
-								},
-							},
-						},
-					},
-				};
-
-				return barOptions;
-			}
-		}
-	}
-
-    
-}
 
 const categoryLabels = [
-	"danceability",
-	"duration",
-	"energy",
-	"speechiness",
-	"tempo",
-	"valence",
+    "danceability",
+    "duration",
+    "energy",
+    "speechiness",
+    "tempo",
+    "valence",
 ];
-
 let chartMode = "radar";
 let trackChart = null;
 let features_obj = "normalized_features";
 
+class ChartManager {
+    colorOptions = {
+        green: ["29,185,84", "25,126,56", "16,72,30", "0,25,0"],
+        unique: ["114, 224, 106", "126, 132, 250", "222, 61, 130", "246, 133, 17"],
+        art: null,
+    };
+    mode = "radar";
+    trackObjects = [];
+    /**
+     * @param {Object[]} trackObjects - An array of fully formed track objects.
+     * @param {Object} chartManagerOptions - Overrides for the ChartManager's defaults
+     * @param {"radar"|"bar"} chartManagerOptions.mode - The type of chart to use initially
+     * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the HTMLElement legends for the chart
+     */
+    constructor(trackObjects, chartManagerOptions) {
+        if (trackObjects) {
+            this.colorOptions.art = trackObjects.map((trackObject) =>
+                trackObject.color.join(", ")
+            );
+            this.trackObjects = trackObjects;
+        }
+    }
+
+    initializeChart() {
+        const canvasContainer = document.getElementById("canvas-container");
+        const canvas = document.getElementById("track-chart");
+        const ctx = document.getElementById("track-chart").getContext("2d");
+
+        canvasContainer.width = canvasContainer.clientWidth;
+        canvasContainer.height = canvasContainer.clientHeight;
+
+        const options = optionsForMode(this.mode);
+        trackChart = new Chart(ctx, {
+            type: this.mode,
+            data: {
+                labels: categoryLabels,
+                datasets: [],
+            },
+            ...options,
+        });
+
+        this.chart = trackChart;
+
+        function optionsForMode(mode) {
+            if (mode === "radar") {
+                const radarOptions = {
+                    options: {
+                        layout: {
+                            padding: {
+                            },
+                        },
+                        responsive: true,
+                        plugins: {
+                            htmlLegend: {
+                                containerID: "album-cover-row",
+                            },
+                            legend: {
+                                display: true,
+                            },
+                        },
+                        scales: {
+                            r: {
+                                angleLines: {},
+                                min: 0,
+                                max: 1.0,
+                                ticks: {
+                                    display: false,
+                                },
+                            },
+                        },
+                    },
+                };
+
+                return radarOptions;
+            } else {
+                const barOptions = {
+                    options: {
+                        layout: {
+                            padding: {
+                                top: 5,
+                                bottom: 5,
+                            },
+                        },
+                        elements: {
+                            bar: { borderWidth: 2 },
+                        },
+                        plugins: {
+                            htmlLegend: {
+                                containerID: "album-cover-row",
+                            },
+                            legend: {
+                                display: false,
+                            },
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: {
+                                display: true,
+                                ticks: {
+                                    maxRotation: 90,
+                                    minRotation: 45,
+                                },
+                            },
+                            yAxes: {
+                                ticks: {
+                                    display: false,
+                                },
+                            },
+                        },
+                    },
+                };
+
+                return barOptions;
+            }
+        }
+    }
+
+    generateDataset() {
+        return this.trackObjects.map((trackObject) => {
+            // guard against the event where the relative values haven't
+            // been calculated yet
+            if (!trackObject.features.relative) return {};
+
+            const data = categoryLabels.map(label => trackObject.features.relative[label]);
+            const borderColor = `rgba(${trackObject.color}, 0.9)`;
+            const backgroundColor = `rgba(${trackObject.color}, 0.1)`;
+            return {
+                label: trackObject.trackData.trackName,
+                data: data,
+                backgroundColor: backgroundColor,
+                pointBackgroundColor: borderColor,
+                pointHoverBackgroundColor: backgroundColor,
+                borderColor: borderColor,
+                pointBorderColor: borderColor,
+                pointHoverBorderColor: backgroundColor,
+            }
+        });
+    }
+
+    updateDataset(datasets) {
+        console.log(datasets)
+        this.chart.data = {
+            labels: categoryLabels,
+            datasets: datasets
+        };
+        this.chart.update();
+    }
+}
+
+const manager = new ChartManager(trackObjects, { mode: "radar", })
+manager.initializeChart();
+const datasets = manager.generateDataset();
+manager.updateDataset(datasets);
 
 const calculateRelative = () => {
-    
+
 }
 /*
 const html_legend_plugin = {
-	id: "htmlLegend",
-	afterUpdate(chart, args, options) {
-		const legend_list = $("#album-cover-row");
-		legend_list.empty();
+    id: "htmlLegend",
+    afterUpdate(chart, args, options) {
+        const legend_list = $("#album-cover-row");
+        legend_list.empty();
 
-		const items = chart.options.plugins.legend.labels.generateLabels(chart);
+        const items = chart.options.plugins.legend.labels.generateLabels(chart);
 
-		let tracknum = 0;
+        let tracknum = 0;
 
-		items.forEach((item) => {
-			let curr_item = tracks_data_obj.tracks[tracknum];
-			let track_cover_container = $("<div></div>");
-			track_cover_container.addClass(`col-3`);
+        items.forEach((item) => {
+            let curr_item = tracks_data_obj.tracks[tracknum];
+            let track_cover_container = $("<div></div>");
+            track_cover_container.addClass(`col-3`);
 
-			let track_image = $("<img>");
-			track_image.attr("src", `${curr_item.track_image}`);
-			track_image.attr("alt", `album cover for ${curr_item.track_name}`);
-			track_image.addClass("album-cover img-fluid");
+            let track_image = $("<img>");
+            track_image.attr("src", `${curr_item.track_image}`);
+            track_image.attr("alt", `album cover for ${curr_item.track_name}`);
+            track_image.addClass("album-cover img-fluid");
 
-			let track_text = $(`<a></a>`)
-				.text(`${item.text}`)
-				.css({ "text-align": "center" })
-				.addClass("link-dark")
-				.attr("href", curr_item.track_url);
-			track_image.css({
-				background: item.fillStyle,
-				"border-color": item.strokeStyle,
-				"border-width": "3px",
-				opacity: item.hidden ? 0.2 : 1.0,
-			});
+            let track_text = $(`<a></a>`)
+                .text(`${item.text}`)
+                .css({ "text-align": "center" })
+                .addClass("link-dark")
+                .attr("href", curr_item.track_url);
+            track_image.css({
+                background: item.fillStyle,
+                "border-color": item.strokeStyle,
+                "border-width": "3px",
+                opacity: item.hidden ? 0.2 : 1.0,
+            });
 
-			track_cover_container.append(track_image);
-			track_cover_container.append(track_text);
+            track_cover_container.append(track_image);
+            track_cover_container.append(track_text);
 
-			track_cover_container.click(function clicked() {
-				const { type } = chart.config;
-				if (type === "pie" || type === "doughnut") {
-					chart.toggleDataVisibility(item.index);
-				} else {
-					chart.setDatasetVisibility(
-						item.datasetIndex,
-						!chart.isDatasetVisible(item.datasetIndex)
-					);
-				}
-				chart.update();
-			});
+            track_cover_container.click(function clicked() {
+                const { type } = chart.config;
+                if (type === "pie" || type === "doughnut") {
+                    chart.toggleDataVisibility(item.index);
+                } else {
+                    chart.setDatasetVisibility(
+                        item.datasetIndex,
+                        !chart.isDatasetVisible(item.datasetIndex)
+                    );
+                }
+                chart.update();
+            });
 
-			legend_list.append(track_cover_container);
+            legend_list.append(track_cover_container);
 
-			tracknum++;
-		});
+            tracknum++;
+        });
 
-		// average
-	},
+        // average
+    },
 };
 */
 

@@ -84,11 +84,6 @@ input[type="radio"]:checked + label h6 {
   display: flex;
 }
 
-#canvas-container {
-  width: 95%;
-  margin: auto;
-}
-
 #canvas-container-landing {
   width: 80%;
   margin: auto;
@@ -97,11 +92,6 @@ input[type="radio"]:checked + label h6 {
 
 /* tablets */
 @media only screen and (min-width: 768px) {
-  #canvas-container {
-    width: 35%;
-    margin: auto;
-  }
-
   #canvas-container-landing {
     width: 75%;
     margin: auto;
@@ -123,11 +113,6 @@ input[type="radio"]:checked + label h6 {
 
 /* Large devices */
 @media only screen and (min-width: 992px) {
-  #canvas-container {
-    width: 38%;
-    margin: auto;
-  }
-
   #canvas-container-landing {
     width: 75%;
     margin: auto;

@@ -38,7 +38,7 @@ exports.createTrackFeaturesObject = (fullTrackFeatureData) => {
 			tempo: fullTrackFeatureData.tempo,
 			valence: fullTrackFeatureData.valence,
 		},
-		relative: null,
+		relative: {},
 	};
 
 	return features;
