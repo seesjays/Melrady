@@ -1,0 +1,50 @@
+<% for(let i=0; i < trackObjectArray.length; i++) {%>
+  <% let trackData=trackObjectArray[i].trackData; %>
+    <% let features=trackObjectArray[i].features; %>
+      <div class="col-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="<%= trackData.trackURL %>" class="link-dark">
+                <%= trackData.trackName %>
+              </a>
+            </h5>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <a class="link-secondary" href="<%= trackData.albumURL %>">
+                <%= trackData.albumName %>
+              </a>
+            </h6>
+            <h6>
+              <% for(let artistIndex=0; artistIndex < trackData.trackArtists.length; artistIndex++) {%>
+                <% let artist=trackData.trackArtists[artistIndex]; %>
+                  <% let name=artist.name; %>
+                    <% if (artistIndex < trackData.trackArtists.length-1) {%>
+                      <% name +="," %>
+                        <% } %>
+                          <% if (artistIndex> 0) { %> &nbsp; <% } %>
+                              <span class="mb-1 text-muted">
+                                <a class="link-secondary" href="<%= artist.external_urls.spotify %>">
+                                  <%=name%>
+                                </a> </span>
+                              <% } %>
+            </h6>
+          </div>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Danceability: <%= features.absolute.danceability.toFixed(3) %>
+            </li>
+            <li class="list-group-item">Duration: <%= features.absolute.duration.toFixed(3) %> seconds</li>
+            <li class="list-group-item">Energy <%= features.absolute.energy.toFixed(3) %>
+            </li>
+            <li class="list-group-item">Loudness <%= features.absolute.loudness.toFixed(3) %>
+            </li>
+            <li class="list-group-item">Speechiness <%= features.absolute.speechiness.toFixed(3) %>
+            </li>
+            <li class="list-group-item">Tempo <%= features.absolute.tempo.toFixed(3) %> BPM</li>
+            <li class="list-group-item">Valence <%= features.absolute.valence.toFixed(3) %>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <% } %>

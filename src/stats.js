@@ -58,8 +58,10 @@ function stats(sharedObjects) {
                                 trackObjects[index].color = color;
                             });
 
+                            console.log(trackObjects);
+
                             return res.render("pages/stats", {
-                                trackObjects: trackObjects,
+                                trackObjectArray: trackObjects,
                             });
                         }
                     );
