@@ -1,6 +1,9 @@
 const express = require("express");
 const faviesRouter = express.Router();
 
+const SpotifyWebApi = require("spotify-web-api-node");
+
+
 function favies(sharedObjects) {
     const auth = sharedObjects.authentication;
 
@@ -11,12 +14,14 @@ function favies(sharedObjects) {
         // but still double checking anyway
         const accessToken = req.headers.authorization;
         if (accessToken) {
-            spotify_api.setAccessToken(accessToken);
+            const spotifyAPI = new SpotifyWebApi();
+            spotifyAPI.setAccessToken(accessToken);
+
             const { createTrackObject } = require("./trackObject");
 
             // query the top tracks for a user API, with a max item count of count and time range
             // extended over the user's entire account
-            const favoriteTracks = await spotify_api.getMyTopTracks({ limit: count, time_range: "long_term" })
+            const favoriteTracks = await spotifyAPI.getMyTopTracks({ limit: count, time_range: "long_term" })
                 .then(
                     (data) => {
                         if (data.body.items) {

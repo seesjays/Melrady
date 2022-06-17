@@ -3,6 +3,9 @@ const path = require("path");
 const express = require("express");
 const searchRouter = express.Router();
 
+const SpotifyWebApi = require("spotify-web-api-node");
+
+
 function search(sharedObjects) {
 	const auth = sharedObjects.authentication;
 	const { body, validationResult } = require("express-validator");
@@ -31,25 +34,26 @@ function search(sharedObjects) {
 				});
 			}
 
-			// valid escaped strings with a max length of 40
-			// 40 was a number I picked kind of at random, but it should cover like
-			// 90% of songs, easy.
-
-			const queries = Object.values(req.body).filter(
-				(query) => query.length > 0
-			);
-			console.log(`tracksearch: searching ${queries.length} tracks:`);
-			console.dir(queries);
-
 			// operating under the assumption that access token exists in req body already thanks to middleware
 			// but still double checking anyway
 			const accessToken = req.headers.authorization;
 			if (accessToken) {
+				const spotifyAPI = new SpotifyWebApi();
+				spotifyAPI.setAccessToken(accessToken);
+
+				// valid escaped strings with a max length of 40
+				// 40 was a number I picked kind of at random, but it should cover like
+				// 90% of songs, easy.
+				const queries = Object.values(req.body).filter(
+					(query) => query.length > 0 && query.length <= 40
+				);
+				console.log(`tracksearch: searching ${queries.length} tracks:`);
+				console.dir(queries);
+
 				const { createTrackObject } = require("./trackObject");
 				const output = await Promise.all(
 					queries.map(async (query) => {
-						spotify_api.setAccessToken(accessToken);
-						const searchResults = await spotify_api.searchTracks(query, {
+						const searchResults = await spotifyAPI.searchTracks(query, {
 							limit: 3,
 						});
 

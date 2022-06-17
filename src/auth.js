@@ -4,6 +4,7 @@ const { state_key, access_tok_key, refresh_tok_key } =
 const express = require("express");
 const authRouter = express.Router();
 
+
 authRouter.get("/authorize", (req, res, next) => {
 	// check if there's an access token in cookies
 	// if not, check if there's a refresh token in cookies, then refresh access token

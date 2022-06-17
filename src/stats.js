@@ -1,6 +1,9 @@
 const express = require("express");
 const statsRouter = express.Router();
 
+const SpotifyWebApi = require("spotify-web-api-node");
+
+
 function stats(sharedObjects) {
     const auth = sharedObjects.authentication;
     const { query, validationResult } = require("express-validator");
@@ -19,13 +22,15 @@ function stats(sharedObjects) {
             // but still double checking anyway
             const accessToken = req.headers.authorization;
             if (accessToken) {
-                spotify_api.setAccessToken(accessToken);
+                const spotifyAPI = new SpotifyWebApi();
+                spotifyAPI.setAccessToken(accessToken);
+
                 const trackIDs = Object.values(req.query).filter(trackID => trackID.length > 0);
 
                 // results are massive, so we filter down the values
                 // into nice packaged objects using createTrackFeaturesObject
                 const { createTrackObject } = require("./trackObject");
-                const trackObjects = await spotify_api.getTracks(trackIDs).then(
+                const trackObjects = await spotifyAPI.getTracks(trackIDs).then(
                     (data) => {
                         return data.body.tracks.map((fulltrackData) => createTrackObject(fulltrackData));
                     },
@@ -37,7 +42,7 @@ function stats(sharedObjects) {
 
                 // attach stats and color data
                 if (trackObjects) {
-                    fetchFeaturesForSet(trackObjects).then(
+                    fetchFeaturesForSet(trackObjects, spotifyAPI).then(
                         (featureArray) => {
                             return calculateTrackColorSet(trackObjects).then(
                                 (colorArray) => {
@@ -70,9 +75,9 @@ function stats(sharedObjects) {
 
     // returns a Promise that resolves 
     // to an array of track feature data
-    const fetchFeaturesForSet = async (trackObjects) => {
+    const fetchFeaturesForSet = async (trackObjects, spotifyAPI) => {
         const { createTrackFeaturesObject } = require("./trackObject");
-        return spotify_api.getAudioFeaturesForTracks(trackObjects.map((trackObject) => trackObject.trackData.trackId))
+        return spotifyAPI.getAudioFeaturesForTracks(trackObjects.map((trackObject) => trackObject.trackData.trackId))
             .then(
                 (data) => {
                     const featureSetArray = data.body.audio_features;
