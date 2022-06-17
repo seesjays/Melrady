@@ -99,28 +99,7 @@ input[type="radio"]:checked.form-check-input + label h6 {
   }
 
   .album-cover {
-    width: 85%;
-  }
-  .album-row {
-    margin: auto;
-    width: 60%;
-  }
-
-  .topbar > span {
-    margin: 0 6%;
-  }
-}
-
-/* Large devices */
-@media only screen and (min-width: 992px) {
-  #canvas-container-landing {
-    width: 75%;
-    margin: auto;
-    padding: 5%;
-  }
-
-  .album-cover {
-    width: 85%;
+    width: 65%;
   }
   .album-row {
     margin: auto;

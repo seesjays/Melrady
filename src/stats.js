@@ -16,12 +16,6 @@ function stats(sharedObjects) {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-            return res.render("pages/stats", {
-                trackObjectArray: [],
-            });
-
-
-
             // operating under the assumption that access token exists in req body already thanks to middleware
             // but still double checking anyway
             const accessToken = req.headers.authorization;
