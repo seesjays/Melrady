@@ -232,7 +232,7 @@ class ChartManager {
 				options: {
 					responsive: true,
 					plugins: {
-						albumLegends: {
+						albumlegends: {
 							containerID: "#album-cover-row",
 						},
 						legend: {
@@ -260,7 +260,7 @@ class ChartManager {
 	}
 }
 
-const chartManager = new ChartManager(trackObjects);
+const chartManager = new ChartManager(trackObjects, {mode: "bar"});
 
 // If this is registered after chart creation, the legends don't appear
 registerHTMLElementLegendPlugin();
