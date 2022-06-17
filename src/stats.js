@@ -20,6 +20,7 @@ function stats(sharedObjects) {
             // but still double checking anyway
             const accessToken = req.headers.authorization;
             if (accessToken) {
+                spotify_api.setAccessToken(accessToken);
                 const trackIDs = Object.values(req.query).filter(trackID => trackID.length > 0);
 
                 // results are massive, so we filter down the values
@@ -57,8 +58,6 @@ function stats(sharedObjects) {
                             fAndCArrays.colors.forEach((color, index) => {
                                 trackObjects[index].color = color;
                             });
-
-                            console.log(trackObjects);
 
                             return res.render("pages/stats", {
                                 trackObjectArray: trackObjects,
