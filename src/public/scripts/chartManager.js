@@ -60,6 +60,10 @@ class ChartManager {
 				trackObject.color.join(", ")
 			);
 
+			if (chartManagerOptions.mode) {
+				this.mode = chartManagerOptions.mode;
+			}
+
 			if (chartManagerOptions.colorProfile) {
 				this.colorProfile = chartManagerOptions.colorProfile;
 			}
@@ -77,7 +81,7 @@ class ChartManager {
 		canvasContainer.width = canvasContainer.clientWidth;
 		canvasContainer.height = canvasContainer.clientHeight;
 
-		const options = optionsForMode(this.mode);
+		const options = this.optionsForMode(this.mode);
 		this.chart = new Chart(ctx, {
 			type: this.mode,
 			data: {
@@ -86,78 +90,6 @@ class ChartManager {
 			},
 			...options,
 		});
-
-		function optionsForMode(mode) {
-			if (mode === "radar") {
-				const radarOptions = {
-					options: {
-						layout: {
-							padding: {},
-						},
-						responsive: true,
-						plugins: {
-							htmlLegend: {
-								containerID: "album-cover-row",
-							},
-							legend: {
-								display: true,
-							},
-						},
-						scales: {
-							r: {
-								angleLines: {},
-								min: 0,
-								max: 1.0,
-								ticks: {
-									display: false,
-								},
-							},
-						},
-					},
-				};
-
-				return radarOptions;
-			} else {
-				const barOptions = {
-					options: {
-						layout: {
-							padding: {
-								top: 5,
-								bottom: 5,
-							},
-						},
-						elements: {
-							bar: { borderWidth: 2 },
-						},
-						plugins: {
-							htmlLegend: {
-								containerID: "album-cover-row",
-							},
-							legend: {
-								display: false,
-							},
-						},
-						responsive: true,
-						scales: {
-							xAxes: {
-								display: true,
-								ticks: {
-									maxRotation: 90,
-									minRotation: 45,
-								},
-							},
-							yAxes: {
-								ticks: {
-									display: false,
-								},
-							},
-						},
-					},
-				};
-
-				return barOptions;
-			}
-		}
 	}
 
 	/**
@@ -172,20 +104,20 @@ class ChartManager {
 			if (!trackObject.features.relative) return {};
 
 			// use the proper RGB color profile
-			let colorProfile;
+			let colorProfileRGB;
 			if (this.colorProfile == "art") {
-				colorProfile = trackObject.color;
+				colorProfileRGB = trackObject.color;
 			} else if (this.colorProfile == "unique") {
-				colorProfile = this.colorProfiles.unique[index];
+				colorProfileRGB = this.colorProfiles.unique[index];
 			} else if (this.colorProfile == "green") {
-				colorProfile = this.colorProfiles.green[index];
+				colorProfileRGB = this.colorProfiles.green[index];
 			}
 
 			const data = categoryLabels.map(
 				(label) => trackObject.features.relative[label]
 			);
-			const borderColor = `rgba(${colorProfile}, 0.9)`;
-			const backgroundColor = `rgba(${colorProfile}, 0.1)`;
+			const borderColor = `rgba(${colorProfileRGB}, 0.9)`;
+			const backgroundColor = `rgba(${colorProfileRGB}, 0.1)`;
 			return {
 				label: trackObject.trackData.trackName,
 				data: data,
@@ -210,16 +142,18 @@ class ChartManager {
 
 	/**
 	 * Transitions between color profiles without generating an entirely new dataset with the new color.
-	 * @param {"art"|"unique"|"green"} newColorProfile = "art" - Which color profile to swap to.
+	 * @param {"art"|"unique"|"green"} newColorProfile - Which color profile to swap to.
 	 */
 	updateChartColors(newColorProfile) {
+		if (this.colorProfile === newColorProfile) return false;
+		this.colorProfile = newColorProfile;
+
 		const chart = this.chart;
+		const colorProfileRGBArray = this.colorProfiles[newColorProfile];
 
 		for (let i = 0; i < chart.data.datasets.length; i++) {
-			this.colorProfile = this.colorProfiles[newColorProfile];
-
-			const borderColor = `rgba(${this.colorProfile[i]}, 0.9)`;
-			const backgroundColor = `rgba(${this.colorProfile[i]}, 0.1)`;
+			const borderColor = `rgba(${colorProfileRGBArray[i]}, 0.9)`;
+			const backgroundColor = `rgba(${colorProfileRGBArray[i]}, 0.1)`;
 			const dataset = this.chart.data.datasets[i];
 
 			dataset.borderColor = borderColor;
@@ -240,12 +174,101 @@ class ChartManager {
 
 		chart.update();
 	}
+
+	/**
+	 * Transitions the chart between radar and bar forms by generating new datasets
+	 * @param {"radar"|"bar"} newMode - Which color profile to swap to.
+	 */
+	updateChartMode(newMode) {
+		if (this.mode === newMode) return false;
+		this.mode = newMode;
+        
+		if (this.chart) {
+			this.chart.destroy();
+		}
+
+		this.initializeChart();
+		const dataset = this.generateDataset();
+		this.setDataset(dataset);
+		this.chart.update();
+	}
+
+	optionsForMode(mode) {
+		if (mode === "radar") {
+			const radarOptions = {
+				options: {
+					layout: {
+						padding: {},
+					},
+					responsive: true,
+					plugins: {
+						htmlLegend: {
+							containerID: "album-cover-row",
+						},
+						legend: {
+							display: true,
+						},
+					},
+					scales: {
+						r: {
+							angleLines: {},
+							min: 0,
+							max: 1.0,
+							ticks: {
+								display: false,
+							},
+						},
+					},
+				},
+			};
+
+			return radarOptions;
+		} else {
+			const barOptions = {
+				options: {
+					layout: {
+						padding: {
+							top: 5,
+							bottom: 5,
+						},
+					},
+					elements: {
+						bar: { borderWidth: 2 },
+					},
+					plugins: {
+						htmlLegend: {
+							containerID: "album-cover-row",
+						},
+						legend: {},
+					},
+					responsive: true,
+					scales: {
+						xAxes: {
+							display: true,
+							ticks: {
+								maxRotation: 90,
+								minRotation: 45,
+							},
+						},
+						yAxes: {
+							ticks: {
+								display: false,
+							},
+						},
+					},
+				},
+			};
+
+			return barOptions;
+		}
+	}
 }
 
-const chartManager = new ChartManager(trackObjects, { mode: "radar" });
+const chartManager = new ChartManager(trackObjects, { mode: "bar" });
 chartManager.initializeChart();
-const datasets = chartManager.generateDataset();
-chartManager.setDataset(datasets);
+const dataset = chartManager.generateDataset();
+chartManager.setDataset(dataset);
+chartManager.updateChartMode("radar");
 
 $(".color-button").click(function () {
 	switch (this.id) {
@@ -257,6 +280,17 @@ $(".color-button").click(function () {
 			break;
 		case "green-color-button":
 			chartManager.updateChartColors("green");
+			break;
+	}
+});
+
+$(".type-button").click(function () {
+	switch (this.id) {
+		case "radar-type":
+			chartManager.updateChartMode("radar");
+			break;
+		case "bar-type":
+			chartManager.updateChartMode("bar");
 			break;
 	}
 });
