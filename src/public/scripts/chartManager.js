@@ -242,14 +242,24 @@ class ChartManager {
 	}
 }
 
-const manager = new ChartManager(trackObjects, { mode: "radar" });
-manager.initializeChart();
-const datasets = manager.generateDataset();
-manager.setDataset(datasets);
-setTimeout(() => {
-    timeout
-}, timeout);
-manager.updateChartColors("green");
+const chartManager = new ChartManager(trackObjects, { mode: "radar" });
+chartManager.initializeChart();
+const datasets = chartManager.generateDataset();
+chartManager.setDataset(datasets);
+
+$(".color-button").click(function () {
+	switch (this.id) {
+		case "art-color-button":
+			chartManager.updateChartColors("art");
+			break;
+		case "unique-color-button":
+			chartManager.updateChartColors("unique");
+			break;
+		case "green-color-button":
+			chartManager.updateChartColors("green");
+			break;
+	}
+});
 /*
 const html_legend_plugin = {
     id: "htmlLegend",
