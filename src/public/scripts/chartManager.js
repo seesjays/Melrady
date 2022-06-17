@@ -5,32 +5,20 @@ A. Form and attach the chart.js instance to an element on the stats page
 - If trackObjects is undefined, chartManager does nothing
 B. Provide controls for the user to modify how the data is displayed
 - Bar vs Radar
-    Bars are better at displaying the data sometimes, particularly when the data points are close together.
-    Radars are the signature display form, and provide an easier way to gain understanding frmo
-        multiple data points. The datapoints aren't split up into their individual groups,
-        which makes for an easier time comparing each song, as radar areas are overlaid atop
-        one another.
+	Bars are better at displaying the data sometimes, particularly when the data points are close together.
+	Radars are the signature display form, and provide an easier way to gain understanding frmo
+		multiple data points. The datapoints aren't split up into their individual groups,
+		which makes for an easier time comparing each song, as radar areas are overlaid atop
+		one another.
 - Colors
-    Colors that match the album art (sourced from backend)
-    Shades of green
-    Static unique colors that are far apart
+	Colors that match the album art (sourced from backend)
+	Shades of green
+	Static unique colors that are far apart
 - Showing/Hiding different charts on the album
 */
 
 // Track Object Array should already exist as trackObjects, this script's the last on the page.
 // But we want a local reference, so:
-
-const categoryLabels = [
-	"danceability",
-	"duration",
-	"energy",
-	"speechiness",
-	"tempo",
-	"valence",
-];
-let chartMode = "radar";
-let trackChart = null;
-let features_obj = "normalized_features";
 
 class ChartManager {
 	trackObjects = [];
@@ -45,6 +33,15 @@ class ChartManager {
 	colorProfile = "art";
 
 	legendContainer = "album-cover-row";
+
+	#categoryLabels = [
+		"danceability",
+		"duration",
+		"energy",
+		"speechiness",
+		"tempo",
+		"valence",
+	];
 
 	/**
 	 * @param {Object[]} trackObjects - An array of fully formed track objects.
@@ -83,21 +80,63 @@ class ChartManager {
 	 */
 	initializeChart() {
 		const canvasContainer = document.getElementById("canvas-container");
-		const canvas = document.getElementById("track-chart");
 		const ctx = document.getElementById("track-chart").getContext("2d");
 
 		canvasContainer.width = canvasContainer.clientWidth;
 		canvasContainer.height = canvasContainer.clientHeight;
 
-		const options = this.optionsForMode(this.mode);
+		const options = optionsForMode(this.mode);
 		this.chart = new Chart(ctx, {
 			type: this.mode,
 			data: {
-				labels: categoryLabels,
+				labels: this.#categoryLabels,
 				datasets: [],
 			},
-			...options,
+			options: options,
 		});
+
+		function optionsForMode(mode) {
+			const base = {
+				responsive: true,
+				plugins: {
+					albumlegends: {
+						containerID: "#album-cover-row",
+					},
+					legend: {
+						display: false,
+					},
+				},
+			}
+
+			if (mode === "radar") {
+				base.scales = {
+					r: {
+						angleLines: {},
+						min: 0,
+						max: 1.0,
+						ticks: {
+							display: false,
+						},
+					},
+				}
+			} else {
+				base.scales = {
+					xAxes: {
+						display: true,
+					},
+					yAxes: {
+						ticks: {
+							display: false,
+						},
+					},
+				}
+				base.elements = {
+					bar: { borderWidth: 2 },
+				}
+			}
+
+			return base;
+		}
 	}
 
 	/**
@@ -121,7 +160,7 @@ class ChartManager {
 				colorProfileRGB = this.colorProfiles.green[index];
 			}
 
-			const data = categoryLabels.map(
+			const data = this.#categoryLabels.map(
 				(label) => trackObject.features.relative[label]
 			);
 			const borderColor = `rgba(${colorProfileRGB}, 0.9)`;
@@ -139,9 +178,13 @@ class ChartManager {
 		});
 	}
 
+	/**
+	 * Sets the chart's current dataset to the one supplied.
+	 * @param {Object[]} datasets 
+	 */
 	setDataset(datasets) {
 		this.chart.data = {
-			labels: categoryLabels,
+			labels: this.#categoryLabels,
 			datasets: datasets,
 		};
 		this.chart.update();
@@ -169,14 +212,6 @@ class ChartManager {
 			dataset.pointBorderColor = borderColor;
 			dataset.pointHoverBackgroundColor = backgroundColor;
 			dataset.pointHoverBorderColor = borderColor;
-
-			/*
-            legends
-			$(`#track-${i + 1}-cover`).css({
-				"background-color": backgroundColor,
-				"border-color": borderColor,
-			});
-            */
 		}
 
 		chart.update();
@@ -199,68 +234,9 @@ class ChartManager {
 		this.setDataset(dataset);
 		this.chart.update();
 	}
-
-	optionsForMode(mode) {
-		if (mode === "radar") {
-			const radarOptions = {
-				options: {
-					responsive: true,
-					plugins: {
-						albumlegends: {
-							containerID: "#album-cover-row",
-						},
-						legend: {
-							display: false,
-						},
-					},
-					scales: {
-						r: {
-							angleLines: {},
-							min: 0,
-							max: 1.0,
-							ticks: {
-								display: false,
-							},
-						},
-					},
-				},
-			};
-
-			return radarOptions;
-		} else {
-			const barOptions = {
-				options: {
-					responsive: true,
-					plugins: {
-						albumlegends: {
-							containerID: "#album-cover-row",
-						},
-						legend: {
-							display: false,
-						},
-					},
-					scales: {
-						xAxes: {
-							display: true,
-						},
-						yAxes: {
-							ticks: {
-								display: false,
-							},
-						},
-					},
-					elements: {
-						bar: { borderWidth: 2 },
-					},
-				},
-			};
-
-			return barOptions;
-		}
-	}
 }
 
-const chartManager = new ChartManager(trackObjects, {mode: "bar"});
+const chartManager = new ChartManager(trackObjects);
 
 // If this is registered after chart creation, the legends don't appear
 registerHTMLElementLegendPlugin();
@@ -268,8 +244,11 @@ registerHTMLElementLegendPlugin();
 chartManager.initializeChart();
 const dataset = chartManager.generateDataset();
 chartManager.setDataset(dataset);
-chartManager.chart.update();
 
+/**
+ * attaching onClick handlers to color and
+ * chart type buttons
+ */
 $(".color-button").click(function () {
 	switch (this.id) {
 		case "art-color-button":
@@ -295,6 +274,13 @@ $(".type-button").click(function () {
 	}
 });
 
+/**
+ * Very important function that I put at the end for cleanliness
+ * reasons.
+ * Registers a global ChartJS plugin responsible for creating HTML elements
+ * for legends. The reason I went through all the trouble of making
+ * this is so the legends would have the album art in them
+ */
 function registerHTMLElementLegendPlugin() {
 	Chart.register({
 		id: "albumlegends",
@@ -311,19 +297,16 @@ function registerHTMLElementLegendPlugin() {
 			 * since trackObjects and the legend items are in the same order.
 			 */
 			const legends = chart.options.plugins.legend.labels.generateLabels(chart);
-			console.log(legends);
 			legends.forEach((item, index) => {
 				const trackObject = trackObjects[index];
 
 				// I really like using template literals for HTML elements. It's so
 				// convenient, yet they format so badly :(
 				// Here we form the image and link elements then add them both to a container
-				const img = `<img src=${
-					trackObject.trackData.albumArt
-				} alt="album cover for ${trackObject}" class="album-cover img-fluid" 
-            style="background: ${item.fillStyle}; border-color: ${
-					item.strokeStyle
-				}; border-width: 3px;
+				const img = `<img src=${trackObject.trackData.albumArt
+					} alt="album cover for ${trackObject}" class="album-cover img-fluid" 
+            style="background: ${item.fillStyle}; border-color: ${item.strokeStyle
+					}; border-width: 3px;
             opacity: ${item.hidden ? 0.2 : 1.0};"/>`;
 
 				const link = `<a href=${trackObject.trackData.trackURL} class="link-dark" 
@@ -335,6 +318,10 @@ function registerHTMLElementLegendPlugin() {
 				legendElement.append(link);
 				legendContainer.append(legendElement);
 
+
+				/**
+				 * This bit here seems kinda arcance,
+				 */
 				legendElement.click(() => {
 					const { type } = chart.config;
 					if (type === "pie" || type === "doughnut") {
@@ -351,301 +338,3 @@ function registerHTMLElementLegendPlugin() {
 		},
 	});
 }
-
-/*
-<script>
-const tracks_data_obj = <%-JSON.stringify(trackObjects)%>;
-
-
-
-function get_chart()
-{
-
-}
-
-
-
-
-const absolute_mappings = {
-    "danceability": "danceability",
-    "energy": "energy",
-    "speechiness": "speechiness",
-    "valence": "valence",
-};
-
-
-function destroy_chart()
-{
-    track_chart.destroy();
-}
-
-
-
-function update_colors()
-{
-    let chart = get_chart();
-    let display_color = $('input[name="display-color-button"]:checked').attr('id');
-
-    const corresponding_color_set = {
-        "dominant-color": dominant_colors,
-        "green-color": default_colors,
-        "unique-color": different_colors,
-    };
-
-    for (let i = 0; i < chart.data.datasets.length; i++)
-    {
-        let border_col = `rgba(${corresponding_color_set[display_color][i]} 0.9)`;
-        let background_col = `rgba(${corresponding_color_set[display_color][i]} 0.1)`;
-        let set = chart.data.datasets[i];
-
-        set.borderColor = border_col;
-        set.backgroundColor = background_col;
-        set.pointBackgroundColor = border_col;
-        set.pointBorderColor = border_col;
-        set.pointHoverBackgroundColor = background_col;
-        set.pointHoverBorderColor = background_col;
-
-        $(`#track-${i + 1}-cover`).css({
-            "background-color": background_col,
-            "border-color": border_col
-        });
-    }
-
-    chart.update();
-}
-
-const relative_mapping_swap = () =>
-{
-    mapping_mode = relative_mappings;
-    features_obj = "normalized_features";
-
-    let chart = get_chart();
-
-    generate_data();
-    chart.data = {
-        labels: Object.keys(mapping_mode),
-        datasets: datasetlist
-    };
-    chart.update();
-};
-
-const absolute_mapping_swap = () =>
-{
-    mapping_mode = absolute_mappings;
-    features_obj = "track_features";
-
-    let chart = get_chart();
-
-    generate_data();
-    chart.data = {
-        labels: Object.keys(mapping_mode),
-        datasets: datasetlist
-    };
-    chart.update();
-};
-
-function generate_data()
-{
-    datasetlist = [];
-
-    const color_averaging = [0, 0, 0];
-    let albumnum = 0;
-    tracks_data_obj.tracks.forEach((track) =>
-    {
-        let color = "0, 0, 0,";
-
-        for (let i = 0; i < 3; i++)
-        {
-            color_averaging[i] += track.track_color[i];
-        }
-
-        if (track.track_color !== null)
-        {
-            color = `${track.track_color[0]}, ${track.track_color[1]}, ${track.track_color[2]},`;
-            dominant_colors.push(color);
-        }
-        else
-        {
-            color = differentcolors[albumnum];
-            dominant_colors.push(color);
-        }
-
-        let border_col = `rgba(${color} 0.9)`;
-        let background_col = `rgba(${color} 0.1)`;
-
-        let set = {
-            label: track.track_name,
-            data: Object.keys(mapping_mode).map(key => track[features_obj][mapping_mode[key]]),
-            borderColor: border_col,
-            backgroundColor: background_col,
-            pointBackgroundColor: border_col,
-            pointBorderColor: border_col,
-            pointHoverBackgroundColor: background_col,
-            pointHoverBorderColor: background_col,
-        }
-
-        albumnum++;
-        datasetlist.push(set);
-    });
-
-    // average
-    for (let i = 0; i < 3; i++)
-    {
-        color_averaging[i] /= tracks_data_obj.tracks.length;
-    }
-
-    if (dominant_colors.length === tracks_data_obj.tracks.length + 1)
-    {
-        dominant_colors.pop();
-    }
-
-    const average_color = `${color_averaging[0]}, ${color_averaging[1]}, ${color_averaging[2]},`;
-    dominant_colors.push(average_color);
-    avgvalue = {
-        label: "Average",
-        data: Object.keys(mapping_mode).map(key => tracks_data_obj.full_data.averages[mapping_mode[key]]),
-        borderColor: `rgba(${average_color} 0.9)`,
-        backgroundColor: `rgba(${average_color} 0.1)`,
-    }
-    //datasetlist.push(avgvalue);
-}
-
-function new_scale()
-{
-    if (scaling_mode === "relative")
-    {
-        relative_mapping_swap();
-    }
-    if (scaling_mode === "absolute")
-    {
-        absolute_mapping_swap();
-    }
-}
-
-$(document).ready(function ()
-{
-    generate_data();
-    create_chart();
-
-    $('input[name="display-color-button"]').click(() =>
-    {
-        let chart = get_chart();
-
-        let display_type = $('input[name="display-color-button"]:checked').attr('id');
-
-        const corresponding_color_set = {
-            "dominant-color": dominant_colors,
-            "green-color": default_colors,
-            "unique-color": different_colors,
-        };
-
-        for (let i = 0; i < chart.data.datasets.length; i++)
-        {
-            let border_col = `rgba(${corresponding_color_set[display_type][i]} 0.9)`;
-            let background_col = `rgba(${corresponding_color_set[display_type][i]} 0.1)`;
-            let set = chart.data.datasets[i];
-
-            set.borderColor = border_col;
-            set.backgroundColor = background_col;
-            set.pointBackgroundColor = border_col;
-            set.pointBorderColor = border_col;
-            set.pointHoverBackgroundColor = background_col;
-            set.pointHoverBorderColor = background_col;
-
-            $(`#track-${i + 1}-cover`).css({
-                "background-color": background_col,
-                "border-color": border_col
-            });
-        }
-
-        chart.update();
-    });
-
-    $('input[name="display-mode-button"]').click(() =>
-    {
-        let track_chart = get_chart();
-
-        let display_type = $('input[name="display-mode-button"]:checked').attr('id');
-
-        if (display_type === "radar-display" && chart_mode !== "radar")
-        {
-            chart_mode = "radar";
-        }
-        else if (display_type === "bar-display" && chart_mode !== "bar")
-        {
-            chart_mode = "bar";
-        }
-        else
-        {
-            return;
-        }
-
-        destroy_chart();
-        create_chart();
-    });
-
-    $('input[name="display-scaling-button"]').click(() =>
-    {
-        let track_chart = get_chart();
-
-        let new_scaling_mode = $('input[name="display-scaling-button"]:checked').attr('id');
-
-        if (new_scaling_mode === "relative-display" && scaling_mode !== "relative")
-        {
-            scaling_mode = "relative";
-            new_scale();
-            update_colors();
-        }
-        else if (new_scaling_mode === "absolute-display" && scaling_mode !== "absolute")
-        {
-            scaling_mode = "absolute";
-            new_scale();
-            update_colors();
-        }
-        else
-        {
-            return;
-        }
-    });
-});
-</script>
-
-<script>
-// Highs, Lows, Averages
-const tracks_data_obj_datagathering = <%-JSON.stringify(tracks_data)%>;
-
-const highs = tracks_data_obj_datagathering.full_data.maximums;
-const avgs = tracks_data_obj_datagathering.full_data.averages;
-const lows = tracks_data_obj_datagathering.full_data.minimums;
-
-const zeroPad = (num) => String(num).padStart(2, '0')
-
-function simplify_data(data)
-{
-    const { duration, loudness, tempo } = data;
-
-    // duration calc
-    let measure = "seconds";
-    let minutes = duration / 60;
-    let seconds = duration % 60;
-    let time = "0:00";
-
-    time = `${Math.trunc(minutes)}:${zeroPad(Math.trunc(seconds))}`
-
-    return [time, (Math.round(loudness) - 60), Math.round(tempo)];
-}
-
-$(document).ready(function ()
-{
-    let data = [simplify_data(highs), simplify_data(avgs), simplify_data(lows)]
-    for (let i = 0; i < 3; i++) 
-    {
-        let set = data[i];
-        let list_id = `#extra-data-${i + 1}`;
-        $(list_id).append(`<li class="list-group-item">Duration: <strong>${set[0]}</strong></li>`);
-        $(list_id).append(`<li class="list-group-item">Loudness: <strong>${set[1]} dB</strong></li>`);
-        $(list_id).append(`<li class="list-group-item">Tempo: <strong>${set[2]} BPM</strong></li>`);
-    }
-});
-</script>
-*/
