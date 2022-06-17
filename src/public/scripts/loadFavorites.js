@@ -37,7 +37,7 @@ const loadFavorites = () => {
             }
         },
         (err) => {
-            console.err("searchPage: error fetching favies", err);
+            console.error("searchPage: error fetching favies", err);
             return dummyPlaceholders;
         }
     ).then((placeholders) => {

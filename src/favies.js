@@ -30,7 +30,7 @@ function favies(sharedObjects) {
                         }
                     },
                     (err) => {
-                        console.err("favies: couldn't get top tracks - " + err);
+                        console.error("favies: couldn't get top tracks - " + err);
                         return null;
                     }
                 );
