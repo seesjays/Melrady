@@ -3,7 +3,6 @@ const statsRouter = express.Router();
 
 function stats(sharedObjects) {
     const auth = sharedObjects.authentication;
-    const spotify_api = sharedObjects.spotify_api;
     const { query, validationResult } = require("express-validator");
 
     statsRouter.get(

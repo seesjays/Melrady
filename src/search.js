@@ -5,7 +5,6 @@ const searchRouter = express.Router();
 
 function search(sharedObjects) {
 	const auth = sharedObjects.authentication;
-	const spotify_api = sharedObjects.spotify_api;
 	const { body, validationResult } = require("express-validator");
 
 	searchRouter.get("/search", auth, (req, res) => {

@@ -21,7 +21,6 @@ const spotify_api = new SpotifyWebApi({
 
 const { auth, executeWithAccessToken } = require("./auth");
 const sharedObjects = {
-	spotify_api: spotify_api,
 	authentication: auth(spotify_api),
 };
 

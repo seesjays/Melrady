@@ -3,7 +3,6 @@ const faviesRouter = express.Router();
 
 function favies(sharedObjects) {
     const auth = sharedObjects.authentication;
-    const spotify_api = sharedObjects.spotify_api;
 
     faviesRouter.get("/favies", auth, async (req, res) => {
         const count = 16;
