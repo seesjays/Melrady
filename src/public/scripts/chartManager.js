@@ -21,174 +21,204 @@ B. Provide controls for the user to modify how the data is displayed
 // But we want a local reference, so:
 
 const categoryLabels = [
-    "danceability",
-    "duration",
-    "energy",
-    "speechiness",
-    "tempo",
-    "valence",
+	"danceability",
+	"duration",
+	"energy",
+	"speechiness",
+	"tempo",
+	"valence",
 ];
 let chartMode = "radar";
 let trackChart = null;
 let features_obj = "normalized_features";
 
 class ChartManager {
-    colorOptions = {
-        green: ["29,185,84", "25,126,56", "16,72,30", "0,25,0"],
-        unique: ["114, 224, 106", "126, 132, 250", "222, 61, 130", "246, 133, 17"],
-        art: null,
-    };
-    mode = "radar";
-    trackObjects = [];
+	colorOptions = {
+		green: ["29,185,84", "25,126,56", "16,72,30", "0,25,0"],
+		unique: ["114, 224, 106", "126, 132, 250", "222, 61, 130", "246, 133, 17"],
+		art: null,
+	};
+	mode = "radar";
+	theme = "art";
+	trackObjects = [];
+	/**
+	 * @param {Object[]} trackObjects - An array of fully formed track objects.
+	 * @param {Object} chartManagerOptions - Overrides for the ChartManager's defaults
+	 * @param {"radar"|"bar"} chartManagerOptions.mode - The type of chart to use initially
+	 * @param {"art"|"unique"|"green"} chartManagerOptions.theme = "art" - Which color profile to use initially.
+	 * Art is calculated via the album art, unique is a set of very distinct colors for visibility, and green is a nice
+	 * (though admittedly somewhat visible to distinguish since they're just different shades) gradient of greens.
+	 * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the HTMLElement legends for the chart
+	 */
+	constructor(trackObjects, chartManagerOptions) {
+		if (trackObjects) {
+			this.trackObjects = trackObjects;
+
+			this.colorOptions.art = trackObjects.map((trackObject) =>
+				trackObject.color.join(", ")
+			);
+
+			if (chartManagerOptions.theme) {
+				this.theme = chartManagerOptions.theme;
+			}
+		}
+	}
+
+	/**
+	 * Initializes the chart with the correct HTML element, as well as setting its initial options
+	 */
+	initializeChart() {
+		const canvasContainer = document.getElementById("canvas-container");
+		const canvas = document.getElementById("track-chart");
+		const ctx = document.getElementById("track-chart").getContext("2d");
+
+		canvasContainer.width = canvasContainer.clientWidth;
+		canvasContainer.height = canvasContainer.clientHeight;
+
+		const options = optionsForMode(this.mode);
+		this.chart = new Chart(ctx, {
+			type: this.mode,
+			data: {
+				labels: categoryLabels,
+				datasets: [],
+			},
+			...options,
+		});
+
+		function optionsForMode(mode) {
+			if (mode === "radar") {
+				const radarOptions = {
+					options: {
+						layout: {
+							padding: {},
+						},
+						responsive: true,
+						plugins: {
+							htmlLegend: {
+								containerID: "album-cover-row",
+							},
+							legend: {
+								display: true,
+							},
+						},
+						scales: {
+							r: {
+								angleLines: {},
+								min: 0,
+								max: 1.0,
+								ticks: {
+									display: false,
+								},
+							},
+						},
+					},
+				};
+
+				return radarOptions;
+			} else {
+				const barOptions = {
+					options: {
+						layout: {
+							padding: {
+								top: 5,
+								bottom: 5,
+							},
+						},
+						elements: {
+							bar: { borderWidth: 2 },
+						},
+						plugins: {
+							htmlLegend: {
+								containerID: "album-cover-row",
+							},
+							legend: {
+								display: false,
+							},
+						},
+						responsive: true,
+						scales: {
+							xAxes: {
+								display: true,
+								ticks: {
+									maxRotation: 90,
+									minRotation: 45,
+								},
+							},
+							yAxes: {
+								ticks: {
+									display: false,
+								},
+							},
+						},
+					},
+				};
+
+				return barOptions;
+			}
+		}
+	}
+
+	/**
+	 * Creates the datasets to be applied to the chart
+	 * @returns a list of ChartJS friendly datasets, with the datapoints being the calculated relative values
+	 * for each (used) category in the trackObject
+	 */
+	generateDataset() {
+		return this.trackObjects.map((trackObject, index) => {
+			// guard against the event where the relative values haven't
+			// been calculated yet
+			if (!trackObject.features.relative) return {};
+
+			// use the proper RGB color profile
+			let colorProfile;
+			if (this.theme == "art") {
+				colorProfile = trackObject.color;
+			} else if (this.theme == "unique") {
+				colorProfile = this.colorOptions.unique[index];
+			} else if (this.theme == "green") {
+				colorProfile = this.colorOptions.green[index];
+			}
+
+			const data = categoryLabels.map(
+				(label) => trackObject.features.relative[label]
+			);
+			const borderColor = `rgba(${colorProfile}, 0.9)`;
+			const backgroundColor = `rgba(${colorProfile}, 0.1)`;
+			return {
+				label: trackObject.trackData.trackName,
+				data: data,
+				backgroundColor: backgroundColor,
+				pointBackgroundColor: borderColor,
+				pointHoverBackgroundColor: backgroundColor,
+				borderColor: borderColor,
+				pointBorderColor: borderColor,
+				pointHoverBorderColor: backgroundColor,
+			};
+		});
+	}
+
+	setDataset(datasets) {
+		console.log(datasets);
+		this.chart.data = {
+			labels: categoryLabels,
+			datasets: datasets,
+		};
+		this.chart.update();
+	}
+
     /**
-     * @param {Object[]} trackObjects - An array of fully formed track objects.
-     * @param {Object} chartManagerOptions - Overrides for the ChartManager's defaults
-     * @param {"radar"|"bar"} chartManagerOptions.mode - The type of chart to use initially
-     * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the HTMLElement legends for the chart
+     * Transitions between color profiles without generating an entirely new dataset with the new color.
+     * @param {"art"|"unique"|"green"} color = "art" - Which color profile to swap to.
      */
-    constructor(trackObjects, chartManagerOptions) {
-        if (trackObjects) {
-            this.colorOptions.art = trackObjects.map((trackObject) =>
-                trackObject.color.join(", ")
-            );
-            this.trackObjects = trackObjects;
-        }
-    }
-
-    initializeChart() {
-        const canvasContainer = document.getElementById("canvas-container");
-        const canvas = document.getElementById("track-chart");
-        const ctx = document.getElementById("track-chart").getContext("2d");
-
-        canvasContainer.width = canvasContainer.clientWidth;
-        canvasContainer.height = canvasContainer.clientHeight;
-
-        const options = optionsForMode(this.mode);
-        trackChart = new Chart(ctx, {
-            type: this.mode,
-            data: {
-                labels: categoryLabels,
-                datasets: [],
-            },
-            ...options,
-        });
-
-        this.chart = trackChart;
-
-        function optionsForMode(mode) {
-            if (mode === "radar") {
-                const radarOptions = {
-                    options: {
-                        layout: {
-                            padding: {
-                            },
-                        },
-                        responsive: true,
-                        plugins: {
-                            htmlLegend: {
-                                containerID: "album-cover-row",
-                            },
-                            legend: {
-                                display: true,
-                            },
-                        },
-                        scales: {
-                            r: {
-                                angleLines: {},
-                                min: 0,
-                                max: 1.0,
-                                ticks: {
-                                    display: false,
-                                },
-                            },
-                        },
-                    },
-                };
-
-                return radarOptions;
-            } else {
-                const barOptions = {
-                    options: {
-                        layout: {
-                            padding: {
-                                top: 5,
-                                bottom: 5,
-                            },
-                        },
-                        elements: {
-                            bar: { borderWidth: 2 },
-                        },
-                        plugins: {
-                            htmlLegend: {
-                                containerID: "album-cover-row",
-                            },
-                            legend: {
-                                display: false,
-                            },
-                        },
-                        responsive: true,
-                        scales: {
-                            xAxes: {
-                                display: true,
-                                ticks: {
-                                    maxRotation: 90,
-                                    minRotation: 45,
-                                },
-                            },
-                            yAxes: {
-                                ticks: {
-                                    display: false,
-                                },
-                            },
-                        },
-                    },
-                };
-
-                return barOptions;
-            }
-        }
-    }
-
-    generateDataset() {
-        return this.trackObjects.map((trackObject) => {
-            // guard against the event where the relative values haven't
-            // been calculated yet
-            if (!trackObject.features.relative) return {};
-
-            const data = categoryLabels.map(label => trackObject.features.relative[label]);
-            const borderColor = `rgba(${trackObject.color}, 0.9)`;
-            const backgroundColor = `rgba(${trackObject.color}, 0.1)`;
-            return {
-                label: trackObject.trackData.trackName,
-                data: data,
-                backgroundColor: backgroundColor,
-                pointBackgroundColor: borderColor,
-                pointHoverBackgroundColor: backgroundColor,
-                borderColor: borderColor,
-                pointBorderColor: borderColor,
-                pointHoverBorderColor: backgroundColor,
-            }
-        });
-    }
-
-    updateDataset(datasets) {
-        console.log(datasets)
-        this.chart.data = {
-            labels: categoryLabels,
-            datasets: datasets
-        };
-        this.chart.update();
+	updateChartColor (color) {
+        
     }
 }
 
-const manager = new ChartManager(trackObjects, { mode: "radar", })
+const manager = new ChartManager(trackObjects, { mode: "radar" });
 manager.initializeChart();
 const datasets = manager.generateDataset();
-manager.updateDataset(datasets);
-
-const calculateRelative = () => {
-
-}
+manager.setDataset(datasets);
 /*
 const html_legend_plugin = {
     id: "htmlLegend",

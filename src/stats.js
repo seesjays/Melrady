@@ -20,6 +20,8 @@ function stats(sharedObjects) {
                 trackObjectArray: [],
             });
 
+
+
             // operating under the assumption that access token exists in req body already thanks to middleware
             // but still double checking anyway
             const accessToken = req.headers.authorization;
