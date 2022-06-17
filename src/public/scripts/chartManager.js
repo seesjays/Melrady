@@ -33,6 +33,10 @@ let trackChart = null;
 let features_obj = "normalized_features";
 
 class ChartManager {
+	trackObjects = [];
+
+	mode = "radar";
+
 	colorProfiles = {
 		green: ["29,185,84", "25,126,56", "16,72,30", "0,25,0"],
 		unique: ["114, 224, 106", "126, 132, 250", "222, 61, 130", "246, 133, 17"],
@@ -40,9 +44,8 @@ class ChartManager {
 	};
 	colorProfile = "art";
 
-	mode = "radar";
+	legendContainer = "album-cover-row";
 
-	trackObjects = [];
 	/**
 	 * @param {Object[]} trackObjects - An array of fully formed track objects.
 	 * @param {Object} chartManagerOptions - Overrides for the ChartManager's defaults
@@ -50,7 +53,8 @@ class ChartManager {
 	 * @param {"art"|"unique"|"green"} chartManagerOptions.colorProfile = "art" - Which color profile to use initially.
 	 * Art is calculated via the album art, unique is a set of very distinct colors for visibility, and green is a nice
 	 * (though admittedly somewhat visible to distinguish since they're just different shades) gradient of greens.
-	 * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the HTMLElement legends for the chart
+	 * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the
+	 * HTMLElement legends that replace the chart's default legends
 	 */
 	constructor(trackObjects, chartManagerOptions) {
 		if (trackObjects) {
@@ -60,12 +64,16 @@ class ChartManager {
 				trackObject.color.join(", ")
 			);
 
-			if (chartManagerOptions.mode) {
+			if (chartManagerOptions?.mode) {
 				this.mode = chartManagerOptions.mode;
 			}
 
-			if (chartManagerOptions.colorProfile) {
+			if (chartManagerOptions?.colorProfile) {
 				this.colorProfile = chartManagerOptions.colorProfile;
+			}
+
+			if (chartManagerOptions?.legendContainer) {
+				this.legendContainer = chartManagerOptions.legendContainer;
 			}
 		}
 	}
@@ -132,7 +140,6 @@ class ChartManager {
 	}
 
 	setDataset(datasets) {
-		console.log(datasets);
 		this.chart.data = {
 			labels: categoryLabels,
 			datasets: datasets,
@@ -182,7 +189,7 @@ class ChartManager {
 	updateChartMode(newMode) {
 		if (this.mode === newMode) return false;
 		this.mode = newMode;
-        
+
 		if (this.chart) {
 			this.chart.destroy();
 		}
@@ -197,16 +204,13 @@ class ChartManager {
 		if (mode === "radar") {
 			const radarOptions = {
 				options: {
-					layout: {
-						padding: {},
-					},
 					responsive: true,
 					plugins: {
-						htmlLegend: {
-							containerID: "album-cover-row",
+						albumlegends: {
+							containerID: "#album-cover-row",
 						},
 						legend: {
-							display: true,
+							display: false,
 						},
 					},
 					scales: {
@@ -226,35 +230,27 @@ class ChartManager {
 		} else {
 			const barOptions = {
 				options: {
-					layout: {
-						padding: {
-							top: 5,
-							bottom: 5,
-						},
-					},
-					elements: {
-						bar: { borderWidth: 2 },
-					},
-					plugins: {
-						htmlLegend: {
-							containerID: "album-cover-row",
-						},
-						legend: {},
-					},
 					responsive: true,
+					plugins: {
+						albumLegends: {
+							containerID: "#album-cover-row",
+						},
+						legend: {
+							display: false,
+						},
+					},
 					scales: {
 						xAxes: {
 							display: true,
-							ticks: {
-								maxRotation: 90,
-								minRotation: 45,
-							},
 						},
 						yAxes: {
 							ticks: {
 								display: false,
 							},
 						},
+					},
+					elements: {
+						bar: { borderWidth: 2 },
 					},
 				},
 			};
@@ -264,11 +260,15 @@ class ChartManager {
 	}
 }
 
-const chartManager = new ChartManager(trackObjects, { mode: "bar" });
+const chartManager = new ChartManager(trackObjects);
+
+// If this is registered after chart creation, the legends don't appear
+registerHTMLElementLegendPlugin();
+
 chartManager.initializeChart();
 const dataset = chartManager.generateDataset();
 chartManager.setDataset(dataset);
-chartManager.updateChartMode("radar");
+chartManager.chart.update();
 
 $(".color-button").click(function () {
 	switch (this.id) {
@@ -294,64 +294,63 @@ $(".type-button").click(function () {
 			break;
 	}
 });
-/*
-const html_legend_plugin = {
-    id: "htmlLegend",
-    afterUpdate(chart, args, options) {
-        const legend_list = $("#album-cover-row");
-        legend_list.empty();
 
-        const items = chart.options.plugins.legend.labels.generateLabels(chart);
+function registerHTMLElementLegendPlugin() {
+	Chart.register({
+		id: "albumlegends",
+		afterUpdate(chart) {
+			// remove previous legend elements
+			const containerID = chart.options.plugins["albumlegends"].containerID;
+			const legendContainer = $(containerID);
+			legendContainer.empty();
 
-        let tracknum = 0;
+			/**
+			 * Each legend item contains a couple things we can use for the element:
+			 * fillStyle, strokeStyle, and text
+			 * The rest we can just source from the trackObject at the item's index
+			 * since trackObjects and the legend items are in the same order.
+			 */
+			const legends = chart.options.plugins.legend.labels.generateLabels(chart);
+			console.log(legends);
+			legends.forEach((item, index) => {
+				const trackObject = trackObjects[index];
 
-        items.forEach((item) => {
-            let curr_item = tracks_data_obj.tracks[tracknum];
-            let track_cover_container = $("<div></div>");
-            track_cover_container.addClass(`col-3`);
+				// I really like using template literals for HTML elements. It's so
+				// convenient, yet they format so badly :(
+				// Here we form the image and link elements then add them both to a container
+				const img = `<img src=${
+					trackObject.trackData.albumArt
+				} alt="album cover for ${trackObject}" class="album-cover img-fluid" 
+            style="background: ${item.fillStyle}; border-color: ${
+					item.strokeStyle
+				}; border-width: 3px;
+            opacity: ${item.hidden ? 0.2 : 1.0};"/>`;
 
-            let track_image = $("<img>");
-            track_image.attr("src", `${curr_item.track_image}`);
-            track_image.attr("alt", `album cover for ${curr_item.track_name}`);
-            track_image.addClass("album-cover img-fluid");
+				const link = `<a href=${trackObject.trackData.trackURL} class="link-dark" 
+            style="text-align: center;">${item.text}</a>`;
 
-            let track_text = $(`<a></a>`)
-                .text(`${item.text}`)
-                .css({ "text-align": "center" })
-                .addClass("link-dark")
-                .attr("href", curr_item.track_url);
-            track_image.css({
-                background: item.fillStyle,
-                "border-color": item.strokeStyle,
-                "border-width": "3px",
-                opacity: item.hidden ? 0.2 : 1.0,
-            });
+				const legendElement = $('<div class="col-3"></div>');
 
-            track_cover_container.append(track_image);
-            track_cover_container.append(track_text);
+				legendElement.append(img);
+				legendElement.append(link);
+				legendContainer.append(legendElement);
 
-            track_cover_container.click(function clicked() {
-                const { type } = chart.config;
-                if (type === "pie" || type === "doughnut") {
-                    chart.toggleDataVisibility(item.index);
-                } else {
-                    chart.setDatasetVisibility(
-                        item.datasetIndex,
-                        !chart.isDatasetVisible(item.datasetIndex)
-                    );
-                }
-                chart.update();
-            });
-
-            legend_list.append(track_cover_container);
-
-            tracknum++;
-        });
-
-        // average
-    },
-};
-*/
+				legendElement.click(() => {
+					const { type } = chart.config;
+					if (type === "pie" || type === "doughnut") {
+						chart.toggleDataVisibility(item.index);
+					} else {
+						chart.setDatasetVisibility(
+							item.datasetIndex,
+							!chart.isDatasetVisible(item.datasetIndex)
+						);
+					}
+					chart.update();
+				});
+			});
+		},
+	});
+}
 
 /*
 <script>
