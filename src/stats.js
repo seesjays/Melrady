@@ -21,54 +21,59 @@ function stats(sharedObjects) {
             // operating under the assumption that access token exists in req body already thanks to middleware
             // but still double checking anyway
             const accessToken = req.headers.authorization;
-            if (accessToken) {
-                const spotifyAPI = new SpotifyWebApi();
-                spotifyAPI.setAccessToken(accessToken);
+            try {
+                if (accessToken) {
+                    const spotifyAPI = new SpotifyWebApi();
+                    spotifyAPI.setAccessToken(accessToken);
 
-                const trackIDs = Object.values(req.query).filter(trackID => trackID.length > 0);
+                    const trackIDs = Object.values(req.query).filter(trackID => trackID.length > 0);
 
-                // results are massive, so we filter down the values
-                // into nice packaged objects using createTrackFeaturesObject
-                const { createTrackObject } = require("./trackObject");
-                const trackObjects = await spotifyAPI.getTracks(trackIDs).then(
-                    (data) => {
-                        return data.body.tracks.map((fulltrackData) => createTrackObject(fulltrackData));
-                    },
-                    (err) => {
-                        console.error("stats: error fetching track objects - " + err);
-                        return null;
-                    }
-                );
-
-                // attach stats and color data
-                if (trackObjects) {
-                    fetchFeaturesForSet(trackObjects, spotifyAPI).then(
-                        (featureArray) => {
-                            return calculateTrackColorSet(trackObjects).then(
-                                (colorArray) => {
-                                    return { features: featureArray, colors: colorArray };
-                                }
-                            );
-                        }
-                    ).then(
-                        (fAndCArrays) => {
-                            // 2 arrays, both in the same order as our track objects
-                            // one is an array of track feature data
-                            // the other is an array of colros
-
-                            fAndCArrays.features.forEach((featureData, index) => {
-                                trackObjects[index].features = featureData;
-                            });
-                            fAndCArrays.colors.forEach((color, index) => {
-                                trackObjects[index].color = color;
-                            });
-
-                            return res.render("pages/stats", {
-                                trackObjectArray: trackObjects,
-                            });
+                    // results are massive, so we filter down the values
+                    // into nice packaged objects using createTrackFeaturesObject
+                    const { createTrackObject } = require("./trackObject");
+                    const trackObjects = await spotifyAPI.getTracks(trackIDs).then(
+                        (data) => {
+                            return data.body.tracks.map((fulltrackData) => createTrackObject(fulltrackData));
+                        },
+                        (err) => {
+                            console.error("stats: error fetching track objects - " + err);
+                            return null;
                         }
                     );
+
+                    // attach stats and color data
+                    if (trackObjects) {
+                        fetchFeaturesForSet(trackObjects, spotifyAPI).then(
+                            (featureArray) => {
+                                return calculateTrackColorSet(trackObjects).then(
+                                    (colorArray) => {
+                                        return { features: featureArray, colors: colorArray };
+                                    }
+                                );
+                            }
+                        ).then(
+                            (fAndCArrays) => {
+                                // 2 arrays, both in the same order as our track objects
+                                // one is an array of track feature data
+                                // the other is an array of colros
+
+                                fAndCArrays.features.forEach((featureData, index) => {
+                                    trackObjects[index].features = featureData;
+                                });
+                                fAndCArrays.colors.forEach((color, index) => {
+                                    trackObjects[index].color = color;
+                                });
+
+                                return res.render("pages/stats", {
+                                    trackObjectArray: trackObjects,
+                                });
+                            }
+                        );
+                    }
                 }
+            } catch (error) {
+                console.error("stats error: " + error);
+                return res.status(400).send([]);
             }
         }
     );
