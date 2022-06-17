@@ -53,9 +53,6 @@ input[type="radio"]:checked.form-check-input + label h6 {
 	test, so oh well... */
 }
 
-.album-row {
-  margin-top: 0;
-}
 .album-cover {
   display: block;
   margin-left: auto;
@@ -101,7 +98,7 @@ input[type="radio"]:checked.form-check-input + label h6 {
   .album-cover {
     width: 65%;
   }
-  .album-row {
+  .chart-row {
     margin: auto;
     width: 60%;
   }

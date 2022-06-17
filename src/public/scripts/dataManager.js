@@ -12,16 +12,10 @@
 class DataManager {
 	data = {
 		max: {
-			value: 0,
-			trackObject: null,
 		},
 		avg: {
-			value: 0,
-			trackObject: null,
 		},
 		min: {
-			value: 0,
-			trackObject: null,
 		},
 	};
 
@@ -92,26 +86,27 @@ class DataManager {
 		// for that in the calculation
 		let initAvg = this.data.avg;
 		Object.keys(this.trackObjects[0].features.absolute).forEach(
-			(key) => (initAvg[key] = 0)
+			(key) => (initAvg[key] = { value: 0 })
 		);
 
 		/**
 		 * calculating averages.
 		 * for each key (danceability, energy, etc), there's a corresponding key in data.avg
 		 * the value at that corresponding key is the average value for that key
+		 * update: for the sake of consistency, the value is at key.value
 		 */
 		const avgObject = this.trackObjects.reduce((prev, trackObject) => {
 			for (const [key, value] of Object.entries(
 				trackObject.features.absolute
 			)) {
-				prev[key] += value;
+				prev[key].value += value;
 			}
 			return prev;
 		}, initAvg);
 
 		// currently avgObject is a set of totals, not averages
 		Object.keys(initAvg).forEach(
-			(key) => (avgObject[key] /= this.trackObjects.length)
+			(key) => (avgObject[key].value /= this.trackObjects.length)
 		);
 
 		this.data.avg = avgObject;
@@ -119,11 +114,11 @@ class DataManager {
 
 	applyRelativeData() {
 
-        /**
-         * taking each value at each key in each track object, dividing that value by the max
-         * for that key, then adding the calculated key/value to the relative features object
-         * for that trackObject
-         */
+		/**
+		 * taking each value at each key in each track object, dividing that value by the max
+		 * for that key, then adding the calculated key/value to the relative features object
+		 * for that trackObject
+		 */
 		this.trackObjects.forEach((trackObject) => {
 			const absolute = trackObject.features.absolute;
 

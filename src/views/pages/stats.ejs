@@ -7,50 +7,34 @@
 </head>
 
 <body>
-  <script>
-    const trackObjects = <%- JSON.stringify(trackObjectArray) %>
-      console.log(trackObjects);
-  </script>
-  <script src="/scripts/dataManager.js" type="application/javascript"></script>
+  <%- include('../partials/grabTrackObjects') %>
+    <script src="/scripts/dataManager.js" type="application/javascript"></script>
 
-  <%- include('../partials/nav'); %>
-    <div class="container">
-
-      <div class="album-row">
-        <div id="album-cover-row" class="row justify-content-center"></div>
-
+    <%- include('../partials/nav'); %>
+      <div class="container">
         <div class="row">
-          <div class="col-10 mx-auto">
-            <div id="canvas-container" style="width: 100%; padding: 0.5em">
-              <canvas id="track-chart" width="100" height="100"></canvas>
+          <div class="chart-row">
+            <div id="album-cover-row" class="row justify-content-center"></div>
+
+            <div class="col-12 col-lg-10 mx-auto">
+              <div id="canvas-container" style="width: 100%; padding: 0.5em">
+                <canvas id="track-chart" width="100" height="100"></canvas>
+              </div>
             </div>
           </div>
         </div>
 
         <%- include('../partials/chartButtons'); %>
+          <%- include('../partials/highAvgLow'); %>
+            <div class="row g-4" style="margin-top: 2em;">
+              <%- include('../partials/fullTrackObjectData'); %>
+            </div>
+
+            <%- include('../partials/statsLegend'); %>
       </div>
 
-      <div style="width: 100%; margin-bottom: 2em"></div>
-
-      <%- include('../partials/highAvgLow'); %>
-
-        <div style="width: 100%; margin-bottom: 2em"></div>
-
-        <div class="container">
-          <div class="row g-4">
-            <%- include('../partials/fullTrackObjectData'); %>
-          </div>
-        </div>
-
-
-        <div style="width: 100%; margin-bottom: 2em"></div>
-
-        <div class="container" style="width: 100%; margin-bottom: 2em">
-          <%- include('../partials/statsLegend'); %>
-        </div>
-    </div>
-
-    <script src="/scripts/chartManager.js" type="application/javascript"></script>
+      <script src="/scripts/chartManager.js" type="application/javascript"></script>
+      <script src="/scripts/highAvgLow.js" type="application/javascript"></script>
 </body>
 
 </html>
