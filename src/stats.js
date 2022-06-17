@@ -103,7 +103,7 @@ function stats(sharedObjects) {
                         },
                         (err) => {
                             console.log("no color");
-                            track.track_color = null;
+                            return [0, 0, 0];
                         }
                     );
             }

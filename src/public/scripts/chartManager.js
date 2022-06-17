@@ -267,9 +267,11 @@ $(".type-button").click(function () {
 	switch (this.id) {
 		case "radar-type":
 			chartManager.updateChartMode("radar");
+			window.scrollTo(0, 0);
 			break;
 		case "bar-type":
 			chartManager.updateChartMode("bar");
+			window.scrollTo(0, 0);
 			break;
 	}
 });

@@ -1,10 +1,7 @@
 require("dotenv").config();
 
-const { body, query, validationResult } = require("express-validator");
-
-const express = require("express"); // Express web server framework
+const express = require("express");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
 const path = require("path");
 
 const PORT = process.env.PORT || 8888;
@@ -19,7 +16,7 @@ const spotify_api = new SpotifyWebApi({
 	redirectUri: RED_URI,
 });
 
-const { auth, executeWithAccessToken } = require("./auth");
+const { auth } = require("./auth");
 const sharedObjects = {
 	authentication: auth(spotify_api),
 };
@@ -242,7 +239,7 @@ app.get("/logout", (req, res) =>
 	res.redirect("/");
 });
 
-app.get("/robots.txt", function (req, res) {
+app.get("/robots.txt", (req, res) => {
 	res.type("text/plain");
 	return res.send(
 		"User-agent: *\nDisallow: /stats\nDisallow: /search\nDisallow: /tracksearch"
