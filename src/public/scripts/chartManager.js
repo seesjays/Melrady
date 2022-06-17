@@ -33,19 +33,21 @@ let trackChart = null;
 let features_obj = "normalized_features";
 
 class ChartManager {
-	colorOptions = {
+	colorProfiles = {
 		green: ["29,185,84", "25,126,56", "16,72,30", "0,25,0"],
 		unique: ["114, 224, 106", "126, 132, 250", "222, 61, 130", "246, 133, 17"],
 		art: null,
 	};
+	colorProfile = "art";
+
 	mode = "radar";
-	theme = "art";
+
 	trackObjects = [];
 	/**
 	 * @param {Object[]} trackObjects - An array of fully formed track objects.
 	 * @param {Object} chartManagerOptions - Overrides for the ChartManager's defaults
 	 * @param {"radar"|"bar"} chartManagerOptions.mode - The type of chart to use initially
-	 * @param {"art"|"unique"|"green"} chartManagerOptions.theme = "art" - Which color profile to use initially.
+	 * @param {"art"|"unique"|"green"} chartManagerOptions.colorProfile = "art" - Which color profile to use initially.
 	 * Art is calculated via the album art, unique is a set of very distinct colors for visibility, and green is a nice
 	 * (though admittedly somewhat visible to distinguish since they're just different shades) gradient of greens.
 	 * @param {string} [chartManagerOptions.legendContainer="album-cover-row"] - The ID of the element used to contain the HTMLElement legends for the chart
@@ -54,12 +56,12 @@ class ChartManager {
 		if (trackObjects) {
 			this.trackObjects = trackObjects;
 
-			this.colorOptions.art = trackObjects.map((trackObject) =>
+			this.colorProfiles.art = trackObjects.map((trackObject) =>
 				trackObject.color.join(", ")
 			);
 
-			if (chartManagerOptions.theme) {
-				this.theme = chartManagerOptions.theme;
+			if (chartManagerOptions.colorProfile) {
+				this.colorProfile = chartManagerOptions.colorProfile;
 			}
 		}
 	}
@@ -171,12 +173,12 @@ class ChartManager {
 
 			// use the proper RGB color profile
 			let colorProfile;
-			if (this.theme == "art") {
+			if (this.colorProfile == "art") {
 				colorProfile = trackObject.color;
-			} else if (this.theme == "unique") {
-				colorProfile = this.colorOptions.unique[index];
-			} else if (this.theme == "green") {
-				colorProfile = this.colorOptions.green[index];
+			} else if (this.colorProfile == "unique") {
+				colorProfile = this.colorProfiles.unique[index];
+			} else if (this.colorProfile == "green") {
+				colorProfile = this.colorProfiles.green[index];
 			}
 
 			const data = categoryLabels.map(
@@ -206,19 +208,48 @@ class ChartManager {
 		this.chart.update();
 	}
 
-    /**
-     * Transitions between color profiles without generating an entirely new dataset with the new color.
-     * @param {"art"|"unique"|"green"} color = "art" - Which color profile to swap to.
-     */
-	updateChartColor (color) {
-        
-    }
+	/**
+	 * Transitions between color profiles without generating an entirely new dataset with the new color.
+	 * @param {"art"|"unique"|"green"} newColorProfile = "art" - Which color profile to swap to.
+	 */
+	updateChartColors(newColorProfile) {
+		const chart = this.chart;
+
+		for (let i = 0; i < chart.data.datasets.length; i++) {
+			this.colorProfile = this.colorProfiles[newColorProfile];
+
+			const borderColor = `rgba(${this.colorProfile[i]}, 0.9)`;
+			const backgroundColor = `rgba(${this.colorProfile[i]}, 0.1)`;
+			const dataset = this.chart.data.datasets[i];
+
+			dataset.borderColor = borderColor;
+			dataset.backgroundColor = backgroundColor;
+			dataset.pointBackgroundColor = borderColor;
+			dataset.pointBorderColor = borderColor;
+			dataset.pointHoverBackgroundColor = backgroundColor;
+			dataset.pointHoverBorderColor = borderColor;
+
+			/*
+            legends
+			$(`#track-${i + 1}-cover`).css({
+				"background-color": backgroundColor,
+				"border-color": borderColor,
+			});
+            */
+		}
+
+		chart.update();
+	}
 }
 
 const manager = new ChartManager(trackObjects, { mode: "radar" });
 manager.initializeChart();
 const datasets = manager.generateDataset();
 manager.setDataset(datasets);
+setTimeout(() => {
+    timeout
+}, timeout);
+manager.updateChartColors("green");
 /*
 const html_legend_plugin = {
     id: "htmlLegend",
