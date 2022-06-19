@@ -23,9 +23,9 @@ const loadFavorites = () => {
                 const selecteds = favoriteTracks.slice(-4);
 
                 const descA = selecteds[0].trackData.trackName;
-                const descB = `${selecteds[1].trackData.trackName}, ${selecteds[1].trackData.albumName}`;
-                const descC = `${selecteds[2].trackData.trackName}, ${selecteds[2].trackData.primaryArtists[0].name}`;
-                const descD = `${selecteds[3].trackData.trackName}, ${selecteds[3].trackData.albumName}, ${selecteds[3].trackData.primaryArtists[0].name}`;
+                const descB = `${selecteds[1].trackData.trackName}, ${selecteds[1].trackData.primaryArtists[0].name}`;
+                const descC = `${selecteds[2].trackData.trackName} (${selecteds[2].trackData.albumName})`;
+                const descD = `${selecteds[3].trackData.trackName}, ${selecteds[3].trackData.primaryArtists[0].name} (${selecteds[3].trackData.albumName})`;
                 const descArray = [descA, descB, descC, descD];
 
                 return descArray;
