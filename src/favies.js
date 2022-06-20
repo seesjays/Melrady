@@ -8,7 +8,7 @@ function favies(sharedObjects) {
     const auth = sharedObjects.authentication;
 
     faviesRouter.get("/favies", auth, async (req, res) => {
-        const count = 16;
+        const count = 24;
 
         // operating under the assumption that access token exists in req body already thanks to middleware
         // but still double checking anyway
