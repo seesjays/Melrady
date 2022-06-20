@@ -12,6 +12,10 @@ h1 {
     font-weight: 600;
 }
 
+#hero-container {
+    padding: 10% 2rem;
+}
+
 .melrady-title {
     color: #49B955;
 }
