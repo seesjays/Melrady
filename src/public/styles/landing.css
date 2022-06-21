@@ -1,42 +1,49 @@
 .sso-button {
-    display:flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
-a, p, h1, h5, span {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
+a,
+p,
+h1,
+h5,
+span {
+  font-family: "Montserrat", sans-serif;
 }
 
 #hero-container {
-    padding: 50px 1em;
-}
-#hero-card {
-    width: min-content;
+  padding: 50px 1em;
 }
 #hero-card-title {
-    margin-bottom: 0;
-    color: #1DB954;
-    font-weight: 700;
-    font-size: 4rem;
+  width: fit-content;
+  margin-bottom: 0;
+  color: #1db954;
+  font-weight: 700;
+  font-size: 4rem;
 }
 #hero-card-description {
-    width: 125%;
-    color: black;
-    font-size: 1.5rem;
-    font-weight: 700;
+  width: 20rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: black;
 }
 #hero-chart-container {
-    background-color: #1DB954;
+  background-color: #1db954;
+}
+#canvas-container {
+  padding: 10%;
 }
 
-#canvas-container {
-    padding: 10%;
+#sso-button-icon {
+  width: 26px;
+  height: 26px;
+  margin-right: 15px;
+  vertical-align: -6px;
 }
 
 .album-chart {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 10%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10%;
 }
