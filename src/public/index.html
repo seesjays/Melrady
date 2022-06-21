@@ -38,7 +38,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <link href="/styles/landing.css" rel="stylesheet">
     <link href="/styles/styles.css" rel="stylesheet">
@@ -47,23 +48,28 @@
 </head>
 
 <body>
-    <div class="container pt-5">
-        <div id="hero-container" class="row">
-            <div class="col-6">
-                <div id="hero-card">
+    <div class="container">
+        <div id="hero-container" class="row align-items-center">
+            <div class="col-sm-6">
+                <div id="hero-card" class="float-sm-end">
                     <h1 id="hero-card-title">
                         Melrady
                     </h1>
-                    <p id="heo-card-description">
+                    <p id="hero-card-description">
                         creates charts comparing traits between songs.
                     </p>
                 </div>
             </div>
-            <div class="col-6">
-
+            <div class="col-sm-6">
+                <div id="canvas-container">
+                    <canvas id="track-chart"></canvas>
+                </div>
             </div>
         </div>
     </div>
+    <script src="/scripts/landingTrackObjects.js" type="application/javascript"></script>
+    <script src="/scripts/chartManager.js" type="application/javascript"></script>
+    <script src="/scripts/landingChartManager.js" type="application/javascript"></script>
 </body>
 
 </html>

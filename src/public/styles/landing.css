@@ -8,16 +8,30 @@ a, p, h1, h5, span {
     font-weight: 500;
 }
 
-h1 {
-    font-weight: 600;
-}
-
 #hero-container {
-    padding: 10% 2rem;
+    padding: 50px 1em;
+}
+#hero-card {
+    width: min-content;
+}
+#hero-card-title {
+    margin-bottom: 0;
+    color: #1DB954;
+    font-weight: 700;
+    font-size: 4rem;
+}
+#hero-card-description {
+    width: 125%;
+    color: black;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+#hero-chart-container {
+    background-color: #1DB954;
 }
 
-.melrady-title {
-    color: #49B955;
+#canvas-container {
+    padding: 10%;
 }
 
 .album-chart {

@@ -236,46 +236,6 @@ class ChartManager {
 	}
 }
 
-const chartManager = new ChartManager(trackObjects);
-
-// If this is registered after chart creation, the legends don't appear
-registerHTMLElementLegendPlugin();
-
-chartManager.initializeChart();
-const dataset = chartManager.generateDataset();
-chartManager.setDataset(dataset);
-
-/**
- * attaching onClick handlers to color and
- * chart type buttons
- */
-$(".color-button").click(function () {
-	switch (this.id) {
-		case "art-color-button":
-			chartManager.updateChartColors("art");
-			break;
-		case "unique-color-button":
-			chartManager.updateChartColors("unique");
-			break;
-		case "green-color-button":
-			chartManager.updateChartColors("green");
-			break;
-	}
-});
-
-$(".type-button").click(function () {
-	switch (this.id) {
-		case "radar-type":
-			chartManager.updateChartMode("radar");
-			window.scrollTo(0, 0);
-			break;
-		case "bar-type":
-			chartManager.updateChartMode("bar");
-			window.scrollTo(0, 0);
-			break;
-	}
-});
-
 /**
  * Very important function that I put at the end for cleanliness
  * reasons.

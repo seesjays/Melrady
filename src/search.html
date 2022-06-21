@@ -1,167 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Melrady makes charts that display the intricate differences between songs."
-    />
-    <link rel="canonical" href="https://melrady.com/" />
 
-    <meta property="og:site_name" content="Melrady" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://melrady.com/" />
-    <meta property="og:title" content="Melrady Search" />
-    <meta
-      property="og:description"
-      content="Melrady makes charts that display the intricate differences between songs."
-    />
-    <meta property="og:image" content="/images/dnda.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Melrady makes charts that display the intricate differences between songs." />
+  <link rel="canonical" href="https://melrady.com/" />
 
-    <meta property="twitter:domain" content="melrady.com" />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://melrady.com/" />
-    <meta property="twitter:title" content="Melrady Search" />
-    <meta
-      property="twitter:description"
-      content="Melrady displays and compares the intricate details of multiple songs."
-    />
-    <meta property="twitter:image" content="/images/dnda.png" />
+  <meta property="og:site_name" content="Melrady" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://melrady.com/" />
+  <meta property="og:title" content="Melrady Search" />
+  <meta property="og:description"
+    content="Melrady makes charts that display the intricate differences between songs." />
+  <meta property="og:image" content="/images/dnda.png" />
 
-    <meta name="msapplication-TileColor" content="#da532c" />
-    <meta name="theme-color" content="#ffffff" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+  <meta property="twitter:domain" content="melrady.com" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://melrady.com/" />
+  <meta property="twitter:title" content="Melrady Search" />
+  <meta property="twitter:description"
+    content="Melrady displays and compares the intricate details of multiple songs." />
+  <meta property="twitter:image" content="/images/dnda.png" />
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <meta name="msapplication-TileColor" content="#da532c" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 
-    <link href="/styles/landing.css" rel="stylesheet" />
-    <link href="/styles/styles.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-    <title>Melrady | Search Tracks</title>
-  </head>
+  <link href="/styles/landing.css" rel="stylesheet" />
+  <link href="/styles/styles.css" rel="stylesheet" />
 
-  <body>
-    <header style="width: 100%">
-      <nav class="topbar">
-        <span class="melrady">
-          <strong> Melrady </strong>
-        </span>
-        <span>
-          <a href="/search">Search</a>
-        </span>
-        <span>
-          <a href="/logout">Logout</a>
-        </span>
-      </nav>
-    </header>
+  <title>Melrady | Search Tracks</title>
+</head>
 
-    <div class="container-lg" style="margin-top: 2em">
-      <div class="row">
-        <h2 class="h3">Enter 1-4 tracks:</h2>
-        <small id="input-explainer" class="text-muted mb-2">
-          Album and artist names are optional but help us
-          find tracks with common names.
-        </small>
-      </div>
-      <div class="row" style="align-items: center">
-        <div class="col-sm-9">
-          <form id="track-search-form">
-            <div class="d-grid gap-3">
-              <input
-                type="text"
-                class="form-control track-input"
-                id="track-1-name"
-                name="track_1_name"
-                aria-describedby="input-explainer"
-              />
-              <input
-                type="text"
-                class="form-control track-input"
-                id="track-2-name"
-                name="track_2_name"
-                aria-describedby="input-explainer"
-              />
-              <input
-                type="text"
-                class="form-control track-input"
-                id="track-3-name"
-                name="track_3_name"
-                aria-describedby="input-explainer"
-              />
-              <input
-                type="text"
-                class="form-control track-input"
-                id="track-4-name"
-                name="track_4_name"
-                aria-describedby="input-explainer"
-              />
-            </div>
-          </form>
-        </div>
+<body>
+  <header style="width: 100%">
+    <nav class="topbar">
+      <span class="melrady">
+        <strong> Melrady </strong>
+      </span>
+      <span>
+        <a href="/search">Search</a>
+      </span>
+      <span>
+        <a href="/logout">Logout</a>
+      </span>
+    </nav>
+  </header>
 
-        <div class="col-sm-3 justify-content-center mt-4 mt-sm-0">
-          <div class="d-grid gap-2">
-            <button
-              type="button"
-              id="search-button"
-              class="btn btn-primary btn-lg"
-            >
-              Search Spotify
-            </button>
-
-            <button
-              type="reset"
-              form="track-search-form"
-              id="reset-button"
-              class="btn btn-danger"
-            >
-              Reset
-            </button>
+  <div class="container-lg" style="margin-top: 2em">
+    <div class="row">
+      <h2 class="h3">Enter 1-4 tracks:</h2>
+      <small id="input-explainer" class="text-muted mb-2">
+        Album and artist names are optional but help us
+        find tracks with common names.
+      </small>
+    </div>
+    <div class="row" style="align-items: center">
+      <div class="col-sm-9">
+        <form id="track-search-form">
+          <div class="d-grid gap-3">
+            <input type="text" class="form-control track-input" id="track-1-name" name="track_1_name"
+              aria-describedby="input-explainer" />
+            <input type="text" class="form-control track-input" id="track-2-name" name="track_2_name"
+              aria-describedby="input-explainer" />
+            <input type="text" class="form-control track-input" id="track-3-name" name="track_3_name"
+              aria-describedby="input-explainer" />
+            <input type="text" class="form-control track-input" id="track-4-name" name="track_4_name"
+              aria-describedby="input-explainer" />
           </div>
-        </div>
+        </form>
       </div>
 
-      <div id="results" class="row" style="margin-bottom: 1rem">
-        <div class="col-sm-4 text-center container p-3 p-sm-0">
-          <div id="cover-art-container" class="row" />
+      <div class="col-sm-3 justify-content-center mt-4 mt-sm-0">
+        <div class="d-grid gap-2">
+          <button type="button" id="search-button" class="btn btn-primary btn-lg">
+            Search Spotify
+          </button>
+
+          <button type="reset" form="track-search-form" id="reset-button" class="btn btn-danger">
+            Reset
+          </button>
         </div>
-        <div
-          id="stats-button-container"
-          class="col-12 text-center"
-          style="margin-top: 0.5em"
-        />
       </div>
     </div>
 
-    <script src="/scripts/loadFavorites.js"></script>
-    <script src="/scripts/formSubmit.js"></script>
-    <script src="/scripts/resultDisplay.js"></script>
-    <script src="/scripts/albumDisplay.js"></script>
-    <script src="/scripts/statsButtonDisplay.js"></script>
-  </body>
+    <div id="results" class="row" style="margin-bottom: 1rem">
+      <div class="col-sm-4 text-center container p-3 p-sm-0">
+        <div id="cover-art-container" class="row" />
+      </div>
+      <div id="stats-button-container" class="col-12 text-center" style="margin-top: 0.5em" />
+    </div>
+  </div>
+
+  <script src="/scripts/loadFavorites.js"></script>
+  <script src="/scripts/formSubmit.js"></script>
+  <script src="/scripts/resultDisplay.js"></script>
+  <script src="/scripts/albumDisplay.js"></script>
+  <script src="/scripts/statsButtonDisplay.js"></script>
+
+  <script>
+    const chartManager = new ChartManager(trackObjects);
+
+    // If this is registered after chart creation, the legends don't appear
+    registerHTMLElementLegendPlugin();
+
+    chartManager.initializeChart();
+    const dataset = chartManager.generateDataset();
+    chartManager.setDataset(dataset);
+
+    /**
+     * attaching onClick handlers to color and
+     * chart type buttons
+     */
+    $(".color-button").click(function () {
+      switch (this.id) {
+        case "art-color-button":
+          chartManager.updateChartColors("art");
+          break;
+        case "unique-color-button":
+          chartManager.updateChartColors("unique");
+          break;
+        case "green-color-button":
+          chartManager.updateChartColors("green");
+          break;
+      }
+    });
+
+    $(".type-button").click(function () {
+      switch (this.id) {
+        case "radar-type":
+          chartManager.updateChartMode("radar");
+          window.scrollTo(0, 0);
+          break;
+        case "bar-type":
+          chartManager.updateChartMode("bar");
+          window.scrollTo(0, 0);
+          break;
+      }
+    });
+  </script>
+</body>
+
 </html>
