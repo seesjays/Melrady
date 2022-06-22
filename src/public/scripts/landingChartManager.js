@@ -4,8 +4,8 @@ class LandingChartManager extends ChartManager {
     }
 
     /**
-	 * Initializes the chart with the correct HTML element, as well as setting its initial options
-	 */
+     * Initializes the chart with the correct HTML element, as well as setting its initial options
+     */
     initializeChart() {
         const canvasContainer = document.getElementById("canvas-container");
         const ctx = document.getElementById("track-chart").getContext("2d");
@@ -13,7 +13,7 @@ class LandingChartManager extends ChartManager {
         canvasContainer.width = canvasContainer.clientWidth;
         canvasContainer.height = canvasContainer.clientHeight;
 
-        const options = optionsForMode(this.mode);
+        const options = optionsForMode();
         this.chart = new Chart(ctx, {
             type: this.mode,
             data: {
@@ -23,21 +23,14 @@ class LandingChartManager extends ChartManager {
             options: options,
         });
 
-        function optionsForMode(mode) {
+        function optionsForMode() {
+            console.log("test")
             const base = {
                 responsive: true,
-                plugins: {
-                    albumlegends: {
-                        containerID: "#album-cover-row",
-                    },
-                    legend: {
-                        display: false,
-                    },
+                tooltips: {
+                    enabled: false,
                 },
-            }
-
-            if (mode === "radar") {
-                base.scales = {
+                scales: {
                     r: {
                         angleLines: {},
                         min: 0,
@@ -45,22 +38,20 @@ class LandingChartManager extends ChartManager {
                         ticks: {
                             display: false,
                         },
+                        display: false
                     },
-                }
-            } else {
-                base.scales = {
-                    xAxes: {
-                        display: true,
+                },
+                plugins: {
+                    albumlegends: {
+                        containerID: "#album-cover-row",
                     },
-                    yAxes: {
-                        ticks: {
-                            display: false,
-                        },
+                    legend: {
+                        display: false,
                     },
-                }
-                base.elements = {
-                    bar: { borderWidth: 2 },
-                }
+                    tooltips: {
+                        enabled: false,
+                    },
+                },
             }
 
             return base;
@@ -70,7 +61,8 @@ class LandingChartManager extends ChartManager {
 
 
 const landingChartManager = new LandingChartManager();
-landingChartManager.cha
+
 landingChartManager.initializeChart();
+landingChartManager.updateChartColors("green");
 const exampledataset = landingChartManager.generateDataset();
 landingChartManager.setDataset(exampledataset);
