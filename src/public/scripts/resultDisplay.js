@@ -53,6 +53,8 @@ const displayResults = (results) => {
 			.map(artist => artist.name)
 			.join(", ");
 
+		const explicitBadge = trackObject.trackData.isExplicit ? `<span class="badge bg-secondary small">E</span>` : "";
+
 		return `
 			<div class="form-check">
 				<input
@@ -71,7 +73,7 @@ const displayResults = (results) => {
 							${trackObject.trackData.albumName}
 						</h6>
 					    <h6 class="card-subtitle mb-2 text-muted">
-							${artists}
+						${explicitBadge} ${artists}
 						</h6>
 					</div>
 				</label>
