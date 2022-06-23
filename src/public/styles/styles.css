@@ -57,11 +57,12 @@ input[type="radio"]:checked.form-check-input + label h6 {
   display: block;
   margin-left: auto;
   margin-right: auto;
-
-  padding: 5%;
-  border: 2px solid black;
+  padding: 2.5%;  
 
   cursor: pointer;
+}
+#album-cover-row .album-cover {
+  border: 2px solid black;
 }
 #album-cover-row p {
   display: -webkit-box;
