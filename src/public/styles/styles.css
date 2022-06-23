@@ -61,8 +61,10 @@ input[type="radio"]:checked.form-check-input + label h6 {
 
   cursor: pointer;
 }
+
 #album-cover-row .album-cover {
   border: 2px solid black;
+  padding: 3.5%;
 }
 #album-cover-row p {
   display: -webkit-box;
