@@ -95,6 +95,49 @@
     <script src="/scripts/landingTrackObjects.js" type="application/javascript"></script>
     <script src="/scripts/chartManager.js" type="application/javascript"></script>
     <script src="/scripts/landingChartManager.js" type="application/javascript"></script>
+
+    <script>
+        /**
+         * Landing Chart Initialization Portion
+         * Largely does the same things as the stats page initialization script,
+         */
+
+        const landingChartManager = new LandingChartManager(DondaTrackObjects);
+
+        landingChartManager.initializeChart();
+        landingChartManager.updateChartColors("green");
+        const exampledataset = landingChartManager.generateDataset();
+        landingChartManager.setDataset(exampledataset);
+
+        /**
+         * Landing Chart Animation Portion
+         * Sets an interval that changes chart dataset+colors using a
+         * special override in landingChartManager
+         */
+
+        const displayOrder = [
+            { tracks: DondaTrackObjects, color: "green" },
+            { tracks: InstrumentalTrackObjects, color: "art" },
+            { tracks: RandomTrackObjects, color: "art" },
+            { tracks: EthanTrackObjects, color: "art" },
+        ];
+
+        const displayDatasets = displayOrder.map(tracksandColorObject => {
+            landingChartManager.trackObjects = tracksandColorObject.tracks;
+            landingChartManager.colorProfile = tracksandColorObject.color;
+
+            return landingChartManager.generateDataset();
+        });
+
+        let iteration = 0;
+        
+        setInterval(() => {
+            landingChartManager.setDataset(displayDatasets[iteration]);
+
+            iteration++;
+            if (iteration > displayOrder.length - 1) iteration = 0;
+        }, 1000);
+    </script>
 </body>
 
 </html>

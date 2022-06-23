@@ -39,6 +39,13 @@
       <script src="/scripts/highAvgLow.js" type="application/javascript"></script>
 
       <script>
+        // This used to be in the ChartManager script, but since I wanted
+        // to reuse some code, I moved the active portion out here.
+        /**
+         * All this script is responsible for is initializing the chart, generating+setting the dataset, and 
+         * then adding event handlers to the option buttons
+         */
+
         const chartManager = new ChartManager(trackObjects);
 
         // If this is registered after chart creation, the legends don't appear

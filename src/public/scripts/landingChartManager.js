@@ -1,6 +1,6 @@
 class LandingChartManager extends ChartManager {
-    constructor() {
-        super(exampleTrackObjectsA, {});
+    constructor(initialTrackObjects) {
+        super(initialTrackObjects, {});
     }
 
     /**
@@ -24,9 +24,17 @@ class LandingChartManager extends ChartManager {
         });
 
         function optionsForMode() {
-            console.log("test")
             const base = {
                 responsive: true,
+                animation: {
+                    duration: 1000,
+                },
+                layout: {
+                    padding: {
+                        top: 5,
+                        bottom: 5,
+                    },
+                },
                 tooltips: {
                     enabled: false,
                 },
@@ -57,12 +65,33 @@ class LandingChartManager extends ChartManager {
             return base;
         }
     }
+
+    /**
+     * Sets the chart's current dataset to the one supplied.
+     * Override of chartManager's setDataset, this modified version iterates over the datasets the chart
+     * already has, iterates over the keys of those datasets, and replaces the value at each key with the 
+     * corresponding value for the corresponding new dataset.
+     * 
+     * It seems inefficient at first, but it's the only way (that I know of) to transition the values of a chart's
+     * data instead of spawning a new set in. The animation as the chart changes color and data position
+     * is just wonderful.
+     * @param {Object[]} datasets 
+     */
+    setDataset(datasets) {
+        if (this.chart.data.datasets.length == 0) {
+            super.setDataset(datasets);
+        }
+        else {
+            // chart already initialized This check is necessary because we can't edit the data values
+            // of a chart that doesn't exist yet.
+
+            Object.keys(this.chart.data.datasets).forEach((set, index) => {
+                Object.keys(this.chart.data.datasets[set]).forEach((datasetProperty) => {
+                    this.chart.data.datasets[set][datasetProperty] = datasets[index][datasetProperty];
+                });
+            });
+
+            this.chart.update();
+        };
+    }
 }
-
-
-const landingChartManager = new LandingChartManager();
-
-landingChartManager.initializeChart();
-landingChartManager.updateChartColors("green");
-const exampledataset = landingChartManager.generateDataset();
-landingChartManager.setDataset(exampledataset);
