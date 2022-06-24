@@ -67,7 +67,7 @@ input[type="radio"]:checked.form-check-input + label h6 {
   padding: 3.5%;
 }
 #album-cover-row p,
-a {
+#album-cover-row a {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

@@ -7,7 +7,7 @@ span {
   font-family: "Montserrat", sans-serif;
 }
 
-.melardy-green {
+.melrady-green {
   color: #1db954;
 }
 
@@ -34,18 +34,18 @@ span {
   padding: 10%;
 }
 
-/* Sign In Button */
-#sso-button {
+/* Sign In and Github Buttons */
+.landing-button {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-#sso-button-icon {
+.landing-button-icon {
   display: inline-block;
   vertical-align: middle;
   margin-right: 7px;
 }
-#sso-button span {
+.landing-button span {
   display: inline-block;
   vertical-align: middle;
   height: 100%;
