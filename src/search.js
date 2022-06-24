@@ -73,8 +73,12 @@ function search(sharedObjects) {
 					);
 
 					// Promise.all returns everything in the same order it was fed, which is nice.
-					console.log(`tracksearch: returning ${output.length} track objects:`);
-					console.dir(output);
+					console.log(`tracksearch: returning ${output.length} result arrays:`);
+					console.dir(output.map((trackObjectArray) => {
+						return trackObjectArray.map((trackObject) => {
+							return trackObject.trackData.trackName;
+						})
+					}));
 					return res.json(output);
 				}
 			} catch (error) {
