@@ -3,9 +3,11 @@
   align-items: center;
 }
 
+
 a,
 p,
 h1,
+h2,
 h5,
 span {
   font-family: "Montserrat", sans-serif;
@@ -16,7 +18,7 @@ span {
 }
 
 #hero-container {
-  padding: 50px 1em;
+  padding: 25px 1em;
 }
 #hero-card-title {
   width: fit-content;
@@ -53,7 +55,7 @@ align-items: center;
 }
 
 #features-container {
-  background-color: #f9f9f9;
+  background-color: #F9F9F9;
   border-radius: 2rem;
   padding: 25px 0;
 }
@@ -64,7 +66,6 @@ align-items: center;
 
 .muchmore-card {
     background-color: white;
-
 }
 .album-chart {
   display: block;
