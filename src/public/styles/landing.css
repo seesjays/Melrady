@@ -1,9 +1,3 @@
-.sso-button {
-  display: flex;
-  align-items: center;
-}
-
-
 a,
 p,
 h1,
@@ -17,6 +11,7 @@ span {
   color: #1db954;
 }
 
+/* Hero Portion, text desc+chart */
 #hero-container {
   padding: 25px 1em;
 }
@@ -38,10 +33,12 @@ span {
 #canvas-container {
   padding: 10%;
 }
+
+/* Sign In Button */
 #sso-button {
-display: flex;
-flex-direction: row;
-align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 #sso-button-icon {
   display: inline-block;
@@ -55,7 +52,7 @@ align-items: center;
 }
 
 #features-container {
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   border-radius: 2rem;
   padding: 25px 0;
 }
@@ -63,13 +60,6 @@ align-items: center;
   font-weight: 600;
   font-size: 1.5rem;
 }
-
 .muchmore-card {
-    background-color: white;
-}
-.album-chart {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 10%;
+  background-color: white;
 }
