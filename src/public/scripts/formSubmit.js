@@ -5,7 +5,9 @@
 */
 let resultGroups = [];
 
-$("#search-button").click(() => {
+$("#search-button").click((e) => {
+	e.preventDefault(); // prevents default form submit
+
 	// mitigate submit spam somewhat
 	$("#search-button").prop("disabled", true).html("Searching...");
 
@@ -43,7 +45,7 @@ $("#search-button").click(() => {
 	// returns true if any inputs have values
 	function searchQueryExists() {
 		for (let i = 1; i < 5; i++) {
-			if ($(`#track_${i}_name`).val() != "") {
+			if ($(`#track-${i}-name`).val() != "") {
 				return true;
 			}
 		}

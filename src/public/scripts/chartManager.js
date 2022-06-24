@@ -1,4 +1,4 @@
-// this is a mess.
+// this used to be a mess.
 /*
 The objective of the chartManager is to:
 A. Form and attach the chart.js instance to an element on the stats page
@@ -280,20 +280,11 @@ function registerHTMLElementLegendPlugin() {
 				legendElement.append(link);
 				legendContainer.append(legendElement);
 
-
-				/**
-				 * This bit here seems kinda arcance,
-				 */
 				legendElement.click(() => {
-					const { type } = chart.config;
-					if (type === "pie" || type === "doughnut") {
-						chart.toggleDataVisibility(item.index);
-					} else {
-						chart.setDatasetVisibility(
-							item.datasetIndex,
-							!chart.isDatasetVisible(item.datasetIndex)
-						);
-					}
+					chart.setDatasetVisibility(
+						item.datasetIndex,
+						!chart.isDatasetVisible(item.datasetIndex)
+					);
 					chart.update();
 				});
 			});
