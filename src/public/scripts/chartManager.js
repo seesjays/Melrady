@@ -40,7 +40,7 @@ class ChartManager {
 		"energy",
 		"speechiness",
 		"tempo",
-		"valence",
+		"happiness",
 	];
 
 	/**

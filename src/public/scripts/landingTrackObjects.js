@@ -44,7 +44,7 @@ const DondaTrackObjects = [
                 "loudness": 53.534,
                 "speechiness": 0.168,
                 "tempo": 118.029,
-                "valence": 0.212
+                "happiness": 0.212
             },
             "relative": {
                 "acousticness": 0.03348148148148148,
@@ -55,7 +55,7 @@ const DondaTrackObjects = [
                 "loudness": 0.9550774281024763,
                 "speechiness": 0.4540540540540541,
                 "tempo": 0.7971162288106977,
-                "valence": 0.3365079365079365
+                "happiness": 0.3365079365079365
             }
         },
         "color": [
@@ -108,7 +108,7 @@ const DondaTrackObjects = [
                 "loudness": 52.735,
                 "speechiness": 0.119,
                 "tempo": 82.986,
-                "valence": 0.268
+                "happiness": 0.268
             },
             "relative": {
                 "acousticness": 0.15148148148148147,
@@ -119,7 +119,7 @@ const DondaTrackObjects = [
                 "loudness": 0.940822807393135,
                 "speechiness": 0.3216216216216216,
                 "tempo": 0.560451137975282,
-                "valence": 0.42539682539682544
+                "happiness": 0.42539682539682544
             }
         },
         "color": [
@@ -172,7 +172,7 @@ const DondaTrackObjects = [
                 "loudness": 54.418,
                 "speechiness": 0.37,
                 "tempo": 137.728,
-                "valence": 0.63
+                "happiness": 0.63
             },
             "relative": {
                 "acousticness": 0.1622222222222222,
@@ -183,7 +183,7 @@ const DondaTrackObjects = [
                 "loudness": 0.9708484978234496,
                 "speechiness": 1,
                 "tempo": 0.9301546565813468,
-                "valence": 1
+                "happiness": 1
             }
         },
         "color": [
@@ -236,7 +236,7 @@ const DondaTrackObjects = [
                 "loudness": 56.052,
                 "speechiness": 0.0642,
                 "tempo": 148.07,
-                "valence": 0.396
+                "happiness": 0.396
             },
             "relative": {
                 "acousticness": 1,
@@ -247,7 +247,7 @@ const DondaTrackObjects = [
                 "loudness": 1,
                 "speechiness": 0.1735135135135135,
                 "tempo": 1,
-                "valence": 0.6285714285714286
+                "happiness": 0.6285714285714286
             }
         },
         "color": [
@@ -304,7 +304,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 49.055,
                 "speechiness": 0.0327,
                 "tempo": 144.919,
-                "valence": 0.336
+                "happiness": 0.336
             },
             "relative": {
                 "acousticness": 0.9004474272930649,
@@ -315,7 +315,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 0.94854590455565,
                 "speechiness": 0.5849731663685153,
                 "tempo": 0.9998758081097304,
-                "valence": 0.5258215962441315
+                "happiness": 0.5258215962441315
             }
         },
         "color": [
@@ -368,7 +368,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 47.381,
                 "speechiness": 0.0334,
                 "tempo": 144.937,
-                "valence": 0.639
+                "happiness": 0.639
             },
             "relative": {
                 "acousticness": 1,
@@ -379,7 +379,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 0.9161768118183927,
                 "speechiness": 0.5974955277280859,
                 "tempo": 1,
-                "valence": 1
+                "happiness": 1
             }
         },
         "color": [
@@ -442,7 +442,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 48.32,
                 "speechiness": 0.0373,
                 "tempo": 79.54,
-                "valence": 0.054
+                "happiness": 0.054
             },
             "relative": {
                 "acousticness": 0.1789709172259508,
@@ -453,7 +453,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 0.9343336684971769,
                 "speechiness": 0.667262969588551,
                 "tempo": 0.5487901640022906,
-                "valence": 0.08450704225352113
+                "happiness": 0.08450704225352113
             }
         },
         "color": [
@@ -506,7 +506,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 51.716,
                 "speechiness": 0.0559,
                 "tempo": 116.292,
-                "valence": 0.0383
+                "happiness": 0.0383
             },
             "relative": {
                 "acousticness": 0.005156599552572708,
@@ -517,7 +517,7 @@ const InstrumentalTrackObjects = [
                 "loudness": 1,
                 "speechiness": 1,
                 "tempo": 0.8023624057349055,
-                "valence": 0.05993740219092332
+                "happiness": 0.05993740219092332
             }
         },
         "color": [
@@ -574,7 +574,7 @@ const RandomTrackObjects = [
                 "loudness": 53.534,
                 "speechiness": 0.168,
                 "tempo": 118.029,
-                "valence": 0.212
+                "happiness": 0.212
             },
             "relative": {
                 "acousticness": 0.04284360189573459,
@@ -585,7 +585,7 @@ const RandomTrackObjects = [
                 "loudness": 0.9777720954868404,
                 "speechiness": 0.4786324786324787,
                 "tempo": 0.7369903215735247,
-                "valence": 0.36741767764298094
+                "happiness": 0.36741767764298094
             }
         },
         "color": [
@@ -688,7 +688,7 @@ const RandomTrackObjects = [
                 "loudness": 50.471000000000004,
                 "speechiness": 0.351,
                 "tempo": 91.994,
-                "valence": 0.441
+                "happiness": 0.441
             },
             "relative": {
                 "acousticness": 1,
@@ -699,7 +699,7 @@ const RandomTrackObjects = [
                 "loudness": 0.9218279118189623,
                 "speechiness": 1,
                 "tempo": 0.574423977521074,
-                "valence": 0.7642980935875218
+                "happiness": 0.7642980935875218
             }
         },
         "color": [
@@ -762,7 +762,7 @@ const RandomTrackObjects = [
                 "loudness": 54.751,
                 "speechiness": 0.184,
                 "tempo": 117.072,
-                "valence": 0.277
+                "happiness": 0.277
             },
             "relative": {
                 "acousticness": 0.5450236966824645,
@@ -773,7 +773,7 @@ const RandomTrackObjects = [
                 "loudness": 1,
                 "speechiness": 0.5242165242165242,
                 "tempo": 0.7310146737433656,
-                "valence": 0.4800693240901214
+                "happiness": 0.4800693240901214
             }
         },
         "color": [
@@ -826,7 +826,7 @@ const RandomTrackObjects = [
                 "loudness": 48.826,
                 "speechiness": 0.118,
                 "tempo": 160.15,
-                "valence": 0.577
+                "happiness": 0.577
             },
             "relative": {
                 "acousticness": 0.8009478672985783,
@@ -837,7 +837,7 @@ const RandomTrackObjects = [
                 "loudness": 0.8917827984876989,
                 "speechiness": 0.33618233618233617,
                 "tempo": 1,
-                "valence": 1
+                "happiness": 1
             }
         },
         "color": [
@@ -894,7 +894,7 @@ const EthanTrackObjects = [
                 "loudness": 51.928,
                 "speechiness": 0.0362,
                 "tempo": 155.925,
-                "valence": 0.497
+                "happiness": 0.497
             },
             "relative": {
                 "acousticness": 0.001709986320109439,
@@ -905,7 +905,7 @@ const EthanTrackObjects = [
                 "loudness": 0.9739848072775016,
                 "speechiness": 0.6666666666666667,
                 "tempo": 1,
-                "valence": 0.569954128440367
+                "happiness": 0.569954128440367
             }
         },
         "color": [
@@ -958,7 +958,7 @@ const EthanTrackObjects = [
                 "loudness": 50.513999999999996,
                 "speechiness": 0.0543,
                 "tempo": 153.902,
-                "valence": 0.792
+                "happiness": 0.792
             },
             "relative": {
                 "acousticness": 0.813953488372093,
@@ -969,7 +969,7 @@ const EthanTrackObjects = [
                 "loudness": 0.9474631904717247,
                 "speechiness": 1,
                 "tempo": 0.9870258136924802,
-                "valence": 0.908256880733945
+                "happiness": 0.908256880733945
             }
         },
         "color": [
@@ -1022,7 +1022,7 @@ const EthanTrackObjects = [
                 "loudness": 52.775999999999996,
                 "speechiness": 0.0243,
                 "tempo": 146.277,
-                "valence": 0.213
+                "happiness": 0.213
             },
             "relative": {
                 "acousticness": 1,
@@ -1033,7 +1033,7 @@ const EthanTrackObjects = [
                 "loudness": 0.9898902747819562,
                 "speechiness": 0.4475138121546961,
                 "tempo": 0.9381240981240979,
-                "valence": 0.24426605504587157
+                "happiness": 0.24426605504587157
             }
         },
         "color": [
@@ -1086,7 +1086,7 @@ const EthanTrackObjects = [
                 "loudness": 53.315,
                 "speechiness": 0.0327,
                 "tempo": 122.054,
-                "valence": 0.872
+                "happiness": 0.872
             },
             "relative": {
                 "acousticness": 0.7496580027359782,
@@ -1097,7 +1097,7 @@ const EthanTrackObjects = [
                 "loudness": 1,
                 "speechiness": 0.6022099447513812,
                 "tempo": 0.7827737694404361,
-                "valence": 1
+                "happiness": 1
             }
         },
         "color": [
