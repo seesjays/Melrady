@@ -117,6 +117,11 @@ class ChartManager {
 						ticks: {
 							display: false,
 						},
+						pointLabels: {
+							font: {
+								size: 13
+							}
+						}
 					},
 				}
 			} else {
