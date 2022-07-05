@@ -8,7 +8,7 @@ function favies(sharedObjects) {
     const auth = sharedObjects.authentication;
 
     faviesRouter.get("/favies", auth, async (req, res) => {
-        const count = 24;
+        const count = 12;
 
         // operating under the assumption that access token exists in req body already thanks to middleware
         // but still double checking anyway
@@ -22,7 +22,7 @@ function favies(sharedObjects) {
 
                 // query the top tracks for a user API, with a max item count of count and time range
                 // extended over the user's entire account
-                const favoriteTracks = await spotifyAPI.getMyTopTracks({ limit: count, time_range: "long_term" })
+                const favoriteTracks = await spotifyAPI.getMyTopTracks({ limit: count, time_range: "medium_term" })
                     .then(
                         (data) => {
                             if (data.body.items) {
