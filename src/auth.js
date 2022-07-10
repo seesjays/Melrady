@@ -37,6 +37,12 @@ const auth = (spotify_api) => {
 
 		console.log("\nauth: auth point hit");
 		try {
+			if (req.query.error) {
+				res.clearCookie(cookies[access_tok_key]);
+				res.clearCookie(cookies[refresh_tok_key]);
+				return res.redirect("/");
+			}
+
 			if (access_token) {
 				// user is already authorized and token hasn't expired
 				console.log("auth: access token found, continuing");
