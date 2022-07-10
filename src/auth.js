@@ -61,6 +61,9 @@ const auth = (spotify_api) => {
 							err.message
 						);
 
+						res.clearCookie(cookies[access_tok_key]);
+						res.clearCookie(cookies[refresh_tok_key]);
+					
 						return res.status(401).send({
 							message: "Authorization Error: " + err.message,
 						});
@@ -99,7 +102,10 @@ const auth = (spotify_api) => {
 								"auth: failed to obtain auth+refresh tokens cause=",
 								err.message
 							);
-
+							
+							res.clearCookie(cookies[access_tok_key]);
+							res.clearCookie(cookies[refresh_tok_key]);
+							
 							return res.status(401).send({
 								message: "Authorization Error: " + err.message,
 							});
@@ -107,6 +113,10 @@ const auth = (spotify_api) => {
 					);
 				} else {
 					console.log("auth: state mismatch, dropping!", state, stored_state);
+
+					res.clearCookie(cookies[access_tok_key]);
+					res.clearCookie(cookies[refresh_tok_key]);
+				
 					return res.redirect("/");
 				}
 			} else {

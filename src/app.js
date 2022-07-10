@@ -48,7 +48,7 @@ const {
 	state_key,
 	access_tok_key,
 	refresh_tok_key,
-} = require("./cookieMapping");
+} = require("./cookieMapping").cookieMap;
 
 app.get("/privacy", (req, res) => {
 	return res.sendFile(path.join(__dirname, "/public/privacy.html"));
@@ -58,6 +58,7 @@ app.get("/logout", (req, res) =>
 {
 	console.log("logging user out");
 	let cookies = [state_key, access_tok_key, refresh_tok_key];
+	res.clearCookie(access_tok_key);
 	cookies.forEach((cookie) => {
 		res.clearCookie(cookie);
 	});
