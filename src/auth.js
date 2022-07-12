@@ -22,6 +22,11 @@ const auth = (spotify_api) => {
 		return [spotify_api.createAuthorizeURL(scopes, state), state];
 	};
 
+	const clearAuthCookies = (res) => {
+		res.clearCookie(refresh_tok_key);
+		res.clearCookie(access_tok_key);
+	}
+
 	return async function (req, res, next) {
 		// check if there's an access token in cookies
 		// if not, check if there's a refresh token in cookies, then refresh access token
@@ -38,8 +43,7 @@ const auth = (spotify_api) => {
 		console.log("\nauth: auth point hit");
 		try {
 			if (req.query.error) {
-				res.clearCookie(cookies[access_tok_key]);
-				res.clearCookie(cookies[refresh_tok_key]);
+				clearAuthCookies(res);
 				return res.redirect("/");
 			}
 
@@ -67,8 +71,7 @@ const auth = (spotify_api) => {
 							err.message
 						);
 
-						res.clearCookie(cookies[access_tok_key]);
-						res.clearCookie(cookies[refresh_tok_key]);
+						clearAuthCookies(res);
 					
 						return res.status(401).send({
 							message: "Authorization Error: " + err.message,
@@ -109,8 +112,7 @@ const auth = (spotify_api) => {
 								err.message
 							);
 							
-							res.clearCookie(cookies[access_tok_key]);
-							res.clearCookie(cookies[refresh_tok_key]);
+							clearAuthCookies(res);
 							
 							return res.status(401).send({
 								message: "Authorization Error: " + err.message,
@@ -120,8 +122,7 @@ const auth = (spotify_api) => {
 				} else {
 					console.log("auth: state mismatch, dropping!", state, stored_state);
 
-					res.clearCookie(cookies[access_tok_key]);
-					res.clearCookie(cookies[refresh_tok_key]);
+					clearAuthCookies(res);
 				
 					return res.redirect("/");
 				}
