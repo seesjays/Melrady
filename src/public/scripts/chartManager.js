@@ -38,7 +38,7 @@ class ChartManager {
 		"danceability",
 		"duration",
 		"energy",
-		"speechiness",
+		"wordiness",
 		"tempo",
 		"happiness",
 	];

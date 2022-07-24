@@ -34,7 +34,7 @@ exports.createTrackFeaturesObject = (fullTrackFeatureData) => {
 			energy: fullTrackFeatureData.energy,
 			instrumentalness: fullTrackFeatureData.instrumentalness,
 			loudness: fullTrackFeatureData.loudness + 60,
-			speechiness: fullTrackFeatureData.speechiness,
+			wordiness: fullTrackFeatureData.speechiness,
 			tempo: fullTrackFeatureData.tempo,
 			happiness: fullTrackFeatureData.valence,
 		},

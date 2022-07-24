@@ -42,7 +42,7 @@ const DondaTrackObjects = [
                 "energy": 0.545,
                 "instrumentalness": 0.0000948,
                 "loudness": 53.534,
-                "speechiness": 0.168,
+                "wordiness": 0.168,
                 "tempo": 118.029,
                 "happiness": 0.212
             },
@@ -53,7 +53,7 @@ const DondaTrackObjects = [
                 "energy": 0.7898550724637682,
                 "instrumentalness": 1,
                 "loudness": 0.9550774281024763,
-                "speechiness": 0.4540540540540541,
+                "wordiness": 0.4540540540540541,
                 "tempo": 0.7971162288106977,
                 "happiness": 0.3365079365079365
             }
@@ -106,7 +106,7 @@ const DondaTrackObjects = [
                 "energy": 0.422,
                 "instrumentalness": 0,
                 "loudness": 52.735,
-                "speechiness": 0.119,
+                "wordiness": 0.119,
                 "tempo": 82.986,
                 "happiness": 0.268
             },
@@ -117,7 +117,7 @@ const DondaTrackObjects = [
                 "energy": 0.6115942028985507,
                 "instrumentalness": 0,
                 "loudness": 0.940822807393135,
-                "speechiness": 0.3216216216216216,
+                "wordiness": 0.3216216216216216,
                 "tempo": 0.560451137975282,
                 "happiness": 0.42539682539682544
             }
@@ -170,7 +170,7 @@ const DondaTrackObjects = [
                 "energy": 0.64,
                 "instrumentalness": 0,
                 "loudness": 54.418,
-                "speechiness": 0.37,
+                "wordiness": 0.37,
                 "tempo": 137.728,
                 "happiness": 0.63
             },
@@ -181,7 +181,7 @@ const DondaTrackObjects = [
                 "energy": 0.9275362318840581,
                 "instrumentalness": 0,
                 "loudness": 0.9708484978234496,
-                "speechiness": 1,
+                "wordiness": 1,
                 "tempo": 0.9301546565813468,
                 "happiness": 1
             }
@@ -234,7 +234,7 @@ const DondaTrackObjects = [
                 "energy": 0.69,
                 "instrumentalness": 0,
                 "loudness": 56.052,
-                "speechiness": 0.0642,
+                "wordiness": 0.0642,
                 "tempo": 148.07,
                 "happiness": 0.396
             },
@@ -245,7 +245,7 @@ const DondaTrackObjects = [
                 "energy": 1,
                 "instrumentalness": 0,
                 "loudness": 1,
-                "speechiness": 0.1735135135135135,
+                "wordiness": 0.1735135135135135,
                 "tempo": 1,
                 "happiness": 0.6285714285714286
             }
@@ -302,7 +302,7 @@ const InstrumentalTrackObjects = [
                 "energy": 0.406,
                 "instrumentalness": 0.42,
                 "loudness": 49.055,
-                "speechiness": 0.0327,
+                "wordiness": 0.0327,
                 "tempo": 144.919,
                 "happiness": 0.336
             },
@@ -313,7 +313,7 @@ const InstrumentalTrackObjects = [
                 "energy": 0.5623268698060943,
                 "instrumentalness": 0.47244094488188976,
                 "loudness": 0.94854590455565,
-                "speechiness": 0.5849731663685153,
+                "wordiness": 0.5849731663685153,
                 "tempo": 0.9998758081097304,
                 "happiness": 0.5258215962441315
             }
@@ -366,7 +366,7 @@ const InstrumentalTrackObjects = [
                 "energy": 0.365,
                 "instrumentalness": 0.397,
                 "loudness": 47.381,
-                "speechiness": 0.0334,
+                "wordiness": 0.0334,
                 "tempo": 144.937,
                 "happiness": 0.639
             },
@@ -377,7 +377,7 @@ const InstrumentalTrackObjects = [
                 "energy": 0.5055401662049862,
                 "instrumentalness": 0.4465691788526434,
                 "loudness": 0.9161768118183927,
-                "speechiness": 0.5974955277280859,
+                "wordiness": 0.5974955277280859,
                 "tempo": 1,
                 "happiness": 1
             }
@@ -440,7 +440,7 @@ const InstrumentalTrackObjects = [
                 "energy": 0.507,
                 "instrumentalness": 0.889,
                 "loudness": 48.32,
-                "speechiness": 0.0373,
+                "wordiness": 0.0373,
                 "tempo": 79.54,
                 "happiness": 0.054
             },
@@ -451,7 +451,7 @@ const InstrumentalTrackObjects = [
                 "energy": 0.7022160664819945,
                 "instrumentalness": 1,
                 "loudness": 0.9343336684971769,
-                "speechiness": 0.667262969588551,
+                "wordiness": 0.667262969588551,
                 "tempo": 0.5487901640022906,
                 "happiness": 0.08450704225352113
             }
@@ -504,7 +504,7 @@ const InstrumentalTrackObjects = [
                 "energy": 0.722,
                 "instrumentalness": 0.873,
                 "loudness": 51.716,
-                "speechiness": 0.0559,
+                "wordiness": 0.0559,
                 "tempo": 116.292,
                 "happiness": 0.0383
             },
@@ -515,7 +515,7 @@ const InstrumentalTrackObjects = [
                 "energy": 1,
                 "instrumentalness": 0.9820022497187851,
                 "loudness": 1,
-                "speechiness": 1,
+                "wordiness": 1,
                 "tempo": 0.8023624057349055,
                 "happiness": 0.05993740219092332
             }
@@ -572,7 +572,7 @@ const RandomTrackObjects = [
                 "energy": 0.545,
                 "instrumentalness": 0.0000948,
                 "loudness": 53.534,
-                "speechiness": 0.168,
+                "wordiness": 0.168,
                 "tempo": 118.029,
                 "happiness": 0.212
             },
@@ -583,7 +583,7 @@ const RandomTrackObjects = [
                 "energy": 0.7305630026809652,
                 "instrumentalness": 0.010784982935153585,
                 "loudness": 0.9777720954868404,
-                "speechiness": 0.4786324786324787,
+                "wordiness": 0.4786324786324787,
                 "tempo": 0.7369903215735247,
                 "happiness": 0.36741767764298094
             }
@@ -686,7 +686,7 @@ const RandomTrackObjects = [
                 "energy": 0.482,
                 "instrumentalness": 0,
                 "loudness": 50.471000000000004,
-                "speechiness": 0.351,
+                "wordiness": 0.351,
                 "tempo": 91.994,
                 "happiness": 0.441
             },
@@ -697,7 +697,7 @@ const RandomTrackObjects = [
                 "energy": 0.646112600536193,
                 "instrumentalness": 0,
                 "loudness": 0.9218279118189623,
-                "speechiness": 1,
+                "wordiness": 1,
                 "tempo": 0.574423977521074,
                 "happiness": 0.7642980935875218
             }
@@ -760,7 +760,7 @@ const RandomTrackObjects = [
                 "energy": 0.746,
                 "instrumentalness": 0.0087,
                 "loudness": 54.751,
-                "speechiness": 0.184,
+                "wordiness": 0.184,
                 "tempo": 117.072,
                 "happiness": 0.277
             },
@@ -771,7 +771,7 @@ const RandomTrackObjects = [
                 "energy": 1,
                 "instrumentalness": 0.9897610921501707,
                 "loudness": 1,
-                "speechiness": 0.5242165242165242,
+                "wordiness": 0.5242165242165242,
                 "tempo": 0.7310146737433656,
                 "happiness": 0.4800693240901214
             }
@@ -824,7 +824,7 @@ const RandomTrackObjects = [
                 "energy": 0.344,
                 "instrumentalness": 0.00879,
                 "loudness": 48.826,
-                "speechiness": 0.118,
+                "wordiness": 0.118,
                 "tempo": 160.15,
                 "happiness": 0.577
             },
@@ -835,7 +835,7 @@ const RandomTrackObjects = [
                 "energy": 0.46112600536193027,
                 "instrumentalness": 1,
                 "loudness": 0.8917827984876989,
-                "speechiness": 0.33618233618233617,
+                "wordiness": 0.33618233618233617,
                 "tempo": 1,
                 "happiness": 1
             }
@@ -892,7 +892,7 @@ const EthanTrackObjects = [
                 "energy": 0.715,
                 "instrumentalness": 0.00000797,
                 "loudness": 51.928,
-                "speechiness": 0.0362,
+                "wordiness": 0.0362,
                 "tempo": 155.925,
                 "happiness": 0.497
             },
@@ -903,7 +903,7 @@ const EthanTrackObjects = [
                 "energy": 1,
                 "instrumentalness": 0.21775956284153003,
                 "loudness": 0.9739848072775016,
-                "speechiness": 0.6666666666666667,
+                "wordiness": 0.6666666666666667,
                 "tempo": 1,
                 "happiness": 0.569954128440367
             }
@@ -956,7 +956,7 @@ const EthanTrackObjects = [
                 "energy": 0.354,
                 "instrumentalness": 0,
                 "loudness": 50.513999999999996,
-                "speechiness": 0.0543,
+                "wordiness": 0.0543,
                 "tempo": 153.902,
                 "happiness": 0.792
             },
@@ -967,7 +967,7 @@ const EthanTrackObjects = [
                 "energy": 0.4951048951048951,
                 "instrumentalness": 0,
                 "loudness": 0.9474631904717247,
-                "speechiness": 1,
+                "wordiness": 1,
                 "tempo": 0.9870258136924802,
                 "happiness": 0.908256880733945
             }
@@ -1020,7 +1020,7 @@ const EthanTrackObjects = [
                 "energy": 0.442,
                 "instrumentalness": 0.0000146,
                 "loudness": 52.775999999999996,
-                "speechiness": 0.0243,
+                "wordiness": 0.0243,
                 "tempo": 146.277,
                 "happiness": 0.213
             },
@@ -1031,7 +1031,7 @@ const EthanTrackObjects = [
                 "energy": 0.6181818181818182,
                 "instrumentalness": 0.3989071038251366,
                 "loudness": 0.9898902747819562,
-                "speechiness": 0.4475138121546961,
+                "wordiness": 0.4475138121546961,
                 "tempo": 0.9381240981240979,
                 "happiness": 0.24426605504587157
             }
@@ -1084,7 +1084,7 @@ const EthanTrackObjects = [
                 "energy": 0.56,
                 "instrumentalness": 0.0000366,
                 "loudness": 53.315,
-                "speechiness": 0.0327,
+                "wordiness": 0.0327,
                 "tempo": 122.054,
                 "happiness": 0.872
             },
@@ -1095,7 +1095,7 @@ const EthanTrackObjects = [
                 "energy": 0.7832167832167833,
                 "instrumentalness": 1,
                 "loudness": 1,
-                "speechiness": 0.6022099447513812,
+                "wordiness": 0.6022099447513812,
                 "tempo": 0.7827737694404361,
                 "happiness": 1
             }
